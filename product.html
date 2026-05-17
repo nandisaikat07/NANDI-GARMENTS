@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title id="product-title">Product • Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles_product.css">
+
+  <meta name="description" content="Product details for Nandi Garments">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html#products" id="nav-all">All</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="header-actions">
+
+        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <div class="account">
+          <button id="auth-button" class="btn small" aria-expanded="false">
+            <span class="auth-icon" aria-hidden="true">👤</span>
+            <span class="auth-text">Login</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <a id="account-link" href="#account">Account</a>
+            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="product-page">
+    <section class="product-hero">
+      <div class="container product-hero-inner">
+        <div class="product-gallery">
+          <div class="gallery-main">
+            <img id="product-main-image" src="" alt="Product image">
+          </div>
+          <div class="gallery-thumbs" id="product-thumbs" aria-label="Product images thumbnails"></div>
+        </div>
+
+        <div class="product-summary">
+          <h2 id="product-name">Product Name</h2>
+          <div class="product-meta">
+            <span class="pill" id="product-category">Category</span>
+            <span class="pill subtle" id="product-availability">Availability</span>
+          </div>
+          <div class="product-price" id="product-price">₹0</div>
+
+          <div class="product-widgets">
+            <div class="widget-row">
+              <button id="add-to-cart" class="btn" type="button">Add to Cart</button>
+              <button id="order-whatsapp" class="btn secondary" type="button">Order on WhatsApp</button>
+            </div>
+            <div class="note" id="order-note">We’ll help with custom sizing and availability.</div>
+          </div>
+
+          <div class="product-facts">
+            <h3>Details</h3>
+            <p id="product-description" class="muted"></p>
+
+            <div class="facts-grid">
+              <div class="fact">
+                <strong>Fabric / Material</strong>
+                <div id="product-fabric">—</div>
+              </div>
+              <div class="fact">
+                <strong>Colors</strong>
+                <div id="product-colors">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="product-options">
+            <h3>Choose Size</h3>
+            <div class="size-options" id="size-options"></div>
+            <div class="muted" id="selected-size-hint">Select a size to order.</div>
+          </div>
+
+          <div class="product-wash">
+            <h3>Washing Instructions</h3>
+            <div class="wash-box" id="wash-instructions">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container product-extra">
+      <div class="grid-2">
+        <div class="section-card">
+          <h3>Size Chart</h3>
+          <div class="size-chart-wrap">
+            <table class="size-table" id="size-chart-table">
+              <thead>
+                <tr id="size-chart-head-row"></tr>
+              </thead>
+              <tbody id="size-chart-body"></tbody>
+            </table>
+          </div>
+          <p class="note muted">Measurements may vary slightly. Contact us for custom fitting.</p>
+        </div>
+
+        <div class="section-card">
+          <h3>Quick Order Help</h3>
+          <ul class="checklist">
+            <li>Share your preferred size (or measurements).</li>
+            <li>We confirm availability before dispatch.</li>
+            <li>We guide you on fit and fabric care.</li>
+          </ul>
+          <div class="whatsapp-inline">
+            <a id="order-whatsapp-link" class="btn" href="#" target="_blank" rel="noopener">Chat on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <section class="product-reviews">
+        <h3>Customer Reviews</h3>
+        <div class="muted" id="product-reviews-count">No reviews yet.</div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <button class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
+
+    <div class="footer-main">
+      <div class="container footer-columns">
+        <div class="footer-col">
+          <h4>Get to Know Us</h4>
+          <ul>
+            <li><a href="index.html#about">About Nandi</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Releases</a></li>
+            <li><a href="#">Our Story</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect with Us</h4>
+          <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Instagram</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Let Us Help You</h4>
+          <ul>
+            <li><a href="#">Your Account</a></li>
+            <li><a href="returns.html">Returns Centre</a></li>
+            <li><a href="index.html#contact">Help</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <div class="container footer-logo-row">
+          <img src="Nandi Garments-.png" alt="Nandi logo" class="footer-logo">
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <div class="footer-links">
+          <a href="terms.html">Terms & Conditions</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="return-policy.html">Return Policy</a>
+          <a href="delivery-policy.html">Delivery Policy</a>
+        </div>
+        <div class="copyright">© 2026 Nandi Garments</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Mobile nav toggle (shared pattern)
+    (function(){
+      var toggle = document.getElementById('nav-toggle');
+      var nav = document.getElementById('site-nav');
+      if(!toggle || !nav) return;
+      nav.setAttribute('aria-hidden','true');
+      toggle.addEventListener('click', function(){
+        var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+        nav.setAttribute('aria-hidden', String(isOpen));
+      });
+      nav.addEventListener('click', function(e){
+        var a = e.target && e.target.closest ? e.target.closest('a') : null;
+        if(a){
+          toggle.setAttribute('aria-expanded','false');
+          nav.setAttribute('aria-hidden','true');
+        }
+      });
+    })();
+
+    // Product page initializer (kept inline so we can reuse existing script.js without large refactor)
+    (function(){
+
+      const params = new URLSearchParams(window.location.search);
+      const id = Number(params.get('id'));
+
+      const mainImg = document.getElementById('product-main-image');
+      const thumbsEl = document.getElementById('product-thumbs');
+      const titleEl = document.getElementById('product-title');
+      const nameEl = document.getElementById('product-name');
+      const catEl = document.getElementById('product-category');
+      const availEl = document.getElementById('product-availability');
+      const priceEl = document.getElementById('product-price');
+      const descEl = document.getElementById('product-description');
+      const fabricEl = document.getElementById('product-fabric');
+      const colorsEl = document.getElementById('product-colors');
+      const washEl = document.getElementById('wash-instructions');
+      const sizeOptionsEl = document.getElementById('size-options');
+      const sizeHintEl = document.getElementById('selected-size-hint');
+      const sizeChartHeadRow = document.getElementById('size-chart-head-row');
+      const sizeChartBody = document.getElementById('size-chart-body');
+
+      const addToCartBtn = document.getElementById('add-to-cart');
+      const orderWhatsAppBtn = document.getElementById('order-whatsapp');
+      const orderWhatsAppLink = document.getElementById('order-whatsapp-link');
+
+      let selectedSize = null;
+      let currentProduct = null;
+
+      function ensureArray(v){
+        if(Array.isArray(v)) return v;
+        if(typeof v === 'string' && v.trim()) return v.split(',').map(s=>s.trim()).filter(Boolean);
+        return [];
+      }
+
+      function escapeHtml(str){
+        return String(str)
+          .replace(/&/g,'&amp;')
+          .replace(/</g,'<')
+          .replace(/>/g,'>')
+          .replace(/"/g,'"')
+          .replace(/'/g,'&#39;');
+      }
+
+      function renderSizeOptions(sizes){
+        sizeOptionsEl.innerHTML = '';
+        const list = ensureArray(sizes);
+        if(list.length===0){
+          sizeOptionsEl.innerHTML = '<div class="muted">Size options not available.</div>';
+          selectedSize = null;
+          sizeHintEl.textContent = 'Select a size to order.';
+          return;
+        }
+        list.forEach(s=>{
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'size-chip';
+          btn.textContent = s;
+          btn.addEventListener('click', ()=>{
+            selectedSize = s;
+            // Expose currently selected size so script.js (WhatsApp floating button) can reuse it
+            try{ window.__NG_SELECTED_SIZE = selectedSize; }catch(_){
+            }
+            sizeHintEl.textContent = 'Selected size: ' + s;
+            [...sizeOptionsEl.querySelectorAll('.size-chip')].forEach(x=>x.classList.remove('active'));
+            btn.classList.add('active');
+          });
+          sizeOptionsEl.appendChild(btn);
+        });
+        selectedSize = list[0];
+        // Expose default selected size for WhatsApp floating button
+        try{ window.__NG_SELECTED_SIZE = selectedSize; }catch(_){
+        }
+        [...sizeOptionsEl.querySelectorAll('.size-chip')][0]?.classList.add('active');
+        sizeHintEl.textContent = 'Selected size: ' + selectedSize;
+      }
+
+      function renderSizeChart(chart){
+        // chart expected: { columns: ['Size','Chest','Length'], rows:[{ 'Size':'S', 'Chest':38,...}] }
+        sizeChartHeadRow.innerHTML = '';
+        sizeChartBody.innerHTML = '';
+
+        if(!chart || !Array.isArray(chart.columns) || !Array.isArray(chart.rows)){
+          sizeChartHeadRow.innerHTML = '<th>Size</th><th>Note</th>';
+          sizeChartBody.innerHTML = '<tr><td>-</td><td class="muted">Size chart not provided for this item.</td></tr>';
+          return;
+        }
+
+        chart.columns.forEach(col=>{
+          const th = document.createElement('th');
+          th.textContent = col;
+          sizeChartHeadRow.appendChild(th);
+        });
+
+        chart.rows.forEach(r=>{
+          const tr = document.createElement('tr');
+          chart.columns.forEach(col=>{
+            const td = document.createElement('td');
+            td.textContent = r[col] ?? '-';
+            tr.appendChild(td);
+          });
+          sizeChartBody.appendChild(tr);
+        });
+      }
+
+      function renderProduct(p){
+        currentProduct = p;
+
+        const title = p.name || 'Product';
+        titleEl.textContent = `${title} • Nandi Garments`;
+        nameEl.textContent = p.name || '';
+        catEl.textContent = p.category || '';
+        availEl.textContent = p.availability || 'In stock';
+        priceEl.textContent = '₹' + (p.price ?? '0');
+        descEl.textContent = p.description || 'High-quality fabric and finish.';
+        fabricEl.textContent = p.fabric || '—';
+        colorsEl.textContent = ensureArray(p.colors).join(', ') || '—';
+        washEl.innerHTML = ensureArray(p.washingInstructions).map(x=>escapeHtml(x)).join('<br>') || '—';
+
+        const images = ensureArray(p.images && p.images.length ? p.images : [p.img]).filter(Boolean);
+        thumbsEl.innerHTML = '';
+        images.forEach((src, idx)=>{
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'thumb-btn';
+          b.setAttribute('aria-label','Image '+(idx+1));
+          b.innerHTML = `<img src="${src}" alt="Thumb ${idx+1}">`;
+          b.addEventListener('click', ()=>{
+            mainImg.src = src;
+            [...thumbsEl.querySelectorAll('.thumb-btn')].forEach(x=>x.classList.remove('active'));
+            b.classList.add('active');
+          });
+          thumbsEl.appendChild(b);
+        });
+        mainImg.src = images[0] || (p.img || '');
+        thumbsEl.querySelectorAll('.thumb-btn')[0]?.classList.add('active');
+
+        renderSizeOptions(p.sizes || p.sizeOptions || []);
+        renderSizeChart(p.sizeChart);
+
+        addToCartBtn.onclick = ()=>{
+          if(window.addToCart && typeof window.addToCart === 'function'){
+            window.addToCart(p.id, 1);
+            alert('Added to cart!');
+            document.getElementById('cart-drawer')?.setAttribute('aria-hidden','false');
+          } else {
+            alert('Cart system not available on this page.');
+          }
+        };
+
+        function whatsAppMsg(){
+          const base = `Hi Nandi Garments! I want to order: ${p.name}.`;
+          const size = selectedSize ? ` Size: ${selectedSize}.` : '';
+          const extra = p.fabric ? ` Fabric: ${p.fabric}.` : '';
+          const note = ' Please confirm availability and share payment/delivery details.';
+          return base + size + extra + note;
+        }
+
+        const waLink = (window.__NG_WA_LINK || null);
+        const number = (window.__NG_WA_NUMBER || null);
+
+        // script.js will set these helpers; fallback to inline pattern if not.
+        const phone = number || '918250530293';
+        const url = `https://wa.me/${phone}?text=${encodeURIComponent(whatsAppMsg())}`;
+
+        orderWhatsAppBtn.onclick = ()=> window.open(url,'_blank');
+        orderWhatsAppLink.href = url;
+
+        // allow WhatsApp floating button to reference this product
+        try{ window.__NG_CURRENT_PRODUCT = p; }catch(e){}
+      }
+
+      async function loadProducts(){
+        try{
+          const res = await fetch('products.json');
+          const data = await res.json();
+          return data;
+        }catch(e){
+          const embedded = document.getElementById('products-data');
+          if(embedded){
+            try{ return JSON.parse(embedded.textContent || embedded.innerText || '[]'); }catch(_){ return []; }
+          }
+          return [];
+        }
+      }
+
+      (async function(){
+        const list = await loadProducts();
+        const p = list.find(x=>Number(x.id)===id);
+        if(!p){
+          nameEl.textContent = 'Product not found';
+          descEl.textContent = 'Please check the product link.';
+          return;
+        }
+        renderProduct(p);
+      })();
+    })();
+  </script>
+</body>
+</html>
+

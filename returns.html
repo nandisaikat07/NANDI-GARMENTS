@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Returns & Refunds · Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Return or request a refund for orders">
+  <style>
+    .returns-hero{padding:2rem 0;text-align:center}
+    .returns-form{max-width:720px;margin:0 auto;padding:1rem;background:var(--surface);border:1px solid #eef2f6;border-radius:8px}
+    .returns-form label{display:block;margin-bottom:.6rem}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo">Nandi Garments</h1>
+      <nav class="nav">
+        <a href="#products" id="nav-all">All</a>
+        <a href="index.html#products" data-i18n="nav.products">Products</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+      </nav>
+      <div class="header-actions">
+        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <div class="account">
+          <button id="auth-button" class="btn small" aria-expanded="false">
+            <span class="auth-icon" aria-hidden="true">👤</span>
+            <span class="auth-text">Login</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <a id="account-link" href="#account">Account</a>
+            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="returns-hero">
+      <div class="container">
+        <h2>Returns & Refunds</h2>
+        <p class="muted">Start a return or request a refund for an eligible order.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="returns-form">
+          <form>
+            <label>Order ID<input id="return-order-id" type="text" placeholder="e.g. 1 or #1" required></label>
+            <label>Item to return<select id="return-item-select"><option value="">Choose item</option></select></label>
+            <label>Reason for return<textarea id="return-reason" rows="4"></textarea></label>
+            <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.6rem">
+              <button id="return-submit" class="btn" type="button">Submit Return Request</button>
+              <button type="button" class="btn secondary" id="return-cancel">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <script>
+      (function(){
+        let orders = [];
+        function loadOrders(){
+          fetch('orders.json').then(r=>r.json()).then(data=>{ orders = data; }).catch(()=>{ orders = []; });
+        }
+        loadOrders();
+
+        const orderInput = document.getElementById('return-order-id');
+        const itemSelect = document.getElementById('return-item-select');
+        const submitBtn = document.getElementById('return-submit');
+        const cancelBtn = document.getElementById('return-cancel');
+
+        function findOrderByIdOrHash(val){
+          if(!val) return null;
+          const clean = val.replace('#','').trim();
+          return orders.find(o=> String(o.id) === clean);
+        }
+
+        orderInput.addEventListener('blur', ()=>{
+          const found = findOrderByIdOrHash(orderInput.value);
+          itemSelect.innerHTML = '<option value="">Choose item</option>';
+          if(found && Array.isArray(found.items)){
+            found.items.forEach(it=>{
+              const opt = document.createElement('option'); opt.value = it.sku; opt.textContent = it.name; itemSelect.appendChild(opt);
+            });
+          }
+        });
+
+        submitBtn.addEventListener('click', ()=>{
+          const found = findOrderByIdOrHash(orderInput.value);
+          if(!found){ alert('Order not found. Please check the Order ID.'); return; }
+          if(!itemSelect.value){ alert('Please pick an item to return.'); return; }
+          // Simulate submission
+          alert('Return request submitted for order ' + found.id + '.\nItem: ' + itemSelect.options[itemSelect.selectedIndex].text);
+          orderInput.value = '';
+          itemSelect.innerHTML = '<option value="">Choose item</option>';
+          document.getElementById('return-reason').value = '';
+        });
+
+        cancelBtn.addEventListener('click', ()=>{
+          orderInput.value = '';
+          itemSelect.innerHTML = '<option value="">Choose item</option>';
+          document.getElementById('return-reason').value = '';
+        });
+      })();
+    </script>
+  </main>
+
+  <footer class="site-footer">
+    <button class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
+
+
+    <div class="footer-main">
+      <div class="container footer-columns">
+        <div class="footer-col">
+          <h4>Get to Know Us</h4>
+          <ul>
+            <li><a href="#">About Nandi</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Releases</a></li>
+            <li><a href="#">Our Story</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect with Us</h4>
+          <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Instagram</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Make Money with Us</h4>
+          <ul>
+            <li><a href="#">Sell on Nandi</a></li>
+            <li><a href="#">Sell under Nandi Accelerator</a></li>
+            <li><a href="#">Advertise Your Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Let Us Help You</h4>
+          <ul>
+            <li><a href="#">Your Account</a></li>
+            <li><a href="#">Returns Centre</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <div class="container footer-logo-row">
+          <img src="Nandi Garments-.png" alt="Nandi logo" class="footer-logo">
+          <div class="footer-actions">
+            <div class="lang-select">
+              <button class="btn small">English ▾</button>
+              <button class="btn small">India</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <div class="footer-links">
+          <a href="terms.html">Terms & Conditions</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="return-policy.html">Return Policy</a>
+          <a href="delivery-policy.html">Delivery Policy</a>
+        </div>
+        <div class="copyright">© 2026 Nandi Garments</div>
+
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script>
+    // Ensure language selector and header behaviors initialize when script is loaded late
+    if(window.initLanguageSelector) initLanguageSelector();
+    if(window.applyTranslations) applyTranslations(localStorage.getItem('ng_lang') || 'en');
+    if(window.initCartUI) initCartUI();
+    if(window.initAuth) initAuth();
+    if(window.initChat) initChat();
+  </script>
+</body>
+</html>

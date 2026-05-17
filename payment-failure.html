@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payment Failed · Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Payment failed for Nandi Garments">
+  <style>
+    .fail-hero{padding:2rem 0;text-align:center}
+    .panel{background:var(--surface);border:1px solid #eef2f6;border-radius:10px;padding:1rem}
+    .muted-box{background:#f8fafc;border:1px solid #eef2f6;border-radius:10px;padding:.8rem}
+    .btn-wide{width:100%;display:flex;justify-content:center}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html#products">Products</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="fail-hero">
+      <div class="container">
+        <h2 class="danger">Payment Failed</h2>
+        <p class="muted">Something went wrong while processing your payment. Please try again.</p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="panel">
+        <h3 style="margin-top:0">What you can do now</h3>
+        <div class="muted-box">
+          <strong>Recommended:</strong> Retry payment. If the issue persists, contact support on WhatsApp.
+        </div>
+
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+          <button class="btn" id="retry" type="button" style="flex:1;min-width:200px">Retry Payment</button>
+          <a class="btn secondary" id="support" target="_blank" rel="noopener" style="flex:1;min-width:200px">Contact Support on WhatsApp</a>
+        </div>
+
+        <div style="margin-top:1rem" class="muted">
+          Note: Refunds are not initiated unless payment is successful. For COD orders, no online charge happens.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2026 Nandi Garments</div>
+  </footer>
+
+  <script>
+    const WHATSAPP_NUMBER = '918250530293';
+
+    function init(){
+      const retry = document.getElementById('retry');
+      const support = document.getElementById('support');
+      retry.addEventListener('click', ()=>{
+        window.location.href = 'checkout.html';
+      });
+
+      const params = new URLSearchParams(location.search);
+      const orderId = params.get('orderId') || '';
+      const msg = `Hi Nandi Garments! My payment failed.${orderId ? '\nOrder ID: '+orderId : ''}\nPlease help.`;
+      support.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+

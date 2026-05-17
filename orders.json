@@ -1,0 +1,4 @@
+[
+  {"id":"1","title":"Classic Cotton Shirt","price":"₹799","rating":"4.6","reviews":214,"tags":[],"status":"not_shipped","buyAgain":true,"items":[{"sku":"S100","name":"Classic Cotton Shirt"},{"sku":"S101","name":"Casual T-Shirt"}]},
+  {"id":"2","title":"Denim Jeans","price":"₹1,199","rating":"4.2","reviews":58,"tags":[],"status":"shipped","buyAgain":true,"items":[{"sku":"J200","name":"Denim Jeans"}]}
+]

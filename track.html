@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Track Order · Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Track your order status at Nandi Garments">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html#products" data-i18n="nav.products">Products</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="track-hero">
+      <div class="container">
+        <h2>Track Your Order</h2>
+        <p class="muted">Enter your order ID to track the delivery status</p>
+        <form class="track-form" id="track-form">
+          <input type="text" id="track-order-id" placeholder="Enter order ID (e.g., 1, 2, 3)" required>
+          <button type="submit" class="btn">Track</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="container">
+      <div id="track-result" class="track-result" style="display:none">
+        <h3>Order Status</h3>
+        <div class="track-steps">
+          <div class="track-step" data-step="confirmed">
+            <div class="track-step-icon">✓</div>
+            <div class="track-step-label">Confirmed</div>
+          </div>
+          <div class="track-step" data-step="processing">
+            <div class="track-step-icon">⚙</div>
+            <div class="track-step-label">Processing</div>
+          </div>
+          <div class="track-step" data-step="shipped">
+            <div class="track-step-icon">📦</div>
+            <div class="track-step-label">Shipped</div>
+          </div>
+          <div class="track-step" data-step="delivered">
+            <div class="track-step-icon">🚚</div>
+            <div class="track-step-label">Delivered</div>
+          </div>
+        </div>
+        <div class="track-order-info">
+          <h4>Order Details</h4>
+          <div id="track-items" class="track-items"></div>
+          <p style="margin-top:1rem"><strong>Expected Delivery:</strong> <span id="track-delivery-date"></span></p>
+        </div>
+      </div>
+      
+      <div id="track-not-found" style="text-align:center;display:none">
+        <p class="muted">Order not found. Please check the order ID and try again.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom-inner">
+      <div class="footer-links">
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="return-policy.html">Return Policy</a>
+        <a href="delivery-policy.html">Delivery Policy</a>
+      </div>
+      <div class="copyright">© 2026 Nandi Garments</div>
+    </div>
+  </footer>
+
+
+  <script src="script.js"></script>
+  <script>
+    // Order tracking mock data
+    const mockOrders = {
+      '1': { status: 'delivered', items: [{ name: 'Classic Cotton Shirt', price: 799, img: 'https://via.placeholder.com/100x80?text=Shirt' }], date: '2026-01-15' },
+      '2': { status: 'shipped', items: [{ name: 'Denim Jeans', price: 1199, img: 'https://via.placeholder.com/100x80?text=Jeans' }], date: '2026-01-20' },
+      '3': { status: 'processing', items: [{ name: 'Cotton Kurta', price: 699, img: 'https://via.placeholder.com/100x80?text=Kurta' }], date: '2026-01-22' }
+    };
+    
+    const statusOrder = ['confirmed', 'processing', 'shipped', 'delivered'];
+    
+    document.getElementById('track-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const orderId = document.getElementById('track-order-id').value.trim();
+      const order = mockOrders[orderId] || null;
+      
+      const resultEl = document.getElementById('track-result');
+      const notFoundEl = document.getElementById('track-not-found');
+      
+      if(!order){
+        resultEl.style.display = 'none';
+        notFoundEl.style.display = 'block';
+        return;
+      }
+      
+      notFoundEl.style.display = 'none';
+      resultEl.style.display = 'block';
+      
+      // Update step statuses
+      const currentIdx = statusOrder.indexOf(order.status);
+      document.querySelectorAll('.track-step').forEach((step, i)=>{
+        step.classList.remove('active', 'completed');
+        if(i < currentIdx) step.classList.add('completed');
+        if(i === currentIdx) step.classList.add('active');
+      });
+      
+      // Update items
+      const itemsEl = document.getElementById('track-items');
+      itemsEl.innerHTML = order.items.map(item=>`
+        <div class="track-item">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="info">
+            <div><strong>${item.name}</strong></div>
+            <div class="meta">₹${item.price}</div>
+          </div>
+        </div>
+      `).join('');
+      
+      // Set delivery date (mock: 3-5 days from order date)
+      const orderDate = new Date(order.date);
+      const deliveryDate = new Date(orderDate.getTime() + (4 * 24 * 60 * 60 * 1000));
+      document.getElementById('track-delivery-date').textContent = deliveryDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    });
+    
+    // Initialize cart count
+    if(window.updateCartCount) updateCartCount();
+  </script>
+</body>
+</html>

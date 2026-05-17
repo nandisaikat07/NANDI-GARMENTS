@@ -1,0 +1,189 @@
+[
+  {
+    "id": 1,
+    "name": "Classic Cotton Shirt",
+    "price": "799",
+    "category": "Men’s Wear",
+    "img": "https://via.placeholder.com/400x300?text=Classic+Shirt",
+    "images": [
+      "https://via.placeholder.com/900x700?text=Classic+Shirt+1",
+      "https://via.placeholder.com/900x700?text=Classic+Shirt+2",
+      "https://via.placeholder.com/900x700?text=Classic+Shirt+3"
+    ],
+    "description": "Premium cotton shirt with breathable comfort and neat finishing—ideal for daily wear and smart casual outings.",
+    "fabric": "100% Cotton",
+    "washingInstructions": [
+      "Machine wash cold / Gentle wash",
+      "Do not bleach",
+      "Iron on medium heat"
+    ],
+    "availability": "Available",
+    "colors": ["White", "Light Blue", "Navy"],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "sizeChart": {
+      "columns": ["Size", "Chest (inches)", "Length (inches)", "Shoulder (inches)"],
+      "rows": [
+        {"Size": "S", "Chest (inches)": 38, "Length (inches)": 26, "Shoulder (inches)": 16},
+        {"Size": "M", "Chest (inches)": 40, "Length (inches)": 27, "Shoulder (inches)": 17},
+        {"Size": "L", "Chest (inches)": 42, "Length (inches)": 28, "Shoulder (inches)": 18},
+        {"Size": "XL", "Chest (inches)": 44, "Length (inches)": 29, "Shoulder (inches)": 19},
+        {"Size": "XXL", "Chest (inches)": 46, "Length (inches)": 30, "Shoulder (inches)": 20}
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "name": "Formal Trousers",
+    "price": "1299",
+    "category": "Men’s Wear",
+    "img": "https://via.placeholder.com/400x300?text=Formal+Trousers",
+    "images": [
+      "https://via.placeholder.com/900x700?text=Formal+Trousers+1",
+      "https://via.placeholder.com/900x700?text=Formal+Trousers+2"
+    ],
+    "description": "Tailored formal trousers for a sharp look. Comfortable fit with durable fabric for office and events.",
+    "fabric": "Cotton Blend",
+    "washingInstructions": [
+      "Wash separately",
+      "Machine wash gentle",
+      "Low heat ironing"
+    ],
+    "availability": "Available",
+    "colors": ["Black", "Beige", "Brown"],
+    "sizes": ["28", "30", "32", "34", "36"],
+    "sizeChart": {
+      "columns": ["Size", "Waist (inches)", "Length (inches)"],
+      "rows": [
+        {"Size": "28", "Waist (inches)": 28, "Length (inches)": 38},
+        {"Size": "30", "Waist (inches)": 30, "Length (inches)": 39},
+        {"Size": "32", "Waist (inches)": 32, "Length (inches)": 40},
+        {"Size": "34", "Waist (inches)": 34, "Length (inches)": 41},
+        {"Size": "36", "Waist (inches)": 36, "Length (inches)": 42}
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "name": "Cotton Kurta",
+    "price": "699",
+    "category": "Women’s Wear",
+    "img": "https://via.placeholder.com/400x300?text=Cotton+Kurta",
+    "images": [
+      "https://via.placeholder.com/900x700?text=Cotton+Kurta+1",
+      "https://via.placeholder.com/900x700?text=Cotton+Kurta+2",
+      "https://via.placeholder.com/900x700?text=Cotton+Kurta+3"
+    ],
+    "description": "Soft and breathable cotton kurta with classic styling—comfortable for festivals, work, and daily wear.",
+    "fabric": "100% Cotton",
+    "washingInstructions": [
+      "Gentle wash cold",
+      "Dry in shade",
+      "Iron inside-out"
+    ],
+    "availability": "Available",
+    "colors": ["Cream", "Sky Blue", "Maroon"],
+    "sizes": ["S", "M", "L", "XL"],
+    "sizeChart": {
+      "columns": ["Size", "Chest (inches)", "Length (inches)"],
+      "rows": [
+        {"Size": "S", "Chest (inches)": 40, "Length (inches)": 36},
+        {"Size": "M", "Chest (inches)": 42, "Length (inches)": 37},
+        {"Size": "L", "Chest (inches)": 44, "Length (inches)": 38},
+        {"Size": "XL", "Chest (inches)": 46, "Length (inches)": 39}
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "name": "Tailored Suit",
+    "price": "4999",
+    "category": "Sarees",
+    "img": "https://via.placeholder.com/400x300?text=Tailored+Suit",
+    "images": [
+      "https://via.placeholder.com/900x700?text=Tailored+Suit+1",
+      "https://via.placeholder.com/900x700?text=Tailored+Suit+2",
+      "https://via.placeholder.com/900x700?text=Tailored+Suit+3"
+    ],
+    "description": "Premium tailored suit with elegant drape and refined stitching. Perfect for functions and celebrations.",
+    "fabric": "Silk Blend",
+    "washingInstructions": [
+      "Dry clean recommended",
+      "Steam lightly for best finish"
+    ],
+    "availability": "Limited Stock",
+    "colors": ["Emerald", "Royal Blue", "Black"],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "sizeChart": {
+      "columns": ["Size", "Chest (inches)", "Length (inches)", "Shoulder (inches)"],
+      "rows": [
+        {"Size": "S", "Chest (inches)": 38, "Length (inches)": 30, "Shoulder (inches)": 16},
+        {"Size": "M", "Chest (inches)": 40, "Length (inches)": 31, "Shoulder (inches)": 17},
+        {"Size": "L", "Chest (inches)": 42, "Length (inches)": 32, "Shoulder (inches)": 18},
+        {"Size": "XL", "Chest (inches)": 44, "Length (inches)": 33, "Shoulder (inches)": 19},
+        {"Size": "XXL", "Chest (inches)": 46, "Length (inches)": 34, "Shoulder (inches)": 20}
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "name": "Casual T-Shirt",
+    "price": "499",
+    "category": "T-Shirts",
+    "img": "https://via.placeholder.com/400x300?text=Casual+T-Shirt",
+    "images": [
+      "https://via.placeholder.com/900x700?text=Casual+T-Shirt+1",
+      "https://via.placeholder.com/900x700?text=Casual+T-Shirt+2"
+    ],
+    "description": "Everyday casual t-shirt with soft feel and a clean, modern fit.",
+    "fabric": "Cotton",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Do not tumble dry",
+      "Iron low heat"
+    ],
+    "availability": "Available",
+    "colors": ["Grey", "White", "Olive"],
+    "sizes": ["S", "M", "L", "XL"],
+    "sizeChart": {
+      "columns": ["Size", "Chest (inches)", "Length (inches)"],
+      "rows": [
+        {"Size": "S", "Chest (inches)": 38, "Length (inches)": 26},
+        {"Size": "M", "Chest (inches)": 40, "Length (inches)": 27},
+        {"Size": "L", "Chest (inches)": 42, "Length (inches)": 28},
+        {"Size": "XL", "Chest (inches)": 44, "Length (inches)": 29}
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "name": "Denim Jeans",
+    "price": "1199",
+    "category": "Kids Wear",
+    "img": "https://via.placeholder.com/400x300?text=Denim+Jeans",
+    "images": [
+      "https://via.placeholder.com/900x700?text=Denim+Jeans+1",
+      "https://via.placeholder.com/900x700?text=Denim+Jeans+2",
+      "https://via.placeholder.com/900x700?text=Denim+Jeans+3"
+    ],
+    "description": "Comfort-fit denim jeans with strong stitching and easy everyday styling.",
+    "fabric": "Denim",
+    "washingInstructions": [
+      "Wash inside-out",
+      "Cold wash recommended",
+      "Hang dry"
+    ],
+    "availability": "Available",
+    "colors": ["Indigo", "Black"],
+    "sizes": ["26", "28", "30", "32"],
+    "sizeChart": {
+      "columns": ["Size", "Waist (inches)", "Length (inches)"],
+      "rows": [
+        {"Size": "26", "Waist (inches)": 26, "Length (inches)": 36},
+        {"Size": "28", "Waist (inches)": 28, "Length (inches)": 37},
+        {"Size": "30", "Waist (inches)": 30, "Length (inches)": 38},
+        {"Size": "32", "Waist (inches)": 32, "Length (inches)": 39}
+      ]
+    }
+  }
+]
+

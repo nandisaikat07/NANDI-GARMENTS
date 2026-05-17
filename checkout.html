@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Checkout · Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Checkout for Nandi Garments">
+  <style>
+    .checkout-hero{padding:2rem 0;text-align:center}
+    .checkout-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:1rem;align-items:start}
+    @media(max-width:900px){.checkout-layout{grid-template-columns:1fr}}
+    .panel{background:var(--surface);border:1px solid #eef2f6;border-radius:10px;padding:1rem}
+    .stepper{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:.75rem 0 1.25rem}
+    .step{padding:.4rem .7rem;border-radius:999px;background:#f6f7f9;border:1px solid #eef2f6;color:var(--muted)}
+    .step.active{background:var(--accent);border-color:var(--accent);color:#fff}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media(max-width:680px){.grid-2{grid-template-columns:1fr}}
+    label{display:block;margin-bottom:.35rem;font-weight:600}
+    input,select,textarea{width:100%;box-sizing:border-box}
+    .methods{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    @media(max-width:680px){.methods{grid-template-columns:1fr}}
+    .method-card{border:1px solid #eef2f6;border-radius:10px;padding:.85rem;display:flex;gap:.6rem;cursor:pointer;user-select:none;transition:transform .06s ease, border-color .15s ease}
+    .method-card:hover{transform:translateY(-1px)}
+    .method-card input{margin-top:.15rem}
+    .method-card.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+    .trust-badges{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
+    .badge{padding:.35rem .6rem;border:1px solid #eef2f6;border-radius:999px;background:#fff;font-weight:700;color:var(--text)}
+    .badge svg{vertical-align:middle;margin-right:.35rem}
+    .summary-line{display:flex;justify-content:space-between;gap:.5rem;margin:.35rem 0}
+    .muted-box{background:#f8fafc;border:1px solid #eef2f6;border-radius:10px;padding:.8rem}
+    .btn-wide{width:100%;display:flex;justify-content:center}
+    .danger{color:#c0392b}
+    .success{color:#2e7d32}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html#products" id="nav-all">All</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="checkout-hero">
+      <div class="container">
+        <h2>Secure Checkout</h2>
+        <p class="muted">Cart → Address → Payment → Confirmation</p>
+        <div class="stepper" aria-hidden="true">
+          <div class="step active">1. Address</div>
+          <div class="step active">2. Payment</div>
+          <div class="step">3. Confirm</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="checkout-layout">
+        <div>
+          <div class="panel" style="margin-bottom:1rem">
+            <h3 style="margin-top:0">Delivery Address</h3>
+            <div class="grid-2">
+              <div>
+                <label>Full Name</label>
+                <input id="addr-name" type="text" required placeholder="e.g. Rahul Kumar">
+              </div>
+              <div>
+                <label>Mobile Number</label>
+                <input id="addr-phone" type="tel" required placeholder="e.g. 8250530293">
+              </div>
+            </div>
+            <div style="margin-top:.75rem">
+              <label>House / Street</label>
+              <input id="addr-line1" type="text" required placeholder="House no, street, area">
+            </div>
+            <div class="grid-2" style="margin-top:.75rem">
+              <div>
+                <label>City</label>
+                <input id="addr-city" type="text" required placeholder="e.g. Purulia">
+              </div>
+              <div>
+                <label>PIN Code</label>
+                <input id="addr-pin" type="text" required inputmode="numeric" placeholder="723156">
+              </div>
+            </div>
+            <div style="margin-top:.75rem">
+              <label>Landmark (optional)</label>
+              <input id="addr-landmark" type="text" placeholder="Near …">
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom:1rem">
+            <h3 style="margin-top:0">Choose Payment Method</h3>
+            <div class="methods" role="radiogroup" aria-label="Payment methods">
+              <label class="method-card" for="pm-upi">
+                <input type="radio" name="pm" id="pm-upi" value="upi" checked>
+                <div>
+                  <div style="font-weight:800">UPI</div>
+                  <div class="muted">Google Pay / PhonePe / Paytm</div>
+                </div>
+              </label>
+
+              <label class="method-card" for="pm-cards">
+                <input type="radio" name="pm" id="pm-cards" value="cards">
+                <div>
+                  <div style="font-weight:800">Debit/Credit Cards</div>
+                  <div class="muted">Visa / Mastercard</div>
+                </div>
+              </label>
+
+              <label class="method-card" for="pm-netbanking">
+                <input type="radio" name="pm" id="pm-netbanking" value="netbanking">
+                <div>
+                  <div style="font-weight:800">Net Banking</div>
+                  <div class="muted">All major banks</div>
+                </div>
+              </label>
+
+              <label class="method-card" for="pm-cod">
+                <input type="radio" name="pm" id="pm-cod" value="cod">
+                <div>
+                  <div style="font-weight:800">Cash on Delivery (COD)</div>
+                  <div class="muted">Pay at your doorstep</div>
+                </div>
+              </label>
+            </div>
+
+      <div class="muted-box" style="margin-top:1rem">
+              <div style="font-weight:800">UPI Apps</div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem">
+                <button type="button" class="btn small" data-upi="googlepay">Google Pay</button>
+                <button type="button" class="btn small" data-upi="phonepe">PhonePe</button>
+                <button type="button" class="btn small" data-upi="paytm">Paytm</button>
+              </div>
+              <p class="muted" style="margin:.6rem 0 0">Demo integration: UPI/Cards/NetBanking are powered by Razorpay checkout (requires backend order + Razorpay key).</p>
+            </div>
+
+
+            <div class="trust-badges" aria-label="Security and trust">
+              <span class="badge">🔒 SSL / HTTPS</span>
+              <span class="badge">✅ Secure Payments</span>
+              <span class="badge">🧾 Trusted Gateway</span>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom:1rem">
+            <h3 style="margin-top:0">Coupon Code</h3>
+            <div class="grid-2">
+              <div>
+                <label>Enter coupon (optional)</label>
+                <input id="coupon-code" type="text" placeholder="WELCOME10 / SUMMER20 / FIRSTORDER">
+              </div>
+              <div style="display:flex;align-items:flex-end">
+                <button class="btn" id="apply-coupon" type="button">Apply</button>
+              </div>
+            </div>
+            <div class="muted" style="margin-top:.6rem">
+              Available: <strong>WELCOME10</strong>, <strong>SUMMER20</strong>, <strong>FIRSTORDER</strong>
+            </div>
+            <div class="summary-line" style="margin-top:.9rem"><span class="muted">Discount</span><span id="discount-amount">₹0</span></div>
+          </div>
+
+          <div class="panel">
+            <h3 style="margin-top:0">Order Confirmation</h3>
+            <div class="grid-2">
+              <div>
+                <div class="muted">Final amount</div>
+                <div style="font-size:1.4rem;font-weight:900" id="final-amount">₹0</div>
+              </div>
+              <div>
+                <div class="muted">Delivery estimate</div>
+                <div style="font-weight:800">3–7 business days</div>
+              </div>
+            </div>
+            <button class="btn btn-wide" style="margin-top:1rem" id="pay-now" type="button">Pay Now</button>
+            <p class="muted" style="margin:.6rem 0 0">You will be redirected to a payment success/failure page (demo).</p>
+          </div>
+        </div>
+
+        <aside>
+          <div class="panel" id="order-summary">
+            <h3 style="margin-top:0">Order Summary</h3>
+            <div id="summary-items" style="margin-top:.75rem"></div>
+
+            <hr style="border:none;border-top:1px solid #eef2f6;margin:1rem 0">
+
+            <div class="summary-line"><span class="muted">Subtotal</span><span id="summary-subtotal">₹0</span></div>
+            <div class="summary-line"><span class="muted">Shipping</span><span id="summary-shipping">₹0</span></div>
+            <div class="summary-line"><span class="muted">Discount</span><span id="summary-discount">₹0</span></div>
+            <div class="summary-line" style="font-weight:900"><span>Total</span><span id="summary-total">₹0</span></div>
+
+            <div class="muted" style="margin-top:.9rem">
+              Return/Refund: handled per policy. Refunds processed within <strong>5–7 business days</strong> after approval (demo text).
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2026 Nandi Garments</div>
+  </footer>
+
+  <script>
+    // ---------- Shared constants (keep aligned with script.js) ----------
+    const CONTACT_EMAIL = 'nandisaikat.2002@gmail.com';
+    const WHATSAPP_NUMBER = '918250530293';
+
+    const CART_KEY = 'ng_cart_v1';
+    const LAST_ORDER_KEY = 'ng_last_order_v1';
+    const LAST_COUPON_KEY = 'ng_last_coupon_v1';
+    const LAST_ADDRESS_KEY = 'ng_last_address_v1';
+
+    // Demo flag: if true, non-COD payments will redirect to a local simulator page
+    const USE_PAYMENT_SIMULATOR = true;
+
+    const SHIPPING_FIXED = 49; // demo
+
+    function safeParse(json, fallback){
+      try{ return JSON.parse(json); }catch(e){ return fallback; }
+    }
+    function money(n){
+      const x = Number(n || 0);
+      return '₹' + x.toLocaleString('en-IN');
+    }
+
+    function getCart(){
+      return safeParse(localStorage.getItem(CART_KEY), {});
+    }
+
+    function cartItems(){
+      const c = getCart();
+      return Object.values(c);
+    }
+
+    function subtotal(){
+      return cartItems().reduce((s,it)=> s + (Number(it.price)||0) * (Number(it.qty)||0), 0);
+    }
+
+    const COUPONS = {
+      WELCOME10: { type:'percent', value:10 },
+      SUMMER20: { type:'percent', value:20 },
+      FIRSTORDER: { type:'fixed', value:100 }
+    };
+
+    function computeDiscount(subTotal, code){
+      if(!code) return 0;
+      const c = COUPONS[String(code).toUpperCase()];
+      if(!c) return 0;
+      if(c.type==='percent'){
+        const d = subTotal * (c.value/100);
+        // cap to keep it realistic
+        return Math.min(d, 500);
+      }
+      if(c.type==='fixed') return Math.min(c.value, subTotal);
+      return 0;
+    }
+
+    function getSelectedPayment(){
+      const el = document.querySelector('input[name="pm"]:checked');
+      return el ? el.value : 'upi';
+    }
+
+    function setActiveMethodCards(){
+      document.querySelectorAll('.method-card').forEach(card=>{
+        const input = card.querySelector('input[type="radio"]');
+        if(!input) return;
+        const on = input.checked;
+        card.classList.toggle('active', on);
+      });
+    }
+
+    function renderOrderSummary(){
+      const itemsEl = document.getElementById('summary-items');
+      const subEl = document.getElementById('summary-subtotal');
+      const shipEl = document.getElementById('summary-shipping');
+      const discEl = document.getElementById('summary-discount');
+      const totEl = document.getElementById('summary-total');
+      const finalEl = document.getElementById('final-amount');
+
+      const items = cartItems();
+      itemsEl.innerHTML = '';
+
+      if(items.length===0){
+        itemsEl.innerHTML = '<div class="muted">Your cart is empty.</div>';
+        subEl.textContent = money(0);
+        shipEl.textContent = money(0);
+        discEl.textContent = money(0);
+        totEl.textContent = money(0);
+        finalEl.textContent = money(0);
+        document.getElementById('pay-now').disabled = true;
+        return;
+      }
+
+      const sub = subtotal();
+      const savedCoupon = safeParse(localStorage.getItem(LAST_COUPON_KEY), null);
+      const discount = computeDiscount(sub, savedCoupon && savedCoupon.code ? savedCoupon.code : null);
+      const shipping = SHIPPING_FIXED;
+      const total = Math.max(0, sub + shipping - discount);
+
+      items.forEach(it=>{
+        const row = document.createElement('div');
+        row.className = 'summary-line';
+        row.innerHTML = `<span style="flex:1">${it.name} <span class="muted">×${it.qty}</span></span><span>${money((Number(it.price)||0)*(Number(it.qty)||0))}</span>`;
+        itemsEl.appendChild(row);
+      });
+
+      subEl.textContent = money(sub);
+      shipEl.textContent = money(shipping);
+      discEl.textContent = money(discount);
+      totEl.textContent = money(total);
+      finalEl.textContent = money(total);
+
+      document.getElementById('discount-amount').textContent = money(discount);
+
+      // update pay button label for COD
+      const pm = getSelectedPayment();
+      document.getElementById('pay-now').textContent = pm==='cod' ? `Place COD Order (${money(total)})` : `Pay Now (${money(total)})`;
+    }
+
+    function setCouponUI(){
+      const couponInput = document.getElementById('coupon-code');
+      const savedCoupon = safeParse(localStorage.getItem(LAST_COUPON_KEY), null);
+      if(savedCoupon && savedCoupon.code){
+        couponInput.value = savedCoupon.code;
+      }
+    }
+
+    function applyCoupon(){
+      const input = document.getElementById('coupon-code');
+      const code = (input.value||'').trim();
+      if(!code){
+        localStorage.removeItem(LAST_COUPON_KEY);
+        renderOrderSummary();
+        return;
+      }
+      const known = COUPONS[String(code).toUpperCase()];
+      if(!known){
+        alert('Invalid coupon code. Try WELCOME10 / SUMMER20 / FIRSTORDER');
+        return;
+      }
+      localStorage.setItem(LAST_COUPON_KEY, JSON.stringify({ code: String(code).toUpperCase(), appliedAt: Date.now() }));
+      renderOrderSummary();
+    }
+
+    function validateAddress(){
+      const required = ['addr-name','addr-phone','addr-line1','addr-city','addr-pin'];
+      for(const id of required){
+        const el = document.getElementById(id);
+        if(!el || !el.value.trim()){
+          alert('Please fill ' + id.replace('addr-','') );
+          el?.focus?.();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function saveAddress(){
+      const data = {
+        name: document.getElementById('addr-name').value.trim(),
+        phone: document.getElementById('addr-phone').value.trim(),
+        line1: document.getElementById('addr-line1').value.trim(),
+        city: document.getElementById('addr-city').value.trim(),
+        pin: document.getElementById('addr-pin').value.trim(),
+        landmark: (document.getElementById('addr-landmark').value||'').trim()
+      };
+      localStorage.setItem(LAST_ADDRESS_KEY, JSON.stringify(data));
+      return data;
+    }
+
+    function loadAddress(){
+      const saved = safeParse(localStorage.getItem(LAST_ADDRESS_KEY), null);
+      if(!saved) return;
+      ['name','phone','line1','city','pin','landmark'].forEach(k=>{
+        const id = 'addr-' + (k==='line1'?'line1':k);
+        const el = document.getElementById(id);
+        if(el && saved[k]) el.value = saved[k];
+      });
+    }
+
+    function generateOrderId(){
+      const rnd = Math.floor(Math.random()*900000)+100000;
+      const dt = new Date();
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth()+1).padStart(2,'0');
+      const d = String(dt.getDate()).padStart(2,'0');
+      return `NG${y}${m}${d}-${rnd}`;
+    }
+
+    function loadRazorpayScript(){
+      return new Promise((resolve)=>{
+        if(window.Razorpay){ resolve(true); return; }
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = ()=> resolve(true);
+        script.onerror = ()=> resolve(false);
+        document.body.appendChild(script);
+      });
+    }
+
+    function startRazorpayPayment(amount, orderId, receipt){
+      // NOTE: Real Razorpay requires backend-created order_id and signature verification.
+      // This function assumes backend endpoint returns {success:true, order:{id,...}}.
+      return fetch('/create-razorpay-order', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          amount,
+          currency: 'INR',
+          receipt
+        })
+      })
+      .then(r=>r.json())
+      .then(async data=>{
+        if(!data || !data.success || !data.order || !data.order.id){
+          return { ok:false, paymentId:null, provider:'razorpay' };
+        }
+
+        const ok = await new Promise((resolve)=>{
+          const amountPaise = Number(amount) * 100;
+          const keyId = 'YOUR_RAZORPAY_KEY_ID';
+
+          const options = {
+            key: keyId,
+            amount: amountPaise,
+            currency: 'INR',
+            name: 'Nandi Garments',
+            description: 'Purchase Payment',
+            order_id: data.order.id,
+
+            handler: function(response){
+              resolve({ ok:true, paymentId: response.razorpay_payment_id, provider:'razorpay' });
+            },
+            prefill: {
+              name: document.getElementById('addr-name')?.value || 'Customer',
+              email: 'customer@example.com',
+              contact: document.getElementById('addr-phone')?.value || ''
+            },
+            notes: {
+              orderId: orderId,
+            },
+            theme: { color: '#000000' },
+            modal: { ondismiss: ()=> resolve({ ok:false, paymentId:null, provider:'razorpay' }) }
+          };
+
+          try{
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.on('payment.failed', function(){
+              resolve({ ok:false, paymentId:null, provider:'razorpay' });
+            });
+            paymentObject.open();
+          }catch(e){
+            resolve({ ok:false, paymentId:null, provider:'razorpay' });
+          }
+        });
+
+        return ok;
+      })
+      .catch(()=>({ ok:false, paymentId:null, provider:'razorpay' }));
+    }
+
+
+    function setMethodsFromPaymentSelection(){
+      document.querySelectorAll('.method-card').forEach(card=>{
+        card.addEventListener('click', ()=>{
+          const input = card.querySelector('input[type="radio"]');
+          if(input) input.checked = true;
+          setActiveMethodCards();
+          renderOrderSummary();
+        });
+      });
+      document.querySelectorAll('input[name="pm"]').forEach(r=>{
+        r.addEventListener('change', ()=>{
+          setActiveMethodCards();
+          renderOrderSummary();
+        });
+      });
+    }
+
+    async function handlePayNow(){
+      if(!validateAddress()) return;
+      const items = cartItems();
+      if(items.length===0){ alert('Cart is empty'); return; }
+
+      const paymentMethod = getSelectedPayment();
+      const orderId = generateOrderId();
+
+      const address = saveAddress();
+
+      const sub = subtotal();
+      const savedCoupon = safeParse(localStorage.getItem(LAST_COUPON_KEY), null);
+      const discount = computeDiscount(sub, savedCoupon && savedCoupon.code ? savedCoupon.code : null);
+      const shipping = SHIPPING_FIXED;
+      const total = Math.max(0, sub + shipping - discount);
+
+      const order = {
+        orderId,
+        createdAt: new Date().toISOString(),
+        items: items.map(it=>({ id: it.id, name: it.name, qty: it.qty, price: it.price })),
+        totals: { subtotal: sub, shipping, discount, total },
+        address,
+        payment: { method: paymentMethod, status: 'processing' },
+        whatsapp: WHATSAPP_NUMBER,
+      };
+
+      // persist so success page can show it
+      localStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
+
+      if(paymentMethod === 'cod'){
+        order.payment.status = 'success';
+        order.payment.provider = 'cod';
+        localStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
+
+        // clear cart
+        localStorage.removeItem(CART_KEY);
+        localStorage.removeItem(LAST_COUPON_KEY);
+        setTimeout(()=>{
+          window.location.href = `payment-success.html?status=cod&orderId=${encodeURIComponent(orderId)}`;
+        }, 250);
+        return;
+      }
+
+      // For demo mode, redirect to a local payment simulator for non-COD methods.
+      if(paymentMethod !== 'cod' && USE_PAYMENT_SIMULATOR){
+        const receipt = 'receipt_' + orderId;
+        const params = new URLSearchParams({ orderId, method: paymentMethod, amount: String(total) });
+        // optional: add a `force` param for deterministic testing (force=success|failure)
+        window.location.href = `payment.html?${params.toString()}`;
+        return;
+      }
+
+      // Razorpay flow for non-COD methods
+      // Requires backend endpoint POST /create-razorpay-order
+      await loadRazorpayScript();
+
+      const receipt = 'receipt_' + orderId;
+      const result = await startRazorpayPayment(total, orderId, receipt);
+
+      order.payment.provider = 'razorpay';
+      order.payment.status = result.ok ? 'success' : 'failed';
+      order.payment.paymentId = result.paymentId;
+      localStorage.setItem(LAST_ORDER_KEY, JSON.stringify(order));
+
+
+      // Note: do not clear cart on failure (customer may retry)
+      setTimeout(()=>{
+        if(result.ok){
+          localStorage.removeItem(CART_KEY);
+          localStorage.removeItem(LAST_COUPON_KEY);
+          window.location.href = `payment-success.html?status=paid&orderId=${encodeURIComponent(orderId)}`;
+        } else {
+          window.location.href = `payment-failure.html?orderId=${encodeURIComponent(orderId)}`;
+        }
+      }, 200);
+    }
+
+    function init(){
+      setCouponUI();
+      loadAddress();
+      setMethodsFromPaymentSelection();
+
+      document.getElementById('apply-coupon').addEventListener('click', applyCoupon);
+      document.getElementById('pay-now').addEventListener('click', handlePayNow);
+
+      // UPI demo buttons select method
+      document.querySelectorAll('[data-upi]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          document.getElementById('pm-upi').checked = true;
+          setActiveMethodCards();
+          renderOrderSummary();
+          alert('Demo: UPI app selected: ' + btn.getAttribute('data-upi') + '. Proceed to Pay Now.');
+        });
+      });
+
+      // initial
+      setActiveMethodCards();
+      renderOrderSummary();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+

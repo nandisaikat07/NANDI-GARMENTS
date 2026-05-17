@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payment Successful · Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Payment successful for Nandi Garments">
+  <style>
+    .success-hero{padding:2rem 0;text-align:center}
+    .panel{background:var(--surface);border:1px solid #eef2f6;border-radius:10px;padding:1rem}
+    .summary-line{display:flex;justify-content:space-between;gap:.5rem;margin:.35rem 0}
+    .muted-box{background:#f8fafc;border:1px solid #eef2f6;border-radius:10px;padding:.8rem}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    @media(max-width:680px){.grid-2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html#products">Products</a>
+        <a href="orders.html">Orders</a>
+        <a href="track.html">Track</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="success-hero">
+      <div class="container">
+        <h2 class="success">Payment Successful</h2>
+        <p class="muted">Thanks for your order. Your order has been placed successfully.</p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="grid-2">
+        <div class="panel">
+          <h3 style="margin-top:0">Order Details</h3>
+          <div class="summary-line"><span class="muted">Order ID</span><span id="order-id" style="font-weight:900"></span></div>
+          <div class="summary-line"><span class="muted">Status</span><span id="order-status" style="font-weight:900"></span></div>
+          <div class="summary-line"><span class="muted">Delivery estimate</span><span>3–7 business days</span></div>
+
+          <div class="muted-box" style="margin-top:1rem">
+            <div style="font-weight:900">Trusted Checkout</div>
+            <div class="muted">SSL / HTTPS. Secure payment confirmation page (demo).</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3 style="margin-top:0">Invoice / Receipt</h3>
+          <p class="muted">Send your invoice on WhatsApp or email.</p>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap">
+            <a id="whatsapp-invoice" class="btn" target="_blank" rel="noopener">Send on WhatsApp</a>
+            <a id="email-invoice" class="btn secondary" href="#">Email invoice</a>
+          </div>
+
+          <div style="margin-top:1rem" class="muted">
+            You can also track your order from the Track page.
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:1rem">
+        <h3 style="margin-top:0">Order Summary</h3>
+        <div id="success-items"></div>
+        <hr style="border:none;border-top:1px solid #eef2f6;margin:1rem 0">
+        <div class="summary-line"><span class="muted">Subtotal</span><span id="s-sub">₹0</span></div>
+        <div class="summary-line"><span class="muted">Shipping</span><span id="s-ship">₹0</span></div>
+        <div class="summary-line"><span class="muted">Discount</span><span id="s-disc">₹0</span></div>
+        <div class="summary-line" style="font-weight:900"><span>Total</span><span id="s-total">₹0</span></div>
+
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+          <a class="btn" href="track.html">Track Order</a>
+          <a class="btn secondary" href="index.html#products">Shop Again</a>
+          <a class="btn secondary" href="returns.html">Return / Refund</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2026 Nandi Garments</div>
+  </footer>
+
+  <script>
+    const CONTACT_EMAIL = 'nandisaikat.2002@gmail.com';
+    const WHATSAPP_NUMBER = '918250530293';
+    const LAST_ORDER_KEY = 'ng_last_order_v1';
+
+    function safeParse(json, fallback){
+      try{ return JSON.parse(json); }catch(e){ return fallback; }
+    }
+    function money(n){
+      const x = Number(n || 0);
+      return '₹' + x.toLocaleString('en-IN');
+    }
+
+    function init(){
+      const order = safeParse(localStorage.getItem(LAST_ORDER_KEY), null);
+      const params = new URLSearchParams(location.search);
+      const orderIdFromQuery = params.get('orderId');
+
+      const orderId = (order && order.orderId) || orderIdFromQuery || '—';
+      const status = (order && order.payment && order.payment.status) || (params.get('status') || 'success');
+
+      document.getElementById('order-id').textContent = orderId;
+      document.getElementById('order-status').textContent = status === 'success' ? 'Paid' : status;
+
+      const itemsEl = document.getElementById('success-items');
+      itemsEl.innerHTML = '';
+
+      const items = order && Array.isArray(order.items) ? order.items : [];
+      if(items.length===0){
+        itemsEl.innerHTML = '<div class="muted">Order data not found. Please place your order again from the cart.</div>';
+      } else {
+        items.forEach(it=>{
+          const row = document.createElement('div');
+          row.className = 'summary-line';
+          row.innerHTML = `<span style="flex:1">${it.name} <span class="muted">×${it.qty}</span></span><span>${money((Number(it.price)||0)*(Number(it.qty)||0))}</span>`;
+          itemsEl.appendChild(row);
+        });
+      }
+
+      const totals = order && order.totals ? order.totals : { subtotal:0, shipping:0, discount:0, total:0 };
+      document.getElementById('s-sub').textContent = money(totals.subtotal);
+      document.getElementById('s-ship').textContent = money(totals.shipping);
+      document.getElementById('s-disc').textContent = money(totals.discount);
+      document.getElementById('s-total').textContent = money(totals.total);
+
+      // invoice message
+      const addr = order && order.address ? `${order.address.name}, ${order.address.line1}, ${order.address.city} - ${order.address.pin}` : '';
+      const msg = `Nandi Garments Invoice\nOrder ID: ${orderId}\nStatus: ${status}\nTotal: ${money(totals.total)}\nDelivery: 3–7 business days\nAddress: ${addr}`;
+
+      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      document.getElementById('whatsapp-invoice').href = waUrl;
+
+      const subject = encodeURIComponent('Your Nandi Garments Invoice - ' + orderId);
+      const body = encodeURIComponent(msg + `\n\nFor support: ${CONTACT_EMAIL}`);
+      document.getElementById('email-invoice').href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+

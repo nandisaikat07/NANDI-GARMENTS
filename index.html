@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Nandi Garments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Nandi Garments - quality clothing for every occasion">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="#products" id="nav-all">All</a>
+        <a href="#products" data-i18n="nav.products">Products</a>
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#location" data-i18n="nav.location">Location</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+        <a href="delivery-policy.html" data-i18n="nav.delivery">Delivery</a>
+      </nav>
+
+      <div class="header-actions">
+
+        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+
+        <div class="account">
+          <button id="auth-button" class="btn small" aria-expanded="false">
+            <span class="auth-icon" aria-hidden="true">👤</span>
+            <span class="auth-text">Login</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <a id="account-link" href="#account">Account</a>
+            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top categories strip (garment-focused) -->
+  <div class="top-categories container" aria-hidden="false">
+    <button class="cat-item all-item" data-cat="all" aria-label="All categories">
+      <div class="cat-icon" aria-hidden="true">☰</div>
+      <span>All</span>
+    </button>
+
+    <button class="cat-item" data-cat="men" aria-label="Men">
+      <div class="cat-icon" aria-hidden="true">👔</div>
+      <span>Men</span>
+    </button>
+
+    <button class="cat-item" data-cat="women" aria-label="Women">
+      <div class="cat-icon" aria-hidden="true">👗</div>
+      <span>Women</span>
+    </button>
+
+    <button class="cat-item" data-cat="kids" aria-label="Kids">
+      <div class="cat-icon" aria-hidden="true">🧒</div>
+      <span>Kids</span>
+    </button>
+
+    <button class="cat-item" data-cat="ethnic" aria-label="Ethnic Wear">
+      <div class="cat-icon" aria-hidden="true">🧵</div>
+      <span>Ethnic</span>
+    </button>
+
+    <button class="cat-item" data-cat="western" aria-label="Western Wear">
+      <div class="cat-icon" aria-hidden="true">👖</div>
+      <span>Western</span>
+    </button>
+
+    <button class="cat-item" data-cat="bestsellers" aria-label="Bestsellers">
+      <div class="cat-icon" aria-hidden="true">🔥</div>
+      <span>Bestsellers</span>
+    </button>
+
+    <button class="cat-item" data-cat="new" aria-label="New Arrivals">
+      <div class="cat-icon" aria-hidden="true">🆕</div>
+      <span>New</span>
+    </button>
+
+    <button class="cat-item" data-cat="offers" aria-label="Offers">
+      <div class="cat-icon" aria-hidden="true">💸</div>
+      <span>Offers</span>
+    </button>
+
+    <button class="cat-item" data-cat="accessories" aria-label="Accessories">
+      <div class="cat-icon" aria-hidden="true">👜</div>
+      <span>Accessories</span>
+    </button>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h2 data-i18n="hero.title">Welcome to Nandi Garments</h2>
+        <p data-i18n="hero.text">Handpicked clothing and tailoring for style and comfort.</p>
+        <a class="btn" href="#products" data-i18n="hero.button">Shop Now</a>
+      </div>
+    </section>
+
+    <section id="recently-viewed" class="recently-viewed" style="display:none">
+      <div class="container">
+        <h3>Recently Viewed</h3>
+        <div id="recently-viewed-items" class="recent-grid"></div>
+      </div>
+    </section>
+
+
+    <section class="deal-strip" aria-label="Shopping benefits">
+      <div class="container deal-strip-inner">
+        <button type="button" class="deal-item deal-link" data-deal-action="whatsapp" aria-label="Size & Fit Help on WhatsApp">
+          <div class="deal-icon" aria-hidden="true">📏</div>
+          <div>
+            <div class="deal-title">Size & Fit Help</div>
+            <div class="deal-sub">WhatsApp for custom measurements</div>
+          </div>
+        </button>
+        <button type="button" class="deal-item deal-link" data-deal-action="returns" aria-label="Easy Returns info">
+          <div class="deal-icon" aria-hidden="true">↩️</div>
+          <div>
+            <div class="deal-title">Easy Returns</div>
+            <div class="deal-sub">3–5 days return window</div>
+          </div>
+        </button>
+        <button type="button" class="deal-item deal-link" data-deal-action="payments" aria-label="Payment methods info">
+          <div class="deal-icon" aria-hidden="true">💳</div>
+          <div>
+            <div class="deal-title">Pay Flexibly</div>
+            <div class="deal-sub">Online & Cash on Delivery</div>
+          </div>
+        </button>
+        <button type="button" class="deal-item deal-link" data-deal-action="support" aria-label="Fast Support">
+          <div class="deal-icon" aria-hidden="true">⚡</div>
+          <div>
+            <div class="deal-title">Fast Support</div>
+            <div class="deal-sub">Quick replies & order updates</div>
+          </div>
+        </button>
+      </div>
+    </section>
+
+
+
+    <section id="products" class="section">
+      <div class="container">
+        <h2 data-i18n="products.title">Products</h2>
+
+        <!-- Best Seller / Trending / Top Picks (mock sections driven by product data) -->
+        <section class="product-promo" aria-label="Most Loved">
+          <div class="promo-header">
+            <h3>Most Loved</h3>
+            <a class="promo-link" href="#" data-promo-action="most-loved">View all</a>
+          </div>
+          <div class="promo-grid" id="promo-most-loved"></div>
+        </section>
+
+        <section class="product-promo" aria-label="Trending Now">
+          <div class="promo-header">
+            <h3>Trending Now</h3>
+            <a class="promo-link" href="#" data-promo-action="trending">View all</a>
+          </div>
+          <div class="promo-grid" id="promo-trending"></div>
+        </section>
+
+        <section class="product-promo" aria-label="Top Picks">
+          <div class="promo-header">
+            <h3>Top Picks</h3>
+            <a class="promo-link" href="#" data-promo-action="top-picks">View all</a>
+          </div>
+          <div class="promo-grid" id="promo-top-picks"></div>
+        </section>
+
+        <!-- Availability helper (in stock / only left / restocking soon) -->
+        <section class="product-availability" aria-label="Availability">
+          <div class="availability-note">
+            <strong>Live Stock Availability</strong>
+            <span class="muted">(demo badges based on product availability)</span>
+          </div>
+        </section>
+
+        <div class="product-controls">
+          <label>Category:
+            <select id="category-filter">
+              <option value="all">All</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="product-grid" class="grid"></div>
+      </div>
+    </section>
+
+
+    <section id="about" class="section">
+      <div class="container">
+        <h2 data-i18n="about.title">About Us</h2>
+        <p data-i18n="about.text">Nandi Garments is focused on simplifying garment business operations through a smart digital platform. We help manage inventory, sales, and products efficiently, reducing manual work and improving accuracy. Our goal is to support business growth with a user-friendly and scalable solution.</p>
+      </div>
+    </section>
+
+    <section id="location" class="section">
+      <div class="container">
+        <h2 data-i18n="location.title">Location</h2>
+        <p data-i18n="location.text">Visit our store at : Madhubanpur, Muraddi, Santuri, Purulia,723156. We're open Mon–Sun, 6:30am–9pm.</p>
+        <div class="map-embed">
+          <iframe
+            id="map-iframe"
+            data-lat="23.60898"
+            data-lng="86.82593"
+            data-zoom="16"
+            src="https://www.google.com/maps?q=23.60898,86.82593&z=16&output=embed"
+            title="Nandi Garments location"
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="map-controls">
+          <div class="zoom-controls">
+            <button id="map-zoom-out" class="btn small" aria-label="Zoom out">−</button>
+            <button id="map-zoom-in" class="btn small" aria-label="Zoom in">+</button>
+          </div>
+          <a id="map-directions" class="btn small" href="https://www.google.com/maps/dir/?api=1&destination=23.60898,86.82593" target="_blank" rel="noopener">Get directions</a>
+        </div>
+      </div>
+    </section>
+
+<section id="contact" class="section contact">
+      <div class="container">
+        <h2 data-i18n="contact.title">Contact</h2>
+        <form id="contact-form">
+          <label><span data-i18n="contact.name">Name</span><input type="text" id="name" required></label>
+          <label><span data-i18n="contact.email">Email</span><input type="email" id="email" required></label>
+          <label><span data-i18n="contact.message">Message</span><textarea id="message" rows="4" required></textarea></label>
+          <div class="contact-actions">
+            <button type="submit" class="btn" data-i18n="contact.send_email">Send Email</button>
+            <button type="button" id="whatsapp-send" class="btn" data-i18n="contact.send_whatsapp">Send WhatsApp</button>
+          </div>
+        </form>
+        <p class="note">Or visit us in-store — address and hours available on request.</p>
+        <div class="contact-info">
+          <p><strong>Phone:</strong> <a href="tel:8250530293">8250530293</a></p>
+          <p><strong>WhatsApp:</strong> <a href="https://wa.me/918250530293" target="_blank" rel="noopener">Message on WhatsApp</a></p>
+          <p><strong>Email:</strong> <a href="mailto:nandisaikat.2002@gmail.com">nandisaikat.2002@gmail.com</a></p>
+          <p><strong>GitHub:</strong> <a href="https://github.com/nandisaikat07" target="_blank" rel="noopener">nandisaikat07</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section">
+      <div class="container">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-list">
+<div class="faq-item">
+            <button class="faq-question">What is your return policy?</button>
+            <div class="faq-answer">
+              <p>Return policy will be 3 to 5 days.</p>
+            </div>
+          </div>
+<div class="faq-item">
+            <button class="faq-question">Do you offer custom tailoring?</button>
+            <div class="faq-answer">
+              <p>Yes</p>
+            </div>
+          </div>
+<div class="faq-item">
+            <button class="faq-question">How do I track my order?</button>
+            <div class="faq-answer">
+              <p>Tracking id will be there</p>
+            </div>
+          </div>
+<div class="faq-item">
+            <button class="faq-question">What payment methods do you accept?</button>
+            <div class="faq-answer">
+              <p>Both Online and Cash</p>
+            </div>
+          </div>
+<div class="faq-item">
+            <button class="faq-question">Do you ship internationally?</button>
+            <div class="faq-answer">
+              <p>No</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Size Guide Section -->
+    <section id="size-guide" class="section">
+      <div class="container">
+        <h2>Size Guide</h2>
+        <div class="size-guide-grid">
+          <table class="size-table">
+            <thead>
+              <tr>
+                <th>Size</th>
+                <th>Chest (inches)</th>
+                <th>Length (inches)</th>
+                <th>Shoulder (inches)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>S</td><td>38</td><td>26</td><td>16</td></tr>
+              <tr><td>M</td><td>40</td><td>27</td><td>17</td></tr>
+              <tr><td>L</td><td>42</td><td>28</td><td>18</td></tr>
+              <tr><td>XL</td><td>44</td><td>29</td><td>19</td></tr>
+              <tr><td>XXL</td><td>46</td><td>30</td><td>20</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note">Note: Measurements may vary slightly. Contact us for custom sizing.</p>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="section">
+      <div class="container">
+        <h2>What Our Customers Say</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>"Excellent quality and perfect fit! The tailoring was exactly as I wanted."</p>
+            <div class="testimonial-author">- Rajesh Kumar</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>"Great customer service and fast delivery. Will definitely order again!"</p>
+            <div class="testimonial-author">- Priya Singh</div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★☆</div>
+            <p>"Good quality fabric. The design was exactly as shown on the website."</p>
+            <div class="testimonial-author">- Amit Patel</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <!-- Newsletter Section -->
+    <section id="newsletter" class="section newsletter-section">
+      <div class="container">
+        <h2>Subscribe to Our Newsletter</h2>
+        <p>Get exclusive offers and updates directly in your inbox!</p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="Enter your email" required>
+          <button type="submit" class="btn">Subscribe</button>
+        </form>
+        <p id="newsletter-success" class="success-message" style="display:none">Thanks for subscribing!</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mobile nav toggle
+    (function(){
+      var toggle = document.getElementById('nav-toggle');
+      var nav = document.getElementById('site-nav');
+      if(!toggle || !nav) return;
+      // start hidden on load for mobile (CSS handles desktop)
+      nav.setAttribute('aria-hidden','true');
+      toggle.addEventListener('click', function(){
+        var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!isOpen));
+        nav.setAttribute('aria-hidden', String(isOpen));
+      });
+      // close nav after clicking a link
+      nav.addEventListener('click', function(e){
+        var a = e.target && e.target.closest ? e.target.closest('a') : null;
+        if(a){
+          toggle.setAttribute('aria-expanded','false');
+          nav.setAttribute('aria-hidden','true');
+        }
+      });
+    })();
+  </script>
+
+  <footer class="site-footer">
+
+    <button class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
+
+
+    <div class="footer-main">
+      <div class="container footer-columns">
+        <div class="footer-col">
+          <h4>Get to Know Us</h4>
+          <ul>
+            <li><a href="#">About Nandi</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press Releases</a></li>
+            <li><a href="#">Our Story</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect with Us</h4>
+          <ul>
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Instagram</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Make Money with Us</h4>
+          <ul>
+            <li><a href="#">Sell on Nandi</a></li>
+            <li><a href="#">Sell under Nandi Accelerator</a></li>
+            <li><a href="#">Advertise Your Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Let Us Help You</h4>
+          <ul>
+            <li><a href="#">Your Account</a></li>
+            <li><a href="#">Returns Centre</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-center">
+        <div class="container footer-logo-row">
+          <img src="Nandi Garments-.png" alt="Nandi logo" class="footer-logo">
+          <div class="footer-actions">
+            <div class="lang-select">
+              <button class="btn small">English ▾</button>
+              <button class="btn small">India</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <div class="footer-links">
+          <a href="#">Conditions of Use & Sale</a>
+          <a href="#">Privacy Notice</a>
+          <a href="#">Interest-Based Ads</a>
+        </div>
+        <div class="copyright">© 2026 Nandi Garments</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <!-- Embedded products JSON as a fallback when fetch() isn't available (file://) -->
+  <script id="products-data" type="application/json">
+    [
+      {"id":1,"name":"Classic Cotton Shirt","price":"799","category":"Shirts","img":"https://via.placeholder.com/400x300?text=Classic+Shirt"},
+      {"id":2,"name":"Formal Trousers","price":"1299","category":"Trousers","img":"https://via.placeholder.com/400x300?text=Formal+Trousers"},
+      {"id":3,"name":"Cotton Kurta","price":"699","category":"Kurtas","img":"https://via.placeholder.com/400x300?text=Cotton+Kurta"},
+      {"id":4,"name":"Tailored Suit","price":"4999","category":"Suits","img":"https://via.placeholder.com/400x300?text=Tailored+Suit"},
+      {"id":5,"name":"Casual T-Shirt","price":"499","category":"Shirts","img":"https://via.placeholder.com/400x300?text=Casual+T-Shirt"},
+      {"id":6,"name":"Denim Jeans","price":"1199","category":"Trousers","img":"https://via.placeholder.com/400x300?text=Denim+Jeans"}
+    ]
+  </script>
+  <!-- Chatbot widget -->
+  <button id="chat-toggle" aria-label="Open chat" class="chat-toggle">
+    <span class="chat-avatar" aria-hidden="true">
+      <!-- Simple girl avatar SVG -->
+      <svg viewBox="0 0 64 64" width="28" height="28" xmlns="http://www.w3.org/2000/svg" role="img">
+        <title>Chat avatar</title>
+        <defs>
+          <linearGradient id="hair" x1="0" x2="1">
+            <stop offset="0" stop-color="#c0392b" />
+            <stop offset="1" stop-color="#ff6b6b" />
+          </linearGradient>
+        </defs>
+        <circle cx="32" cy="32" r="30" fill="#fff" stroke="#f1f3f5" stroke-width="2"/>
+        <circle cx="32" cy="26" r="12" fill="#ffd6cc" />
+        <path d="M10 46c6-12 22-12 22-12s16 0 22 12v6H10v-6z" fill="url(#hair)" />
+        <circle cx="27" cy="25" r="2" fill="#6b4f3a" />
+        <circle cx="37" cy="25" r="2" fill="#6b4f3a" />
+        <path d="M26 32c1.5 2 6 2 8 0" stroke="#6b4f3a" stroke-width="1.5" stroke-linecap="round" fill="none" />
+      </svg>
+    </span>
+  </button>
+  <div id="chat-window" class="chat-window" aria-hidden="true">
+    <div class="chat-header">
+      <strong>Help — Nandi Garments</strong>
+      <button id="chat-close" aria-label="Close chat">✕</button>
+    </div>
+    <div id="chat-messages" class="chat-messages" role="log" aria-live="polite"></div>
+    <form id="chat-form" class="chat-form">
+      <input id="chat-input" autocomplete="off" placeholder="Type your question..." />
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </div>
+  <!-- Wishlist drawer -->
+  <aside id="wishlist-drawer" class="wishlist-drawer" aria-hidden="true">
+    <div class="wishlist-header">
+      <strong>Wishlist</strong>
+      <button id="wishlist-close" class="wishlist-close" aria-label="Close wishlist">✕</button>
+    </div>
+    <div id="wishlist-items" class="wishlist-items"></div>
+  </aside>
+
+  <!-- Cart drawer -->
+
+  <aside id="cart-drawer" class="cart-drawer" aria-hidden="true">
+
+    <div class="cart-header">
+      <strong data-i18n="cart.title">Your Cart</strong>
+      <button id="cart-close" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span data-i18n="cart.total_label">Total:</span> <span id="cart-total">₹0</span></div>
+      <div class="cart-actions">
+        <button id="checkout-btn" class="btn" data-i18n="cart.checkout">Checkout</button>
+        <button id="clear-cart" class="btn secondary" data-i18n="cart.clear">Clear</button>
+      </div>
+    </div>
+  </aside>
+  <!-- Login modal -->
+  <div id="login-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" id="login-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <div class="modal-header">
+        <h3 id="login-title">Login to your account</h3>
+        <button id="login-close" aria-label="Close">✕</button>
+      </div>
+      <form id="login-form" class="modal-form">
+        <label>Name<input id="login-name" type="text" required placeholder="Your name"></label>
+        <label>Email<input id="login-email" type="email" required placeholder="you@example.com"></label>
+        <label>Password<input id="login-password" type="password" required placeholder="Password"></label>
+        <div class="modal-actions">
+          <button type="submit" class="btn">Login</button>
+          <button type="button" id="login-cancel" class="btn secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

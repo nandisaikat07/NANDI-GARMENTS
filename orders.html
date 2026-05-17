@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Your Orders · Nandi Garments</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Your orders at Nandi Garments">
+  <style>
+    /* small page-specific tweaks */
+    .orders-hero{padding:2rem 0;text-align:center}
+    .orders-actions{display:flex;gap:.5rem;align-items:center;justify-content:center;margin-bottom:1.25rem}
+    .orders-tabs{display:flex;gap:1rem;justify-content:center;margin-bottom:1rem}
+    .order-card{max-width:880px;margin:1rem auto;padding:1rem;border-radius:8px;border:1px solid #eef2f6;background:var(--surface);display:flex;gap:1rem;align-items:center}
+    .order-card img{width:140px;height:80px;object-fit:contain}
+    .order-card .meta{flex:1}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo">Nandi Garments</h1>
+      <nav class="nav">
+        <a href="#products" id="nav-all">All</a>
+        <a href="index.html#products" data-i18n="nav.products">Products</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+      </nav>
+      <div class="header-actions">
+        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <div class="account">
+          <button id="auth-button" class="btn small" aria-expanded="false">
+            <span class="auth-icon" aria-hidden="true">👤</span>
+            <span class="auth-text">Login</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <a id="account-link" href="#account">Account</a>
+            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="orders-hero">
+      <div class="container">
+        <h2>Your Orders</h2>
+        <p class="muted">Track and manage your recent purchases</p>
+        <div class="orders-actions">
+          <input placeholder="Search all orders" class="site-search" style="min-width:360px">
+          <button class="btn">Search Orders</button>
+        </div>
+
+        <div class="orders-tabs">
+          <button class="btn small">Orders</button>
+          <button class="btn small secondary">Buy Again</button>
+          <button class="btn small secondary">Not Yet Shipped</button>
+        </div>
+
+        <p class="muted">0 orders placed in <select><option>past 3 months</option></select></p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div id="orders-list">
+        <!-- order cards rendered by script -->
+      </div>
+
+      <p class="muted" id="no-orders" style="text-align:center;margin-top:1.5rem;display:none">Looks like you haven't placed an order recently.</p>
+    </section>
+  
+  <script>
+    (function(){
+      let orders = [];
+      const listEl = document.getElementById('orders-list');
+      const searchInput = document.querySelector('.orders-actions input') || document.querySelector('.site-search');
+      const noOrdersEl = document.getElementById('no-orders');
+
+      // render order card
+      function renderOrderCard(o){
+        const el = document.createElement('div');
+        el.className = 'order-card';
+        el.dataset.status = o.status;
+        el.dataset.buyAgain = o.buyAgain ? '1' : '0';
+        el.innerHTML = `
+          <div style="flex:1">
+            <h3>${o.title}</h3>
+            <p class="muted">${o.rating} ★★★★☆ · ${o.reviews} reviews</p>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:700;font-size:1.1rem">${o.price}</div>
+            ${o.tags && o.tags.includes && o.tags.includes('sponsored') ? '<div class="muted">Sponsored</div>' : ''}
+          </div>
+        `;
+        return el;
+      }
+
+      // render list based on filters
+      let activeFilter = 'all';
+      function renderList(){
+        const q = (searchInput && searchInput.value || '').trim().toLowerCase();
+        listEl.innerHTML = '';
+        const filtered = orders.filter(o=>{
+            // hide sponsored items entirely
+            if(o.tags && o.tags.includes && o.tags.includes('sponsored')) return false;
+          if(activeFilter === 'not_shipped' && o.status !== 'not_shipped') return false;
+          if(activeFilter === 'buy_again' && !o.buyAgain) return false;
+          // search by title
+          if(q && !o.title.toLowerCase().includes(q)) return false;
+          return true;
+        });
+          if(filtered.length === 0){
+          noOrdersEl.style.display = '';
+        } else {
+          noOrdersEl.style.display = 'none';
+          filtered.forEach(o=> listEl.appendChild(renderOrderCard(o)));
+        }
+      }
+
+      // tabs
+      function setActiveTab(name){
+        activeFilter = name;
+        document.querySelectorAll('.orders-tabs button').forEach(b=>{
+          if(b.dataset.filter === name){ b.classList.remove('secondary'); b.classList.add('btn'); b.classList.add('small'); b.style.background='var(--accent)'; b.style.color='#fff'; }
+          else { b.classList.add('secondary'); b.style.background=''; b.style.color=''; }
+        });
+        renderList();
+      }
+
+      // hook up tab buttons
+      document.querySelectorAll('.orders-tabs button').forEach(btn=>{
+        // map text to filters
+        const text = (btn.textContent||'').toLowerCase();
+        if(text.includes('orders')) btn.dataset.filter = 'all';
+        else if(text.includes('buy')) btn.dataset.filter = 'buy_again';
+        else if(text.includes('not yet shipped') || text.includes('not yet')) btn.dataset.filter = 'not_shipped';
+        btn.addEventListener('click', ()=> setActiveTab(btn.dataset.filter));
+      });
+
+      // search
+      if(searchInput){
+        searchInput.addEventListener('input', ()=> renderList());
+      }
+
+      // load orders from JSON file
+      function loadOrders(){
+        fetch('orders.json').then(r=>{
+          if(!r.ok) throw new Error('Network response not ok');
+          return r.json();
+        }).then(data=>{
+          if(Array.isArray(data)) orders = data;
+          renderList();
+        }).catch(()=>{
+          // fallback to embedded sample if fetch fails (Bose removed)
+          orders = [
+            {id: '1', title: 'Classic Cotton Shirt', price: '₹799', rating: '4.6', reviews: 214, tags:[], status: 'not_shipped', buyAgain: true},
+            {id: '2', title: 'Denim Jeans', price: '₹1,199', rating: '4.2', reviews: 58, tags:[], status: 'shipped', buyAgain: true}
+          ];
+          renderList();
+        });
+      }
+
+      loadOrders();
+    })();
+  </script>
+  </main>
+
+  <!-- reuse footer from index -->
+  <footer class="site-footer">
+    <div class="container">© Nandi Garments</div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Ensure language selector and header behaviors initialize when script is loaded late
+    if(window.initLanguageSelector) initLanguageSelector();
+    if(window.applyTranslations) applyTranslations(localStorage.getItem('ng_lang') || 'en');
+    if(window.initCartUI) initCartUI();
+    if(window.initAuth) initAuth();
+    if(window.initChat) initChat();
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+/* Product detail page extras */
+.product-page .product-hero-inner{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.product-gallery{background:transparent}
+.gallery-main img{
+  width:100%;
+  height:420px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid #eef2f6;
+}
+.gallery-thumbs{display:flex;gap:.5rem;overflow:auto;margin-top:.75rem}
+.thumb-btn{
+  border:1px solid #eef2f6;
+  border-radius:10px;
+  padding:0;
+  background:rgba(255,255,255,0.7);
+  cursor:pointer;
+}
+.thumb-btn img{width:86px;height:66px;object-fit:cover;border-radius:10px;display:block}
+.thumb-btn.active{border-color:var(--accent)}
+
+.product-summary{background:var(--surface);border:1px solid #eef2f6;border-radius:12px;padding:1rem}
+.product-meta{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0}
+.pill{display:inline-block;padding:.25rem .55rem;border-radius:999px;background:rgba(192,57,43,0.08);border:1px solid rgba(192,57,43,0.18);color:var(--text);font-size:.9rem}
+.pill.subtle{background:#f8fafc;border-color:#eef2f6}
+.product-price{font-size:1.6rem;font-weight:800;color:var(--accent);margin:.25rem 0}
+.widget-row{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.75rem}
+.note{color:var(--muted);font-size:.92rem;margin-top:.4rem}
+
+.facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.75rem}
+.fact strong{display:block;color:var(--muted);font-weight:700;font-size:.85rem;margin-bottom:.25rem}
+.fact div{font-weight:600}
+
+.product-options{margin-top:1rem}
+.size-options{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+.size-chip{
+  border:1px solid #e6e9ee;
+  background:#fff;
+  border-radius:999px;
+  padding:.45rem .7rem;
+  cursor:pointer;
+  font-weight:700;
+}
+.size-chip.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,57,43,0.15)}
+
+.product-wash{margin-top:1rem}
+.wash-box{background:#f8fafc;border:1px solid #eef2f6;border-radius:10px;padding:.75rem;color:var(--muted)}
+
+.product-extra{margin-top:1.25rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.section-card{background:var(--surface);border:1px solid #eef2f6;border-radius:12px;padding:1rem}
+.size-chart-wrap{overflow-x:auto}
+
+.checklist{padding-left:1rem;margin:.25rem 0}
+.checklist li{margin:.35rem 0;color:var(--muted)}
+.whatsapp-inline{margin-top:1rem}
+
+.product-reviews{margin-top:1.25rem}
+
+@media (max-width:900px){
+  .product-page .product-hero-inner{grid-template-columns:1fr;}
+  .grid-2{grid-template-columns:1fr}
+  .gallery-main img{height:320px}
+}
+
