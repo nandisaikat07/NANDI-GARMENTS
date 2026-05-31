@@ -49,33 +49,44 @@
     <section class="container">
       <div id="track-result" class="track-result" style="display:none">
         <h3>Order Status</h3>
-        <div class="track-steps">
-          <div class="track-step" data-step="confirmed">
+        <p class="muted" id="track-subtitle"></p>
+
+        <div class="track-steps" role="list" aria-label="Order tracking steps">
+          <div class="track-step" data-step="confirmed" role="listitem">
             <div class="track-step-icon">✓</div>
             <div class="track-step-label">Confirmed</div>
           </div>
-          <div class="track-step" data-step="processing">
+          <div class="track-step" data-step="processing" role="listitem">
             <div class="track-step-icon">⚙</div>
             <div class="track-step-label">Processing</div>
           </div>
-          <div class="track-step" data-step="shipped">
+          <div class="track-step" data-step="shipped" role="listitem">
             <div class="track-step-icon">📦</div>
             <div class="track-step-label">Shipped</div>
           </div>
-          <div class="track-step" data-step="delivered">
+          <div class="track-step" data-step="delivered" role="listitem">
             <div class="track-step-icon">🚚</div>
             <div class="track-step-label">Delivered</div>
           </div>
         </div>
+
         <div class="track-order-info">
           <h4>Order Details</h4>
+          <p class="track-meta" style="margin-top:-.25rem" id="track-meta"></p>
           <div id="track-items" class="track-items"></div>
           <p style="margin-top:1rem"><strong>Expected Delivery:</strong> <span id="track-delivery-date"></span></p>
+
+          <div class="track-next" id="track-next" aria-live="polite" style="margin-top:1rem"></div>
         </div>
       </div>
       
       <div id="track-not-found" style="text-align:center;display:none">
-        <p class="muted">Order not found. Please check the order ID and try again.</p>
+        <p class="muted" id="track-not-found-text">Order not found. Please check the order ID and try again.</p>
+        <p class="muted" style="margin-top:.5rem" id="track-not-found-hint"></p>
+      </div>
+
+      <div id="track-loading" style="display:none;text-align:center;max-width:520px;margin:0 auto">
+        <div class="track-loading-pill" aria-hidden="true">Checking your order…</div>
       </div>
     </section>
   </main>
@@ -95,42 +106,79 @@
 
   <script src="script.js"></script>
   <script>
-    // Order tracking mock data
+    // Order tracking UX improvements (mock data)
     const mockOrders = {
       '1': { status: 'delivered', items: [{ name: 'Classic Cotton Shirt', price: 799, img: 'https://via.placeholder.com/100x80?text=Shirt' }], date: '2026-01-15' },
       '2': { status: 'shipped', items: [{ name: 'Denim Jeans', price: 1199, img: 'https://via.placeholder.com/100x80?text=Jeans' }], date: '2026-01-20' },
       '3': { status: 'processing', items: [{ name: 'Cotton Kurta', price: 699, img: 'https://via.placeholder.com/100x80?text=Kurta' }], date: '2026-01-22' }
     };
-    
+
     const statusOrder = ['confirmed', 'processing', 'shipped', 'delivered'];
-    
-    document.getElementById('track-form').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const orderId = document.getElementById('track-order-id').value.trim();
-      const order = mockOrders[orderId] || null;
-      
-      const resultEl = document.getElementById('track-result');
-      const notFoundEl = document.getElementById('track-not-found');
-      
-      if(!order){
-        resultEl.style.display = 'none';
-        notFoundEl.style.display = 'block';
-        return;
+    const TRACK_LS_KEY = 'ng_last_tracked_order_v1';
+
+    const formEl = document.getElementById('track-form');
+    const inputEl = document.getElementById('track-order-id');
+    const resultEl = document.getElementById('track-result');
+    const notFoundEl = document.getElementById('track-not-found');
+    const loadingEl = document.getElementById('track-loading');
+
+    const subtitleEl = document.getElementById('track-subtitle');
+    const metaEl = document.getElementById('track-meta');
+    const itemsEl = document.getElementById('track-items');
+    const deliveryDateEl = document.getElementById('track-delivery-date');
+    const nextEl = document.getElementById('track-next');
+
+    function setLoading(isLoading){
+      loadingEl.style.display = isLoading ? 'block' : 'none';
+      if(isLoading){
+        inputEl.disabled = true;
+        formEl.querySelector('button[type="submit"]').disabled = true;
+      } else {
+        inputEl.disabled = false;
+        formEl.querySelector('button[type="submit"]').disabled = false;
       }
-      
-      notFoundEl.style.display = 'none';
-      resultEl.style.display = 'block';
-      
-      // Update step statuses
-      const currentIdx = statusOrder.indexOf(order.status);
+    }
+
+    function statusCopy(status){
+      switch(status){
+        case 'confirmed':
+          return { subtitle: 'We’ve received your order.', next: 'Next: we’ll start processing your order shortly.' };
+        case 'processing':
+          return { subtitle: 'Your order is being processed.', next: 'Next: your items will be packed and shipped.' };
+        case 'shipped':
+          return { subtitle: 'Your order has been shipped.', next: 'Next: track further updates until delivery.' };
+        case 'delivered':
+          return { subtitle: 'Your order was delivered.', next: 'Need help with returns or exchange? Visit the Returns page.' };
+        default:
+          return { subtitle: 'Tracking update unavailable.', next: 'Please try again later.' };
+      }
+    }
+
+    function renderSteps(status){
+      const currentIdx = statusOrder.indexOf(status);
       document.querySelectorAll('.track-step').forEach((step, i)=>{
         step.classList.remove('active', 'completed');
-        if(i < currentIdx) step.classList.add('completed');
-        if(i === currentIdx) step.classList.add('active');
+        step.removeAttribute('aria-current');
+        if(i < currentIdx){
+          step.classList.add('completed');
+        }
+        if(i === currentIdx){
+          step.classList.add('active');
+          step.setAttribute('aria-current','step');
+        }
       });
-      
-      // Update items
-      const itemsEl = document.getElementById('track-items');
+    }
+
+    function renderOrder(orderId, order){
+      const copy = statusCopy(order.status);
+      resultEl.style.display = 'block';
+      notFoundEl.style.display = 'none';
+
+      subtitleEl.textContent = copy.subtitle;
+      metaEl.textContent = `Tracking ID: ${orderId}`;
+
+      renderSteps(order.status);
+
       itemsEl.innerHTML = order.items.map(item=>`
         <div class="track-item">
           <img src="${item.img}" alt="${item.name}">
@@ -140,13 +188,62 @@
           </div>
         </div>
       `).join('');
-      
-      // Set delivery date (mock: 3-5 days from order date)
+
+      // Mock: expected delivery 4 days after order date
       const orderDate = new Date(order.date);
       const deliveryDate = new Date(orderDate.getTime() + (4 * 24 * 60 * 60 * 1000));
-      document.getElementById('track-delivery-date').textContent = deliveryDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+      deliveryDateEl.textContent = deliveryDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      nextEl.textContent = copy.next;
+    }
+
+    function renderNotFound(orderId){
+      resultEl.style.display = 'none';
+      notFoundEl.style.display = 'block';
+      const hintEl = document.getElementById('track-not-found-hint');
+      const textEl = document.getElementById('track-not-found-text');
+      textEl.textContent = `No order found for ID: ${orderId}`;
+      hintEl.textContent = `Try examples: 1, 2, 3`;
+      nextEl.textContent = '';
+      subtitleEl.textContent = '';
+      inputEl.focus();
+    }
+
+    async function handleTrackSubmit(orderId){
+      setLoading(true);
+      // mock delay for better UX
+      await new Promise(r => setTimeout(r, 650));
+
+      const order = mockOrders[orderId] || null;
+      setLoading(false);
+
+      if(!order){
+        renderNotFound(orderId);
+        return;
+      }
+      localStorage.setItem(TRACK_LS_KEY, orderId);
+      renderOrder(orderId, order);
+    }
+
+    formEl.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const orderId = inputEl.value.trim();
+      if(!orderId) return;
+      handleTrackSubmit(orderId);
     });
-    
+
+    // Prefill last searched order id for a smoother UX
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const last = localStorage.getItem(TRACK_LS_KEY);
+      if(last){
+        inputEl.value = last;
+        const order = mockOrders[last];
+        if(order){
+          renderOrder(last, order);
+        }
+      }
+    });
+
     // Initialize cart count
     if(window.updateCartCount) updateCartCount();
   </script>

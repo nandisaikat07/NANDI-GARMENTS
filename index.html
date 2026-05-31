@@ -34,7 +34,10 @@
 
       <div class="header-actions">
 
-        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        </div>
         <select id="lang-select" aria-label="Select language" title="Select language"></select>
         <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
         <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
