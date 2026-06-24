@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Your Orders · Nandi Garments</title>
-  <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
   <meta name="description" content="Your orders at Nandi Garments">
   <style>
     /* small page-specific tweaks */
@@ -149,22 +151,57 @@
         searchInput.addEventListener('input', ()=> renderList());
       }
 
-      // load orders from JSON file
+      function formatOrderForUI(o){
+        const total = o?.totals?.total;
+        const status = o.status || (o.payment && o.payment.status) || 'processing';
+        // map backend -> existing UI filters
+        const uiStatus = status === 'delivered' ? 'shipped'
+          : (status === 'confirmed' ? 'not_shipped'
+          : (status === 'processing' ? 'not_shipped' : status));
+
+        const firstItem = Array.isArray(o.items) && o.items[0] ? o.items[0] : null;
+        const title = firstItem && firstItem.name ? firstItem.name : ('Order ' + o.orderId);
+
+        return {
+          id: o.orderId,
+          title,
+          price: '₹' + Number(total || 0).toLocaleString('en-IN'),
+          rating: '4.5',
+          reviews: '0',
+          tags: [],
+          status: uiStatus,
+          buyAgain: true
+        };
+      }
+
+      // load orders from backend (fallback to orders.json)
       function loadOrders(){
-        fetch('orders.json').then(r=>{
-          if(!r.ok) throw new Error('Network response not ok');
-          return r.json();
-        }).then(data=>{
-          if(Array.isArray(data)) orders = data;
-          renderList();
-        }).catch(()=>{
-          // fallback to embedded sample if fetch fails (Bose removed)
-          orders = [
-            {id: '1', title: 'Classic Cotton Shirt', price: '₹799', rating: '4.6', reviews: 214, tags:[], status: 'not_shipped', buyAgain: true},
-            {id: '2', title: 'Denim Jeans', price: '₹1,199', rating: '4.2', reviews: 58, tags:[], status: 'shipped', buyAgain: true}
-          ];
-          renderList();
-        });
+        const backendUrl = 'http://localhost:5050/api/orders?limit=50';
+        fetch(backendUrl)
+          .then(r=>r.json())
+          .then(data=>{
+            if(data && data.success && Array.isArray(data.orders)){
+              orders = data.orders.map(formatOrderForUI);
+              renderList();
+              return;
+            }
+            throw new Error('Bad backend response');
+          })
+          .catch(()=>{
+            fetch('orders.json').then(r=>{
+              if(!r.ok) throw new Error('Network response not ok');
+              return r.json();
+            }).then(data=>{
+              if(Array.isArray(data)) orders = data;
+              renderList();
+            }).catch(()=>{
+              orders = [
+                {id: '1', title: 'Classic Cotton Shirt', price: '₹799', rating: '4.6', reviews: 214, tags:[], status: 'not_shipped', buyAgain: true},
+                {id: '2', title: 'Denim Jeans', price: '₹1,199', rating: '4.2', reviews: 58, tags:[], status: 'shipped', buyAgain: true}
+              ];
+              renderList();
+            });
+          });
       }
 
       loadOrders();

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Refer & Earn • Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Refer a friend and earn a ₹100 coupon at Nandi Garments.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html#products" id="nav-all">All</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        </div>
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding:2rem 0;">
+    <section class="section">
+      <h1>Refer a friend & earn ₹100</h1>
+      <p class="muted">Trust building referral program: invite your friends and get a coupon when they make a purchase.</p>
+
+      <div class="grid-2" style="align-items:start;">
+        <div class="section-card">
+          <h2 style="font-size:1.05rem;">Your referral link</h2>
+          <p class="muted">Share the link below:</p>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-top:.75rem;">
+            <input id="ref-link" type="text" readonly class="input" style="flex:1;min-width:220px;" />
+            <button class="btn" type="button" id="copy-ref">Copy</button>
+          </div>
+          <p class="note" style="margin-top:.75rem;">
+            Coupon: <strong>₹100</strong> for you and your friend (demo).
+          </p>
+
+          <div style="margin-top:1.25rem;padding:1rem;border-radius:14px;background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.16);">
+            <div style="font-weight:900;">How it works</div>
+            <ol style="margin:.5rem 0 0;line-height:1.8;padding-left:1.25rem;">
+              <li>Share your referral link</li>
+              <li>Your friend shops on Nandi Garments</li>
+              <li>Both get a ₹100 coupon (demo logic)</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2 style="font-size:1.05rem;">Refer by email</h2>
+          <form id="ref-form" style="margin-top:1rem;">
+            <label>Friend name<input id="friend-name" type="text" placeholder="e.g., Aarav" required></label>
+            <label>Friend email<input id="friend-email" type="email" placeholder="e.g., aarav@gmail.com" required></label>
+            <label>Message<textarea id="friend-message" rows="4" placeholder="Write a short note..." required></textarea></label>
+
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-top:1rem;">
+              <button class="btn" type="submit">Send invite</button>
+              <a class="btn secondary" href="index.html#products">Shop now</a>
+            </div>
+          </form>
+
+          <p class="note" id="ref-status" style="margin-top:1rem;"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom-inner">
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="delivery-policy.html">Delivery Policy</a>
+        <a href="return-policy.html">Return Policy</a>
+      </div>
+      <div class="copyright">© 2026 Nandi Garments</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (function(){
+      const code = 'NG-REF-' + Math.random().toString(16).slice(2,8).toUpperCase();
+      const link = window.location.origin ? (window.location.origin + window.location.pathname) : 'index.html';
+      // In static hosting, origin may be empty; keep a relative link.
+      const refLink = 'refer-and-earn.html?code=' + encodeURIComponent(code);
+      const input = document.getElementById('ref-link');
+      if(input) input.value = refLink;
+
+      document.getElementById('copy-ref')?.addEventListener('click', async ()=>{
+        try{
+          await navigator.clipboard.writeText(refLink);
+          const s = document.getElementById('ref-status');
+          if(s) s.textContent = 'Copied referral link.';
+        }catch(e){
+          const s = document.getElementById('ref-status');
+          if(s) s.textContent = 'Copy not supported in this browser.';
+        }
+      });
+
+      document.getElementById('ref-form')?.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const status = document.getElementById('ref-status');
+        const fn = document.getElementById('friend-name').value.trim();
+        const fe = document.getElementById('friend-email').value.trim();
+        const fm = document.getElementById('friend-message').value.trim();
+        if(!fn || !fe || !fm){
+          if(status) status.textContent = 'Please fill all fields.';
+          return;
+        }
+        if(status) status.innerHTML = 'Invite sent to <strong>' + fe + '</strong>! (Demo)';
+        e.target.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
+

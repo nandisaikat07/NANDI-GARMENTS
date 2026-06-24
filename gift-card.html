@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gift Cards • Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Buy gift cards from Nandi Garments.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html#products" id="nav-all">All</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        </div>
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding:2rem 0;">
+    <section class="section">
+      <h1>Gift Cards</h1>
+      <p class="muted">Perfect for festivals—send premium fashion credit instantly.</p>
+
+      <div class="grid-2" style="align-items:start;">
+        <div class="section-card" style="background:var(--surface);">
+          <h2 style="font-size:1.05rem;">Choose an amount</h2>
+          <div class="size-options" style="margin-top:.75rem;">
+            <button type="button" class="size-chip" onclick="window.__GC_SELECT(500)">₹500</button>
+            <button type="button" class="size-chip" onclick="window.__GC_SELECT(1000)">₹1,000</button>
+            <button type="button" class="size-chip" onclick="window.__GC_SELECT(2000)">₹2,000</button>
+            <button type="button" class="size-chip" onclick="window.__GC_SELECT(3000)">₹3,000</button>
+          </div>
+
+          <form id="gift-card-form" style="margin-top:1rem;">
+            <label>Recipient name<input id="gc-recipient" type="text" placeholder="e.g., Riya" required></label>
+            <label>Recipient email<input id="gc-email" type="email" placeholder="e.g., riya@gmail.com" required></label>
+            <label>Gift message<textarea id="gc-message" rows="4" placeholder="Write a short message..." required></textarea></label>
+            <label style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+              Delivery date
+              <input id="gc-date" type="date" required>
+            </label>
+
+            <div style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+              <button type="submit" class="btn">Buy Gift Card</button>
+              <a class="btn secondary" href="index.html#products">Browse Products</a>
+            </div>
+
+            <p class="note" id="gc-status" style="margin-top:1rem;"></p>
+          </form>
+        </div>
+
+        <div class="section-card" style="background:var(--surface);">
+          <h2 style="font-size:1.05rem;">How it works</h2>
+          <ul class="checklist">
+            <li>Pick a value (₹500–₹3,000)</li>
+            <li>Add recipient details and a message</li>
+            <li>Receive a digital gift code</li>
+            <li>Use it on eligible products</li>
+          </ul>
+
+          <div style="margin-top:1rem;padding:1rem;border-radius:14px;background:rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.06);">
+            <div style="font-weight:900;">Festival-ready</div>
+            <p class="muted" style="margin:.35rem 0 0;">Choose a delivery date and make gifting hassle-free.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom-inner">
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="delivery-policy.html">Delivery Policy</a>
+        <a href="return-policy.html">Return Policy</a>
+      </div>
+      <div class="copyright">© 2026 Nandi Garments</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (function(){
+      let selectedAmount = 1000;
+      const statusEl = document.getElementById('gc-status');
+      const form = document.getElementById('gift-card-form');
+
+      window.__GC_SELECT = function(amount){
+        selectedAmount = amount;
+        if(statusEl){ statusEl.textContent = 'Selected gift amount: ₹' + selectedAmount; }
+      };
+
+      const dateEl = document.getElementById('gc-date');
+      if(dateEl){
+        const t = new Date();
+        const yyyy = t.getFullYear();
+        const mm = String(t.getMonth()+1).padStart(2,'0');
+        const dd = String(t.getDate()).padStart(2,'0');
+        dateEl.value = `${yyyy}-${mm}-${dd}`;
+      }
+
+      form?.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        const recipient = document.getElementById('gc-recipient').value.trim();
+        const email = document.getElementById('gc-email').value.trim();
+        const msg = document.getElementById('gc-message').value.trim();
+        const date = document.getElementById('gc-date').value;
+        if(!recipient || !email || !msg || !date){
+          statusEl.textContent = 'Please fill all fields.';
+          return;
+        }
+        const code = 'NG-GIFT-' + Math.random().toString(16).slice(2,8).toUpperCase();
+        statusEl.innerHTML = `Gift card created!<br><strong>Code:</strong> ${code}<br><span class="muted">(Demo flow — no payment processing in this page.)</span>`;
+      });
+
+      statusEl && (statusEl.textContent = 'Selected gift amount: ₹' + selectedAmount);
+    })();
+  </script>
+</body>
+</html>
+

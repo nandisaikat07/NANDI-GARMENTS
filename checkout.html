@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Checkout · Nandi Garments</title>
-  <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
   <meta name="description" content="Checkout for Nandi Garments">
   <style>
     .checkout-hero{padding:2rem 0;text-align:center}
@@ -18,12 +20,15 @@
     @media(max-width:680px){.grid-2{grid-template-columns:1fr}}
     label{display:block;margin-bottom:.35rem;font-weight:600}
     input,select,textarea{width:100%;box-sizing:border-box}
-    .methods{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    .methods{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem}
     @media(max-width:680px){.methods{grid-template-columns:1fr}}
-    .method-card{border:1px solid #eef2f6;border-radius:10px;padding:.85rem;display:flex;gap:.6rem;cursor:pointer;user-select:none;transition:transform .06s ease, border-color .15s ease}
-    .method-card:hover{transform:translateY(-1px)}
-    .method-card input{margin-top:.15rem}
-    .method-card.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+    .method-card{border:1.5px solid #ddd;border-radius:10px;padding:.7rem .8rem;display:flex;gap:.65rem;align-items:flex-start;cursor:pointer;user-select:none;transition:all .15s cubic-bezier(0.34, 1.56, 0.64, 1);background:#fafbfc}
+    .method-card:hover{border-color:#c0392b;background:#fff;box-shadow:0 2px 6px rgba(192,57,43,0.08)}
+    .method-card input{margin-top:.35rem;width:18px;height:18px;cursor:pointer;accent-color:#c0392b}
+    .method-card-content{flex:1}
+    .method-card-content > div:first-child{font-weight:700;font-size:.95rem;color:var(--text);margin-bottom:.2rem}
+    .method-card-content > div:last-child{font-size:.85rem;color:var(--muted);line-height:1.3}
+    .method-card.active{border-color:#c0392b;background:#fff;box-shadow:0 0 0 2px rgba(192,57,43,0.15);border-width:2px;padding:.65rem .8rem}
     .trust-badges{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
     .badge{padding:.35rem .6rem;border:1px solid #eef2f6;border-radius:999px;background:#fff;font-weight:700;color:var(--text)}
     .badge svg{vertical-align:middle;margin-right:.35rem}
@@ -38,7 +43,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo-container">
-        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
         <h1>Nandi Garments</h1>
       </div>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
@@ -112,33 +117,33 @@
             <div class="methods" role="radiogroup" aria-label="Payment methods">
               <label class="method-card" for="pm-upi">
                 <input type="radio" name="pm" id="pm-upi" value="upi" checked>
-                <div>
-                  <div style="font-weight:800">UPI</div>
-                  <div class="muted">Google Pay / PhonePe / Paytm</div>
+                <div class="method-card-content">
+                  <div>💳 UPI</div>
+                  <div>Google Pay, PhonePe, Paytm</div>
                 </div>
               </label>
 
               <label class="method-card" for="pm-cards">
                 <input type="radio" name="pm" id="pm-cards" value="cards">
-                <div>
-                  <div style="font-weight:800">Debit/Credit Cards</div>
-                  <div class="muted">Visa / Mastercard</div>
+                <div class="method-card-content">
+                  <div>🏦 Cards</div>
+                  <div>Visa, Mastercard</div>
                 </div>
               </label>
 
               <label class="method-card" for="pm-netbanking">
                 <input type="radio" name="pm" id="pm-netbanking" value="netbanking">
-                <div>
-                  <div style="font-weight:800">Net Banking</div>
-                  <div class="muted">All major banks</div>
+                <div class="method-card-content">
+                  <div>🏛️ Net Banking</div>
+                  <div>All major banks</div>
                 </div>
               </label>
 
               <label class="method-card" for="pm-cod">
                 <input type="radio" name="pm" id="pm-cod" value="cod">
-                <div>
-                  <div style="font-weight:800">Cash on Delivery (COD)</div>
-                  <div class="muted">Pay at your doorstep</div>
+                <div class="method-card-content">
+                  <div>🚪 Cash on Delivery</div>
+                  <div>Pay at doorstep</div>
                 </div>
               </label>
             </div>
@@ -226,12 +231,17 @@
     const WHATSAPP_NUMBER = '918250530293';
 
     const CART_KEY = 'ng_cart_v1';
+    const CART_FALLBACK_KEYS = ['ng_cart_v1', 'cart', 'nandi_cart'];
     const LAST_ORDER_KEY = 'ng_last_order_v1';
     const LAST_COUPON_KEY = 'ng_last_coupon_v1';
     const LAST_ADDRESS_KEY = 'ng_last_address_v1';
+    const SAVED_ADDRESSES_KEY = 'ng_saved_addresses_v1';
+    const ADDRESS_CUSTOMER_KEY = 'ng_customer_id_v1';
+    const ADDRESS_API_BASE = 'http://localhost:5050/api';
 
     // Demo flag: if true, non-COD payments will redirect to a local simulator page
-    const USE_PAYMENT_SIMULATOR = true;
+    const USE_PAYMENT_SIMULATOR = false;
+
 
     const SHIPPING_FIXED = 49; // demo
 
@@ -243,8 +253,80 @@
       return '₹' + x.toLocaleString('en-IN');
     }
 
+    function parseMoneyValue(value){
+      if(typeof value === 'number') return Number.isFinite(value) ? value : 0;
+      if(value && typeof value === 'object'){
+        const nested = value.amount ?? value.price ?? value.totalPrice ?? value.salePrice;
+        if(nested !== undefined) return parseMoneyValue(nested);
+      }
+
+      const cleaned = String(value || '')
+        .replace(/₹/g,'')
+        .replace(/,/g,'')              // handle 1,299.00
+        .replace(/\s+/g,'')
+        .replace(/[^0-9.]/g, '');     // keep only digits + dot
+
+      const parsed = Number(cleaned);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function normalizeCartItem(item, fallbackId){
+      if(!item) return null;
+
+      // if cart stored as primitive (unexpected), ignore
+      if(typeof item !== 'object') return null;
+
+      const qtyRaw = item.qty ?? item.quantity ?? item.count ?? 1;
+      const qty = Math.max(0, Number(qtyRaw));
+
+      const priceRaw =
+        item.price ??
+        item.salePrice ??
+        item.amount ??
+        item.totalPrice ??
+        item.unitPrice ??
+        item.priceValue ??
+        (item.price && item.price.value) ??
+        (item.price && item.price.amount);
+
+      const price = parseMoneyValue(priceRaw);
+
+      if(!qty || !price) return null;
+
+      return {
+        id: item.id ?? fallbackId,
+        name: item.name || item.title || 'Product',
+        price,
+        qty,
+        img: item.img || item.image || ''
+      };
+    }
+
     function getCart(){
-      return safeParse(localStorage.getItem(CART_KEY), {});
+      for(const key of CART_FALLBACK_KEYS){
+        const saved = safeParse(localStorage.getItem(key), null);
+        if(!saved) continue;
+
+        // saved can be:
+        // 1) array: [{id,name,price,qty}, ...]
+        // 2) object map: { "12": {id,name,price,qty}, ... }
+        // 3) legacy shapes
+        const rawItems = Array.isArray(saved)
+          ? saved
+          : (typeof saved === 'object' ? Object.values(saved || {}) : []);
+
+        const normalized = rawItems
+          .map((item, index)=>normalizeCartItem(item, index))
+          .filter(Boolean);
+
+        if(normalized.length){
+          return normalized.reduce((map, item)=>{
+            map[item.id] = item;
+            return map;
+          }, {});
+        }
+      }
+      return {};
     }
 
     function cartItems(){
@@ -316,6 +398,17 @@
       const discount = computeDiscount(sub, savedCoupon && savedCoupon.code ? savedCoupon.code : null);
       const shipping = SHIPPING_FIXED;
       const total = Math.max(0, sub + shipping - discount);
+      // Ensure we always send a valid numeric amount to the backend (Razorpay requires > 0).
+      const safeTotal = Number.isFinite(total) ? Math.round(total * 100) / 100 : 0;
+      const totalToPay = safeTotal > 0 ? safeTotal : 0;
+
+      // Used for Razorpay amount.
+
+
+
+
+
+
 
       items.forEach(it=>{
         const row = document.createElement('div');
@@ -329,6 +422,7 @@
       discEl.textContent = money(discount);
       totEl.textContent = money(total);
       finalEl.textContent = money(total);
+      document.getElementById('pay-now').disabled = total <= 0;
 
       document.getElementById('discount-amount').textContent = money(discount);
 
@@ -362,6 +456,36 @@
       renderOrderSummary();
     }
 
+    function getAddressCustomerId(){
+      let customerId = localStorage.getItem(ADDRESS_CUSTOMER_KEY);
+      if(!customerId){
+        customerId = 'guest_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(ADDRESS_CUSTOMER_KEY, customerId);
+      }
+      return customerId;
+    }
+
+    function normalizeAddress(address = {}){
+      return {
+        name: String(address.name || '').trim(),
+        phone: String(address.phone || '').trim(),
+        line1: String(address.line1 || '').trim(),
+        city: String(address.city || '').trim(),
+        pin: String(address.pin || '').trim(),
+        landmark: String(address.landmark || '').trim(),
+        country: String(address.country || 'India').trim()
+      };
+    }
+
+    function fillAddressForm(address){
+      const saved = normalizeAddress(address);
+      ['name','phone','line1','city','pin','landmark'].forEach(k=>{
+        const id = 'addr-' + (k==='line1'?'line1':k);
+        const el = document.getElementById(id);
+        if(el && saved[k]) el.value = saved[k];
+      });
+    }
+
     function validateAddress(){
       const required = ['addr-name','addr-phone','addr-line1','addr-city','addr-pin'];
       for(const id of required){
@@ -382,20 +506,37 @@
         line1: document.getElementById('addr-line1').value.trim(),
         city: document.getElementById('addr-city').value.trim(),
         pin: document.getElementById('addr-pin').value.trim(),
-        landmark: (document.getElementById('addr-landmark').value||'').trim()
+        landmark: (document.getElementById('addr-landmark').value||'').trim(),
+        country: 'India'
       };
       localStorage.setItem(LAST_ADDRESS_KEY, JSON.stringify(data));
+      const savedAddresses = safeParse(localStorage.getItem(SAVED_ADDRESSES_KEY), {});
+      savedAddresses.home = data;
+      localStorage.setItem(SAVED_ADDRESSES_KEY, JSON.stringify(savedAddresses));
+      fetch(`${ADDRESS_API_BASE}/addresses/${encodeURIComponent(getAddressCustomerId())}/home`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).catch(()=>{});
       return data;
     }
 
     function loadAddress(){
-      const saved = safeParse(localStorage.getItem(LAST_ADDRESS_KEY), null);
-      if(!saved) return;
-      ['name','phone','line1','city','pin','landmark'].forEach(k=>{
-        const id = 'addr-' + (k==='line1'?'line1':k);
-        const el = document.getElementById(id);
-        if(el && saved[k]) el.value = saved[k];
-      });
+      const savedAddresses = safeParse(localStorage.getItem(SAVED_ADDRESSES_KEY), {});
+      const saved = safeParse(localStorage.getItem(LAST_ADDRESS_KEY), null) || savedAddresses.home;
+      if(saved) fillAddressForm(saved);
+
+      fetch(`${ADDRESS_API_BASE}/addresses/${encodeURIComponent(getAddressCustomerId())}`)
+        .then(r=>r.json())
+        .then(data=>{
+          if(!data || !data.success || !Array.isArray(data.addresses)) return;
+          const home = data.addresses.find(addr => addr.key === 'home') || data.addresses[0];
+          if(home){
+            fillAddressForm(home);
+            localStorage.setItem(LAST_ADDRESS_KEY, JSON.stringify(normalizeAddress(home)));
+          }
+        })
+        .catch(()=>{});
     }
 
     function generateOrderId(){
@@ -419,29 +560,48 @@
     }
 
     function startRazorpayPayment(amount, orderId, receipt){
-      // NOTE: Real Razorpay requires backend-created order_id and signature verification.
-      // This function assumes backend endpoint returns {success:true, order:{id,...}}.
-      return fetch('/create-razorpay-order', {
+      // NOTE: backend creates Razorpay order.
+      // This function expects backend returns {success:true, order:{id,...}, razorpayKeyId}.
+
+      return fetch('http://localhost:5050/api/razorpay/create-order', {
+
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
           amount,
           currency: 'INR',
-          receipt
+          receipt,
+          orderId,
+          paymentMethod: getSelectedPayment(),
+          totals: {
+            subtotal: subtotal(),
+            shipping: SHIPPING_FIXED,
+            discount: computeDiscount(subtotal(), safeParse(localStorage.getItem(LAST_COUPON_KEY), null)?.code),
+            total: amount
+          },
+          items: cartItems().map(it => ({ id: it.id, name: it.name, qty: it.qty, price: it.price })),
+          address: JSON.parse(localStorage.getItem(LAST_ADDRESS_KEY) || 'null')
         })
+
       })
       .then(r=>r.json())
       .then(async data=>{
-        if(!data || !data.success || !data.order || !data.order.id){
+
+        if(!data || !data.success || !data.order){
           return { ok:false, paymentId:null, provider:'razorpay' };
         }
 
+
         const ok = await new Promise((resolve)=>{
-          const amountPaise = Number(amount) * 100;
-          const keyId = 'YOUR_RAZORPAY_KEY_ID';
+      const amountPaise = Number(amount) * 100;
+          const keyId = data.razorpayKeyId;
+          if(!keyId){
+            return { ok:false, paymentId:null, provider:'razorpay' };
+          }
 
           const options = {
             key: keyId,
+
             amount: amountPaise,
             currency: 'INR',
             name: 'Nandi Garments',
@@ -512,12 +672,16 @@
       const discount = computeDiscount(sub, savedCoupon && savedCoupon.code ? savedCoupon.code : null);
       const shipping = SHIPPING_FIXED;
       const total = Math.max(0, sub + shipping - discount);
+      // Keep persisted totals consistent with what we send to payment.
+      const safeTotal = Number.isFinite(total) ? Math.round(total * 100) / 100 : 0;
 
       const order = {
+
         orderId,
         createdAt: new Date().toISOString(),
         items: items.map(it=>({ id: it.id, name: it.name, qty: it.qty, price: it.price })),
-        totals: { subtotal: sub, shipping, discount, total },
+        totals: { subtotal: sub, shipping, discount, total: safeTotal },
+
         address,
         payment: { method: paymentMethod, status: 'processing' },
         whatsapp: WHATSAPP_NUMBER,
@@ -550,11 +714,19 @@
       }
 
       // Razorpay flow for non-COD methods
-      // Requires backend endpoint POST /create-razorpay-order
-      await loadRazorpayScript();
+      // Requires backend endpoint POST /api/razorpay/create-order
+      const razorLoaded = await loadRazorpayScript();
+      if(!razorLoaded){
+        // if razorpay script failed, redirect to failure page to avoid staying stuck on checkout
+        setTimeout(()=>{
+          window.location.href = `payment-failure.html?orderId=${encodeURIComponent(orderId)}`;
+        }, 50);
+        return;
+      }
 
       const receipt = 'receipt_' + orderId;
-      const result = await startRazorpayPayment(total, orderId, receipt);
+      const result = await startRazorpayPayment(safeTotal, orderId, receipt);
+
 
       order.payment.provider = 'razorpay';
       order.payment.status = result.ok ? 'success' : 'failed';

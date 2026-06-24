@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title id="product-title">Product • Nandi Garments</title>
+  <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="styles_product.css">
 
@@ -17,7 +19,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo-container">
-        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
         <h1>Nandi Garments</h1>
       </div>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
@@ -140,8 +142,24 @@
         <h3>Customer Reviews</h3>
         <div class="muted" id="product-reviews-count">No reviews yet.</div>
       </section>
+
+      <!-- Kids Products -->
+      <section class="product-kids" id="kids-products-section">
+        <h3>Kids Products</h3>
+        <p class="muted">Recommended for kids based on our Kids collection.</p>
+        <div class="kids-grid" id="kids-products-grid" aria-label="Kids products"></div>
+      </section>
+
+
+      <!-- You May Also Like -->
+      <section class="product-related">
+        <h3>You May Also Like</h3>
+        <p class="muted">Popular picks based on this product category.</p>
+        <div class="related-grid" id="related-products-grid" aria-label="Related products"></div>
+      </section>
     </section>
   </main>
+
 
   <footer class="site-footer">
     <button class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
@@ -177,7 +195,7 @@
 
       <div class="footer-center">
         <div class="container footer-logo-row">
-          <img src="Nandi Garments-.png" alt="Nandi logo" class="footer-logo">
+          <img src="nandi-logo.png" alt="Nandi logo" class="footer-logo">
         </div>
       </div>
     </div>
@@ -403,6 +421,48 @@
         }
       }
 
+      function isKidsProduct(p){
+        const cat = String(p.category || '').toLowerCase().trim();
+        const name = String(p.name || '').toLowerCase().trim();
+        // Strong match first (category-based)
+        if(/\bkids\b|\bkid\b|\bchildren\b|\bchild\b/.test(cat)) return true;
+        if(cat.includes('kids wear')) return true;
+        // Relaxed match second (name-based)
+        // (require at least 'kids/kid/child' somewhere; avoids accidentally matching empty)
+        if(!name) return false;
+        return /\bkids\b|\bkid\b|\bchildren\b|\bchild\b/.test(name);
+
+      }
+
+
+      function renderKidsGrid(list){
+        const grid = document.getElementById('kids-products-grid');
+        if(!grid) return;
+        grid.innerHTML = '';
+
+        const kids = (Array.isArray(list) ? list : []).filter(isKidsProduct);
+        if(!kids.length){
+          grid.innerHTML = '<div class="muted">No kids products found.</div>';
+          return;
+        }
+
+        // keep stable ordering
+        kids.slice(0, 6).forEach(p=>{
+          const card = document.createElement('article');
+          card.className = 'kids-card';
+          card.innerHTML = `
+            <a class="kids-link" href="product.html?id=${p.id}" aria-label="View ${p.name}">
+              <div class="kids-img"><img src="${p.img}" alt="${p.name}"></div>
+              <div class="kids-body">
+                <div class="kids-title">${p.name}</div>
+                <div class="kids-price">₹${p.price}</div>
+              </div>
+            </a>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
       (async function(){
         const list = await loadProducts();
         const p = list.find(x=>Number(x.id)===id);
@@ -412,6 +472,7 @@
           return;
         }
         renderProduct(p);
+        renderKidsGrid(list);
       })();
     })();
   </script>

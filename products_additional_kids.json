@@ -1,0 +1,56 @@
+[
+  {
+    "id": 17,
+    "name": "Kids Full Sleeve T-Shirt (Boys)",
+    "price": "499",
+    "category": "Kids Wear",
+    "img": "https://images.unsplash.com/photo-1520975916090-3105956dac38?w=900&h=700&fit=crop",
+    "images": [
+      "https://images.unsplash.com/photo-1520975916090-3105956dac38?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=700&fit=crop"
+    ],
+    "description": "Comfortable full sleeve kids t-shirt with soft fabric—perfect for daily school wear.",
+    "fabric": "Cotton",
+    "washingInstructions": ["Machine wash cold", "Do not bleach", "Iron low heat"],
+    "availability": "Available",
+    "colors": ["Navy", "Red", "Green"],
+    "sizes": ["2-3Y", "4-5Y", "6-7Y", "8-9Y", "10-11Y"],
+    "sizeChart": {
+      "columns": ["Size", "Chest (inches)", "Length (inches)"],
+      "rows": [
+        {"Size": "2-3Y", "Chest (inches)": 24, "Length (inches)": 18},
+        {"Size": "4-5Y", "Chest (inches)": 26, "Length (inches)": 20},
+        {"Size": "6-7Y", "Chest (inches)": 28, "Length (inches)": 22},
+        {"Size": "8-9Y", "Chest (inches)": 30, "Length (inches)": 24},
+        {"Size": "10-11Y", "Chest (inches)": 32, "Length (inches)": 26}
+      ]
+    }
+  },
+  {
+    "id": 18,
+    "name": "Kids Cotton Shorts (Boys)",
+    "price": "349",
+    "category": "Kids Wear",
+    "img": "https://images.unsplash.com/photo-1520975693411-5b6b7bd3e7c8?w=900&h=700&fit=crop",
+    "images": [
+      "https://images.unsplash.com/photo-1520975693411-5b6b7bd3e7c8?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1548690596-f450e10d00f0?w=900&h=700&fit=crop"
+    ],
+    "description": "Everyday cotton shorts for kids—lightweight, breathable, and easy to move.",
+    "fabric": "Cotton",
+    "washingInstructions": ["Machine wash cold", "Wash separately", "Iron low heat"],
+    "availability": "Available",
+    "colors": ["Grey", "Black", "Blue"],
+    "sizes": ["2-3Y", "4-5Y", "6-7Y", "8-9Y"],
+    "sizeChart": {
+      "columns": ["Size", "Waist (inches)", "Length (inches)"],
+      "rows": [
+        {"Size": "2-3Y", "Waist (inches)": 20, "Length (inches)": 10},
+        {"Size": "4-5Y", "Waist (inches)": 21, "Length (inches)": 11},
+        {"Size": "6-7Y", "Waist (inches)": 22, "Length (inches)": 12},
+        {"Size": "8-9Y", "Waist (inches)": 23, "Length (inches)": 13}
+      ]
+    }
+  }
+]
+

@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Payment Successful · Nandi Garments</title>
-  <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
   <meta name="description" content="Payment successful for Nandi Garments">
   <style>
     .success-hero{padding:2rem 0;text-align:center}
@@ -19,7 +21,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo-container">
-        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
         <h1>Nandi Garments</h1>
       </div>
       <nav class="nav">
@@ -58,8 +60,8 @@
           <div style="display:flex;gap:.6rem;flex-wrap:wrap">
             <a id="whatsapp-invoice" class="btn" target="_blank" rel="noopener">Send on WhatsApp</a>
             <a id="email-invoice" class="btn secondary" href="#">Email invoice</a>
+            <button id="download-invoice" class="btn secondary" type="button">Download Invoice</button>
           </div>
-
           <div style="margin-top:1rem" class="muted">
             You can also track your order from the Track page.
           </div>
@@ -96,26 +98,50 @@
     function safeParse(json, fallback){
       try{ return JSON.parse(json); }catch(e){ return fallback; }
     }
+
     function money(n){
       const x = Number(n || 0);
       return '₹' + x.toLocaleString('en-IN');
     }
 
-    function init(){
-      const order = safeParse(localStorage.getItem(LAST_ORDER_KEY), null);
-      const params = new URLSearchParams(location.search);
-      const orderIdFromQuery = params.get('orderId');
+    function downloadInvoiceText({ orderId, status, totals, items, addr }){
+      const totalsLine = `Subtotal: ${money(totals.subtotal)}\nShipping: ${money(totals.shipping)}\nDiscount: ${money(totals.discount)}\nTotal: ${money(totals.total)}`;
+      const itemsLines = (items || [])
+        .map(it=>`- ${it.name} (x${it.qty}) = ${money((Number(it.price)||0)*(Number(it.qty)||0))}`)
+        .join('\n');
 
-      const orderId = (order && order.orderId) || orderIdFromQuery || '—';
-      const status = (order && order.payment && order.payment.status) || (params.get('status') || 'success');
+      const invoiceText = `Nandi Garments\n-------------------------\nOrder ID: ${orderId}\nStatus: ${status}\n\nItems:\n${itemsLines}\n\n${totalsLine}\n\nDelivery: 3–7 business days\nAddress: ${addr}\n\nThank you for shopping with Nandi Garments!\n`;
+
+      const blob = new Blob([invoiceText], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Invoice_${orderId}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function toInvoiceStatus(status){
+      if(status === 'success') return 'Paid';
+      return status || '—';
+    }
+
+    function render(orderData, orderIdOverride){
+      const params = new URLSearchParams(location.search);
+      const orderId = orderIdOverride || (orderData && orderData.orderId) || (params.get('orderId')) || '—';
+
+      const paymentStatus = (orderData && orderData.payment && orderData.payment.status) || (params.get('status') || 'success');
+      const uiStatus = toInvoiceStatus(paymentStatus);
 
       document.getElementById('order-id').textContent = orderId;
-      document.getElementById('order-status').textContent = status === 'success' ? 'Paid' : status;
+      document.getElementById('order-status').textContent = uiStatus;
 
       const itemsEl = document.getElementById('success-items');
       itemsEl.innerHTML = '';
 
-      const items = order && Array.isArray(order.items) ? order.items : [];
+      const items = orderData && Array.isArray(orderData.items) ? orderData.items : [];
       if(items.length===0){
         itemsEl.innerHTML = '<div class="muted">Order data not found. Please place your order again from the cart.</div>';
       } else {
@@ -127,22 +153,74 @@
         });
       }
 
-      const totals = order && order.totals ? order.totals : { subtotal:0, shipping:0, discount:0, total:0 };
-      document.getElementById('s-sub').textContent = money(totals.subtotal);
-      document.getElementById('s-ship').textContent = money(totals.shipping);
-      document.getElementById('s-disc').textContent = money(totals.discount);
-      document.getElementById('s-total').textContent = money(totals.total);
+      const totals = orderData && orderData.totals ? orderData.totals : { subtotal:0, shipping:0, discount:0, total:0 };
 
-      // invoice message
-      const addr = order && order.address ? `${order.address.name}, ${order.address.line1}, ${order.address.city} - ${order.address.pin}` : '';
-      const msg = `Nandi Garments Invoice\nOrder ID: ${orderId}\nStatus: ${status}\nTotal: ${money(totals.total)}\nDelivery: 3–7 business days\nAddress: ${addr}`;
+      const safeTotals = {
+        subtotal: Number.isFinite(Number(totals.subtotal)) ? Number(totals.subtotal) : 0,
+        shipping: Number.isFinite(Number(totals.shipping)) ? Number(totals.shipping) : 0,
+        discount: Number.isFinite(Number(totals.discount)) ? Number(totals.discount) : 0,
+        total: Number.isFinite(Number(totals.total)) ? Number(totals.total) : 0
+      };
 
-      const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-      document.getElementById('whatsapp-invoice').href = waUrl;
+      document.getElementById('s-sub').textContent = money(safeTotals.subtotal);
+      document.getElementById('s-ship').textContent = money(safeTotals.shipping);
+      document.getElementById('s-disc').textContent = money(safeTotals.discount);
+      document.getElementById('s-total').textContent = money(safeTotals.total);
+
+
+      const addr = orderData && orderData.address
+        ? `${orderData.address.name}, ${orderData.address.line1}, ${orderData.address.city} - ${orderData.address.pin}`
+        : '';
+
+      const msg = `Nandi Garments Invoice\nOrder ID: ${orderId}\nStatus: ${uiStatus}\nTotal: ${money(totals.total)}\nDelivery: 3–7 business days\nAddress: ${addr}`;
+
+      document.getElementById('whatsapp-invoice').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
       const subject = encodeURIComponent('Your Nandi Garments Invoice - ' + orderId);
       const body = encodeURIComponent(msg + `\n\nFor support: ${CONTACT_EMAIL}`);
       document.getElementById('email-invoice').href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+
+      const downloadBtn = document.getElementById('download-invoice');
+      downloadBtn.onclick = ()=>{
+        if(!orderData){
+          alert('Order data not found. Please place your order again from the cart.');
+          return;
+        }
+        downloadInvoiceText({
+          orderId,
+          status: uiStatus,
+          totals,
+          items,
+          addr
+        });
+      };
+    }
+
+    function init(){
+      const localOrder = safeParse(localStorage.getItem(LAST_ORDER_KEY), null);
+      const params = new URLSearchParams(location.search);
+      const orderIdFromQuery = params.get('orderId');
+      const orderId = (localOrder && localOrder.orderId) || orderIdFromQuery || null;
+
+      // First render from local fallback
+      if(localOrder){
+        render(localOrder);
+      } else {
+        // set order id early so user sees something even before backend fetch
+        document.getElementById('order-id').textContent = orderId || '—';
+      }
+
+      // Then fetch real order from backend
+      if(orderId){
+        fetch(`http://localhost:5050/api/orders/${encodeURIComponent(orderId)}`)
+          .then(r=>r.json())
+          .then(data=>{
+            if(data && data.success && data.order){
+              render(data.order, orderId);
+            }
+          })
+          .catch(()=>{});
+      }
     }
 
     document.addEventListener('DOMContentLoaded', init);

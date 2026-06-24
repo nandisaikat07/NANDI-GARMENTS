@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Track Order · Nandi Garments</title>
-  <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
   <meta name="description" content="Track your order status at Nandi Garments">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -211,9 +213,37 @@
 
     async function handleTrackSubmit(orderId){
       setLoading(true);
-      // mock delay for better UX
-      await new Promise(r => setTimeout(r, 650));
+      // small delay for better UX
+      await new Promise(r => setTimeout(r, 350));
 
+      try{
+        const res = await fetch(`http://localhost:5050/api/orders/${encodeURIComponent(orderId)}`);
+        const data = await res.json();
+        setLoading(false);
+
+        if(data && data.success && data.order){
+          const o = data.order;
+          const status = o.status || (o.payment && o.payment.status) || 'processing';
+
+          const uiOrder = {
+            status,
+            date: o.createdAt || new Date().toISOString(),
+            items: (o.items || []).map(it=>({
+              name: it.name,
+              price: it.price,
+              img: 'https://via.placeholder.com/100x80?text=Item'
+            }))
+          };
+
+          localStorage.setItem(TRACK_LS_KEY, orderId);
+          renderOrder(orderId, uiOrder);
+          return;
+        }
+      }catch(e){
+        setLoading(false);
+      }
+
+      // fallback to mock if backend not available
       const order = mockOrders[orderId] || null;
       setLoading(false);
 

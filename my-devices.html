@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Manage Devices - Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Manage Devices - Nandi Garments">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html" id="nav-all">All</a>
+        <a href="index.html#products" data-i18n="nav.products">Products</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="careers.html">Careers</a>
+        <a href="press-releases.html">Press</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+        <a href="delivery-policy.html" data-i18n="nav.delivery">Delivery</a>
+      </nav>
+
+      <div class="header-actions">
+        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+
+        <div class="account">
+          <button id="auth-button" class="btn small" aria-expanded="false">
+            <span class="auth-icon" aria-hidden="true">👤</span>
+            <span class="auth-text">Account</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <a href="account.html" class="account-menu-item">My Account</a>
+            <a href="profile.html" class="account-menu-item">Edit Profile</a>
+            <a href="orders.html" class="account-menu-item">Orders</a>
+            <a href="wishlist.html" class="account-menu-item">Wishlist</a>
+            <a href="coupons.html" class="account-menu-item">Coupons</a>
+            <a href="help.html" class="account-menu-item">Help Center</a>
+            <a href="my-devices.html" class="account-menu-item">Manage Devices</a>
+            <a href="my-cards.html" class="account-menu-item">Saved Cards & Gift Cards</a>
+            <a href="my-addresses.html" class="account-menu-item">Saved Address</a>
+            <a href="notification-settings.html" class="account-menu-item">Notification Settings</a>
+            <a href="privacy-center.html" class="account-menu-item">Privacy Center</a>
+            <a href="my-reviews.html" class="account-menu-item">Reviews</a>
+            <a href="questions-answers.html" class="account-menu-item">Questions & Answers</a>
+            <a href="seller.html" class="account-menu-item">Sell on Nandi Garments</a>
+            <a href="help.html#faq" class="account-menu-item">Browse FAQs</a>
+            <div class="account-menu-divider"></div>
+            <a href="terms.html" class="account-menu-item small">Terms, Policies & Licenses</a>
+            <a href="privacy.html" class="account-menu-item small">Privacy Policy</a>
+            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0;">
+    <section>
+      <h1>Manage Devices</h1>
+      <p style="margin-top: 1rem; color: var(--text-secondary);">View and manage the devices where you're logged into your Nandi Garments account. Remove devices you no longer use to enhance your account security.</p>
+      
+      <div style="margin-top: 2rem;">
+        <div class="devices-list">
+          <article class="device-card" style="padding: 1.5rem; background: var(--surface); border-radius: 8px; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h3 style="margin: 0;">Chrome on Windows</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.5rem 0;">Last active: Today at 10:30 AM</p>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Location: New Delhi, India</p>
+              </div>
+              <span style="background: #4CAF50; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem;">Active</span>
+            </div>
+          </article>
+
+          <article class="device-card" style="padding: 1.5rem; background: var(--surface); border-radius: 8px; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h3 style="margin: 0;">Mobile Safari on iPhone</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.5rem 0;">Last active: 2 days ago</p>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Location: Mumbai, India</p>
+              </div>
+              <button class="btn small" style="background: #f44336;">Remove</button>
+            </div>
+          </article>
+
+          <article class="device-card" style="padding: 1.5rem; background: var(--surface); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <h3 style="margin: 0;">Chrome on Android</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0.5rem 0;">Last active: 1 week ago</p>
+                <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">Location: Bangalore, India</p>
+              </div>
+              <button class="btn small" style="background: #f44336;">Remove</button>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding: 1.5rem; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ff9800;">
+        <h3 style="margin-top: 0;">Security Tip</h3>
+        <p>Regularly review your active devices and remove any unrecognized or unused devices to keep your account secure.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-section">
+          <h3>Learn More</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Policies</h3>
+          <ul>
+            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="delivery-policy.html">Delivery Policy</a></li>
+            <li><a href="return-policy.html">Return Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            <a href="https://facebook.com/nandigarments" aria-label="Facebook">f</a>
+            <a href="https://instagram.com/nandigarments" aria-label="Instagram">📷</a>
+            <a href="https://twitter.com/nandigarments" aria-label="Twitter">𝕏</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <label for="footer-lang" style="display: block; margin-bottom: 0.5rem;">Language</label>
+          <select id="footer-lang" aria-label="Select language">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="bn">বাংলা</option>
+          </select>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-inner">
+          <p>© 2026 Nandi Garments. All Rights Reserved. Fashion Crafted with Trust & Style.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

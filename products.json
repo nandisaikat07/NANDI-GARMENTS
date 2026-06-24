@@ -4,11 +4,11 @@
     "name": "Classic Cotton Shirt",
     "price": "799",
     "category": "Men’s Wear",
-    "img": "https://via.placeholder.com/400x300?text=Classic+Shirt",
+    "img": "https://bananaclub.co.in/cdn/shop/files/OliveGreenPureCottonStitchlessPlacketShirt_5.jpg?v=1761233010&width=700",
     "images": [
-      "https://via.placeholder.com/900x700?text=Classic+Shirt+1",
-      "https://via.placeholder.com/900x700?text=Classic+Shirt+2",
-      "https://via.placeholder.com/900x700?text=Classic+Shirt+3"
+      "https://images.unsplash.com/photo-1596783154498-8c43d9e70c3c?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1489749798305-4fea3ba63d60?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&h=700&fit=crop"
     ],
     "description": "Premium cotton shirt with breathable comfort and neat finishing—ideal for daily wear and smart casual outings.",
     "fabric": "100% Cotton",
@@ -18,16 +18,56 @@
       "Iron on medium heat"
     ],
     "availability": "Available",
-    "colors": ["White", "Light Blue", "Navy"],
-    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": [
+      "White",
+      "Light Blue",
+      "Navy"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
     "sizeChart": {
-      "columns": ["Size", "Chest (inches)", "Length (inches)", "Shoulder (inches)"],
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)",
+        "Shoulder (inches)"
+      ],
       "rows": [
-        {"Size": "S", "Chest (inches)": 38, "Length (inches)": 26, "Shoulder (inches)": 16},
-        {"Size": "M", "Chest (inches)": 40, "Length (inches)": 27, "Shoulder (inches)": 17},
-        {"Size": "L", "Chest (inches)": 42, "Length (inches)": 28, "Shoulder (inches)": 18},
-        {"Size": "XL", "Chest (inches)": 44, "Length (inches)": 29, "Shoulder (inches)": 19},
-        {"Size": "XXL", "Chest (inches)": 46, "Length (inches)": 30, "Shoulder (inches)": 20}
+        {
+          "Size": "S",
+          "Chest (inches)": 38,
+          "Length (inches)": 26,
+          "Shoulder (inches)": 16
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 40,
+          "Length (inches)": 27,
+          "Shoulder (inches)": 17
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 42,
+          "Length (inches)": 28,
+          "Shoulder (inches)": 18
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 44,
+          "Length (inches)": 29,
+          "Shoulder (inches)": 19
+        },
+        {
+          "Size": "XXL",
+          "Chest (inches)": 46,
+          "Length (inches)": 30,
+          "Shoulder (inches)": 20
+        }
       ]
     }
   },
@@ -36,10 +76,10 @@
     "name": "Formal Trousers",
     "price": "1299",
     "category": "Men’s Wear",
-    "img": "https://via.placeholder.com/400x300?text=Formal+Trousers",
+    "img": "https://images.meesho.com/images/products/577110133/ylz1i_512.webp?width=512",
     "images": [
-      "https://via.placeholder.com/900x700?text=Formal+Trousers+1",
-      "https://via.placeholder.com/900x700?text=Formal+Trousers+2"
+      "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1542272604-787c62d465d1?w=900&h=700&fit=crop"
     ],
     "description": "Tailored formal trousers for a sharp look. Comfortable fit with durable fabric for office and events.",
     "fabric": "Cotton Blend",
@@ -49,16 +89,50 @@
       "Low heat ironing"
     ],
     "availability": "Available",
-    "colors": ["Black", "Beige", "Brown"],
-    "sizes": ["28", "30", "32", "34", "36"],
+    "colors": [
+      "Black",
+      "Beige",
+      "Brown"
+    ],
+    "sizes": [
+      "28",
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
     "sizeChart": {
-      "columns": ["Size", "Waist (inches)", "Length (inches)"],
+      "columns": [
+        "Size",
+        "Waist (inches)",
+        "Length (inches)"
+      ],
       "rows": [
-        {"Size": "28", "Waist (inches)": 28, "Length (inches)": 38},
-        {"Size": "30", "Waist (inches)": 30, "Length (inches)": 39},
-        {"Size": "32", "Waist (inches)": 32, "Length (inches)": 40},
-        {"Size": "34", "Waist (inches)": 34, "Length (inches)": 41},
-        {"Size": "36", "Waist (inches)": 36, "Length (inches)": 42}
+        {
+          "Size": "28",
+          "Waist (inches)": 28,
+          "Length (inches)": 38
+        },
+        {
+          "Size": "30",
+          "Waist (inches)": 30,
+          "Length (inches)": 39
+        },
+        {
+          "Size": "32",
+          "Waist (inches)": 32,
+          "Length (inches)": 40
+        },
+        {
+          "Size": "34",
+          "Waist (inches)": 34,
+          "Length (inches)": 41
+        },
+        {
+          "Size": "36",
+          "Waist (inches)": 36,
+          "Length (inches)": 42
+        }
       ]
     }
   },
@@ -66,12 +140,12 @@
     "id": 3,
     "name": "Cotton Kurta",
     "price": "699",
-    "category": "Women’s Wear",
-    "img": "https://via.placeholder.com/400x300?text=Cotton+Kurta",
+    "category": "Men’s Wear",
+    "img": "https://nakhclothing.com/cdn/shop/products/DSC_2130copy.jpg?v=1712644467",
     "images": [
-      "https://via.placeholder.com/900x700?text=Cotton+Kurta+1",
-      "https://via.placeholder.com/900x700?text=Cotton+Kurta+2",
-      "https://via.placeholder.com/900x700?text=Cotton+Kurta+3"
+      "https://images.unsplash.com/photo-1606777895958-75169a1796b8?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1618886996285-b1a4c5fd0ecf?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1595614666155-a3e51c3f9d45?w=900&h=700&fit=crop"
     ],
     "description": "Soft and breathable cotton kurta with classic styling—comfortable for festivals, work, and daily wear.",
     "fabric": "100% Cotton",
@@ -81,15 +155,44 @@
       "Iron inside-out"
     ],
     "availability": "Available",
-    "colors": ["Cream", "Sky Blue", "Maroon"],
-    "sizes": ["S", "M", "L", "XL"],
+    "colors": [
+      "Cream",
+      "Sky Blue",
+      "Maroon"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "sizeChart": {
-      "columns": ["Size", "Chest (inches)", "Length (inches)"],
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
       "rows": [
-        {"Size": "S", "Chest (inches)": 40, "Length (inches)": 36},
-        {"Size": "M", "Chest (inches)": 42, "Length (inches)": 37},
-        {"Size": "L", "Chest (inches)": 44, "Length (inches)": 38},
-        {"Size": "XL", "Chest (inches)": 46, "Length (inches)": 39}
+        {
+          "Size": "S",
+          "Chest (inches)": 40,
+          "Length (inches)": 36
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 42,
+          "Length (inches)": 37
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 44,
+          "Length (inches)": 38
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 46,
+          "Length (inches)": 39
+        }
       ]
     }
   },
@@ -97,12 +200,12 @@
     "id": 4,
     "name": "Tailored Suit",
     "price": "4999",
-    "category": "Sarees",
-    "img": "https://via.placeholder.com/400x300?text=Tailored+Suit",
+    "category": "Suits",
+    "img": "https://president-tailors.com/wp-content/uploads/2023/03/5-819x1024.webp",
     "images": [
-      "https://via.placeholder.com/900x700?text=Tailored+Suit+1",
-      "https://via.placeholder.com/900x700?text=Tailored+Suit+2",
-      "https://via.placeholder.com/900x700?text=Tailored+Suit+3"
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1585487000714-9a0ef8d159a4?w=900&h=700&fit=crop"
     ],
     "description": "Premium tailored suit with elegant drape and refined stitching. Perfect for functions and celebrations.",
     "fabric": "Silk Blend",
@@ -111,16 +214,56 @@
       "Steam lightly for best finish"
     ],
     "availability": "Limited Stock",
-    "colors": ["Emerald", "Royal Blue", "Black"],
-    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "colors": [
+      "Emerald",
+      "Royal Blue",
+      "Black"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
     "sizeChart": {
-      "columns": ["Size", "Chest (inches)", "Length (inches)", "Shoulder (inches)"],
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)",
+        "Shoulder (inches)"
+      ],
       "rows": [
-        {"Size": "S", "Chest (inches)": 38, "Length (inches)": 30, "Shoulder (inches)": 16},
-        {"Size": "M", "Chest (inches)": 40, "Length (inches)": 31, "Shoulder (inches)": 17},
-        {"Size": "L", "Chest (inches)": 42, "Length (inches)": 32, "Shoulder (inches)": 18},
-        {"Size": "XL", "Chest (inches)": 44, "Length (inches)": 33, "Shoulder (inches)": 19},
-        {"Size": "XXL", "Chest (inches)": 46, "Length (inches)": 34, "Shoulder (inches)": 20}
+        {
+          "Size": "S",
+          "Chest (inches)": 38,
+          "Length (inches)": 30,
+          "Shoulder (inches)": 16
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 40,
+          "Length (inches)": 31,
+          "Shoulder (inches)": 17
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 42,
+          "Length (inches)": 32,
+          "Shoulder (inches)": 18
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 44,
+          "Length (inches)": 33,
+          "Shoulder (inches)": 19
+        },
+        {
+          "Size": "XXL",
+          "Chest (inches)": 46,
+          "Length (inches)": 34,
+          "Shoulder (inches)": 20
+        }
       ]
     }
   },
@@ -129,10 +272,10 @@
     "name": "Casual T-Shirt",
     "price": "499",
     "category": "T-Shirts",
-    "img": "https://via.placeholder.com/400x300?text=Casual+T-Shirt",
+    "img": "https://adro.in/cdn/shop/files/adro-men-maroon-flatknit-johnny-collar-polo-front_a873553d-d20f-4eb7-8a9e-9b40fca4fb13.jpg?v=1776522819&width=480",
     "images": [
-      "https://via.placeholder.com/900x700?text=Casual+T-Shirt+1",
-      "https://via.placeholder.com/900x700?text=Casual+T-Shirt+2"
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1518050901994-26e4c6b5da17?w=900&h=700&fit=crop"
     ],
     "description": "Everyday casual t-shirt with soft feel and a clean, modern fit.",
     "fabric": "Cotton",
@@ -142,15 +285,44 @@
       "Iron low heat"
     ],
     "availability": "Available",
-    "colors": ["Grey", "White", "Olive"],
-    "sizes": ["S", "M", "L", "XL"],
+    "colors": [
+      "Grey",
+      "White",
+      "Olive"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
     "sizeChart": {
-      "columns": ["Size", "Chest (inches)", "Length (inches)"],
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
       "rows": [
-        {"Size": "S", "Chest (inches)": 38, "Length (inches)": 26},
-        {"Size": "M", "Chest (inches)": 40, "Length (inches)": 27},
-        {"Size": "L", "Chest (inches)": 42, "Length (inches)": 28},
-        {"Size": "XL", "Chest (inches)": 44, "Length (inches)": 29}
+        {
+          "Size": "S",
+          "Chest (inches)": 38,
+          "Length (inches)": 26
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 40,
+          "Length (inches)": 27
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 42,
+          "Length (inches)": 28
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 44,
+          "Length (inches)": 29
+        }
       ]
     }
   },
@@ -158,12 +330,12 @@
     "id": 6,
     "name": "Denim Jeans",
     "price": "1199",
-    "category": "Kids Wear",
-    "img": "https://via.placeholder.com/400x300?text=Denim+Jeans",
+    "category": "Men’s Wear",
+    "img": "https://media.landmarkshops.in/cdn-cgi/image/h=831,w=615,q=85,fit=cover/max-new/1000010363131-Blue-Midblue-1000010363131-8132021_01-2100.jpg",
     "images": [
-      "https://via.placeholder.com/900x700?text=Denim+Jeans+1",
-      "https://via.placeholder.com/900x700?text=Denim+Jeans+2",
-      "https://via.placeholder.com/900x700?text=Denim+Jeans+3"
+      "https://images.unsplash.com/photo-1542272604-787c62d465d1?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1548690596-f450e10d00f0?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=900&h=700&fit=crop"
     ],
     "description": "Comfort-fit denim jeans with strong stitching and easy everyday styling.",
     "fabric": "Denim",
@@ -173,17 +345,733 @@
       "Hang dry"
     ],
     "availability": "Available",
-    "colors": ["Indigo", "Black"],
-    "sizes": ["26", "28", "30", "32"],
+    "colors": [
+      "Indigo",
+      "Black"
+    ],
+    "sizes": [
+      "26",
+      "28",
+      "30",
+      "32"
+    ],
     "sizeChart": {
-      "columns": ["Size", "Waist (inches)", "Length (inches)"],
+      "columns": [
+        "Size",
+        "Waist (inches)",
+        "Length (inches)"
+      ],
       "rows": [
-        {"Size": "26", "Waist (inches)": 26, "Length (inches)": 36},
-        {"Size": "28", "Waist (inches)": 28, "Length (inches)": 37},
-        {"Size": "30", "Waist (inches)": 30, "Length (inches)": 38},
-        {"Size": "32", "Waist (inches)": 32, "Length (inches)": 39}
+        {
+          "Size": "26",
+          "Waist (inches)": 26,
+          "Length (inches)": 36
+        },
+        {
+          "Size": "28",
+          "Waist (inches)": 28,
+          "Length (inches)": 37
+        },
+        {
+          "Size": "30",
+          "Waist (inches)": 30,
+          "Length (inches)": 38
+        },
+        {
+          "Size": "32",
+          "Waist (inches)": 32,
+          "Length (inches)": 39
+        }
+      ]
+    }
+  },
+  {
+    "id": 7,
+    "name": "Traditional Silk Saree",
+    "price": "2499",
+    "category": "Sarees",
+    "img": "https://www.zarikaariindia.com/cdn/shop/products/9_77581afc-5835-43e3-9364-d98d14ffabb9_1200x.jpg?v=1656832684",
+    "images": [
+      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=900&h=700&fit=crop"
+    ],
+    "description": "Elegant traditional silk saree with intricate golden embroidery. Perfect for festivals, weddings, and celebrations.",
+    "fabric": "Pure Silk",
+    "washingInstructions": [
+      "Dry clean recommended",
+      "Hand wash with mild soap",
+      "Iron on low heat with thin cloth"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Maroon",
+      "Deep Blue",
+      "Emerald Green"
+    ],
+    "sizes": [
+      "Free Size"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "Free Size",
+          "Length (inches)": 60
+        }
+      ]
+    }
+  },
+  {
+    "id": 8,
+    "name": "Cotton Saree",
+    "price": "1299",
+    "category": "Sarees",
+    "img": "https://aham.store/cdn/shop/files/IMG_6121_cfdac8c5-ef81-4216-9014-09cdcf58283a.jpg?v=1736230297",
+    "images": [
+      "https://images.unsplash.com/photo-1589553936836-ba6d3e8f3a00?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1609893357919-a1c2e3a3a8a5?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=900&h=700&fit=crop"
+    ],
+    "description": "Comfortable cotton saree with traditional designs. Ideal for daily wear, office, and casual occasions.",
+    "fabric": "100% Cotton",
+    "washingInstructions": [
+      "Hand wash in cold water",
+      "Dry in shade",
+      "Iron inside-out on medium heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "White",
+      "Beige",
+      "Light Green"
+    ],
+    "sizes": [
+      "Free Size"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "Free Size",
+          "Length (inches)": 60
+        }
+      ]
+    }
+  },
+  {
+    "id": 9,
+    "name": "Designer Printed Kurti",
+    "price": "899",
+    "category": "Kurtis",
+    "img": "https://static.cilory.com/738356-thickbox_default/blue-notch-neck-cotton-block-printed-kurti-with-tassels.jpg.webp",
+    "images": [
+      "https://images.unsplash.com/photo-1597589254194-d4c00f3e4b91?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1589455066275-cf35f9f48ba8?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1618886996285-b1a4c5fd0ecf?w=900&h=700&fit=crop"
+    ],
+    "description": "Stylish printed kurti with modern designs and comfortable fit. Perfect for casual and semi-formal gatherings.",
+    "fabric": "Cotton Blend",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Dry in shade",
+      "Iron on low-medium heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Pink",
+      "Blue",
+      "Purple"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "S",
+          "Chest (inches)": 38,
+          "Length (inches)": 39
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 40,
+          "Length (inches)": 40
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 42,
+          "Length (inches)": 41
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 44,
+          "Length (inches)": 42
+        },
+        {
+          "Size": "XXL",
+          "Chest (inches)": 46,
+          "Length (inches)": 43
+        }
+      ]
+    }
+  },
+  {
+    "id": 10,
+    "name": "Embroidered Kurti",
+    "price": "1099",
+    "category": "Kurtis",
+    "img": "https://www.lakshita.com/cdn/shop/files/LakshitaFestive240921.jpg?v=1756969238",
+    "images": [
+      "https://images.unsplash.com/photo-1617456202039-2a3f2be6c149?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1593612998160-e34014e67546?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1606777895958-75169a1796b8?w=900&h=700&fit=crop"
+    ],
+    "description": "Ethnic embroidered kurti with traditional patterns. Great for festivals, celebrations, and daily ethnic wear.",
+    "fabric": "Rayon",
+    "washingInstructions": [
+      "Hand wash recommended",
+      "Use mild detergent",
+      "Dry in shade, iron inside-out"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Red",
+      "Orange",
+      "Navy Blue"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "S",
+          "Chest (inches)": 38,
+          "Length (inches)": 39
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 40,
+          "Length (inches)": 40
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 42,
+          "Length (inches)": 41
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 44,
+          "Length (inches)": 42
+        }
+      ]
+    }
+  },
+  {
+    "id": 11,
+    "name": "Party Wear Saree",
+    "price": "3499",
+    "category": "Sarees",
+    "img": "https://clothsvilla.com/cdn/shop/files/poly-shimmer-zari-weaving-saree-with-matching-unstitched-blouse-piece-festive-wedding-party-wear-saree-for-women_4_1024x1024.jpg?v=1766129657",
+    "images": [
+      "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1618886996285-b1a4c5fd0ecf?w=900&h=700&fit=crop"
+    ],
+    "description": "Premium party wear saree with elegant sequin and bead work. Perfect for weddings and festive celebrations.",
+    "fabric": "Georgette with Embellishments",
+    "washingInstructions": [
+      "Dry clean only",
+      "Professional cleaning recommended",
+      "Store in breathable cloth bag"
+    ],
+    "availability": "Limited Stock",
+    "colors": [
+      "Gold",
+      "Silver",
+      "Black"
+    ],
+    "sizes": [
+      "Free Size"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "Free Size",
+          "Length (inches)": 60
+        }
+      ]
+    }
+  },
+  {
+    "id": 12,
+    "name": "Casual Kurti with Dupatta",
+    "price": "749",
+    "category": "Kurtis",
+    "img": "https://stimg.b-cdn.net/images/800/data/2026y/April/60918/Rust-Orange-Muslin-Casual-Wear-Digital-Print-Work-Readymade-3-Piece-Plazzo-Kurti-With-Dupatta-Vyoma-6001(1).jpg",
+    "images": [
+      "https://images.unsplash.com/photo-1565577666747-69f6646db940?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1585487000714-9a0ef8d159a4?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=900&h=700&fit=crop"
+    ],
+    "description": "Comfortable casual kurti set with matching dupatta. Perfect for daily wear and comfortable office outings.",
+    "fabric": "Cotton",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Dry in shade",
+      "Iron on medium heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Cream",
+      "Sky Blue",
+      "Olive"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "XXL"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "S",
+          "Chest (inches)": 38,
+          "Length (inches)": 39
+        },
+        {
+          "Size": "M",
+          "Chest (inches)": 40,
+          "Length (inches)": 40
+        },
+        {
+          "Size": "L",
+          "Chest (inches)": 42,
+          "Length (inches)": 41
+        },
+        {
+          "Size": "XL",
+          "Chest (inches)": 44,
+          "Length (inches)": 42
+        },
+        {
+          "Size": "XXL",
+          "Chest (inches)": 46,
+          "Length (inches)": 43
+        }
+      ]
+    }
+  },
+  {
+    "id": 13,
+    "name": "Kids Cotton T-Shirt (Boys)",
+    "price": "399",
+    "category": "Kids Wear",
+    "img": "https://cdn07.nnnow.com/web-images/large/styles/AOEDLPVBMOW/1752146036109/1.jpg",
+    "images": [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1518050901994-26e4c6b5da17?w=900&h=700&fit=crop"
+    ],
+    "description": "Soft cotton kids t-shirt with a comfy everyday fit—easy to wear for school and play.",
+    "fabric": "Cotton",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Do not bleach",
+      "Iron low heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Blue",
+      "Green",
+      "Red"
+    ],
+    "sizes": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y",
+      "8-9Y",
+      "10-11Y"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "2-3Y",
+          "Chest (inches)": 26,
+          "Length (inches)": 16
+        },
+        {
+          "Size": "4-5Y",
+          "Chest (inches)": 28,
+          "Length (inches)": 18
+        },
+        {
+          "Size": "6-7Y",
+          "Chest (inches)": 30,
+          "Length (inches)": 20
+        },
+        {
+          "Size": "8-9Y",
+          "Chest (inches)": 32,
+          "Length (inches)": 22
+        },
+        {
+          "Size": "10-11Y",
+          "Chest (inches)": 34,
+          "Length (inches)": 24
+        }
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "name": "Kids Denim Jeans (Boys)",
+    "price": "899",
+    "category": "Kids Wear",
+    "img": "https://images.jdmagicbox.com/quickquotes/images_main/children-s-denim-jeans-2015484506-69xbjph5.jpg",
+    "images": [
+      "https://images.unsplash.com/photo-1542272604-787c62d465d1?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=900&h=700&fit=crop"
+    ],
+    "description": "Durable denim jeans for kids with comfortable stretch and neat stitching—made for daily wear.",
+    "fabric": "Denim",
+    "washingInstructions": [
+      "Wash inside-out",
+      "Cold wash recommended",
+      "Hang dry"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Indigo",
+      "Black"
+    ],
+    "sizes": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y",
+      "8-9Y",
+      "10-11Y"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Waist (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "2-3Y",
+          "Waist (inches)": 20,
+          "Length (inches)": 22
+        },
+        {
+          "Size": "4-5Y",
+          "Waist (inches)": 21,
+          "Length (inches)": 24
+        },
+        {
+          "Size": "6-7Y",
+          "Waist (inches)": 22,
+          "Length (inches)": 26
+        },
+        {
+          "Size": "8-9Y",
+          "Waist (inches)": 23,
+          "Length (inches)": 28
+        },
+        {
+          "Size": "10-11Y",
+          "Waist (inches)": 24,
+          "Length (inches)": 30
+        }
+      ]
+    }
+  },
+  {
+    "id": 15,
+    "name": "Kids Party Wear Kurti (Girls)",
+    "price": "649",
+    "category": "Kids Wear",
+    "img": "https://ynfonline.com/images/product/2026/03/ynf-georgette-kesh461-241-kids-wear-wholesale-girls-kurti-kids-festive-wear-kids-party-wear-ethnic-manufacturer-2026-03-21_18_04_10.jpg",
+    "images": [
+      "https://images.unsplash.com/photo-1606777895958-75169a1796b8?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1618886996285-b1a4c5fd0ecf?w=900&h=700&fit=crop"
+    ],
+    "description": "Elegant kurti for kids with soft fabric and comfortable fit—perfect for functions and festivals.",
+    "fabric": "Cotton Blend",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Dry in shade",
+      "Iron on low-medium heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Pink",
+      "Purple",
+      "Sky Blue"
+    ],
+    "sizes": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y",
+      "8-9Y",
+      "10-11Y"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "2-3Y",
+          "Chest (inches)": 22,
+          "Length (inches)": 18
+        },
+        {
+          "Size": "4-5Y",
+          "Chest (inches)": 24,
+          "Length (inches)": 20
+        },
+        {
+          "Size": "6-7Y",
+          "Chest (inches)": 26,
+          "Length (inches)": 22
+        },
+        {
+          "Size": "8-9Y",
+          "Chest (inches)": 28,
+          "Length (inches)": 24
+        },
+        {
+          "Size": "10-11Y",
+          "Chest (inches)": 30,
+          "Length (inches)": 26
+        }
+      ]
+    }
+  },
+  {
+    "id": 16,
+    "name": "Kids Sleeveless Frock (Girls)",
+    "price": "549",
+    "category": "Kids Wear",
+    "img": "https://i5.walmartimages.com/asr/92c287e1-f5ec-4d56-a83c-dd4ed59b4dc2.eafed447f90903a31d81ddb8a3c2d001.jpeg",
+    "images": [
+      "https://images.unsplash.com/photo-1589553936836-ba6d3e8f3a00?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1609893357919-a1c2e3a3a8a5?w=900&h=700&fit=crop"
+    ],
+    "description": "Breathable sleeveless frock for kids—lightweight, comfortable, and easy to move.",
+    "fabric": "Cotton",
+    "washingInstructions": [
+      "Hand wash in cold water",
+      "Dry in shade",
+      "Iron low heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Yellow",
+      "White",
+      "Light Green"
+    ],
+    "sizes": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y",
+      "8-9Y"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "2-3Y",
+          "Chest (inches)": 20,
+          "Length (inches)": 22
+        },
+        {
+          "Size": "4-5Y",
+          "Chest (inches)": 21,
+          "Length (inches)": 24
+        },
+        {
+          "Size": "6-7Y",
+          "Chest (inches)": 22,
+          "Length (inches)": 26
+        },
+        {
+          "Size": "8-9Y",
+          "Chest (inches)": 23,
+          "Length (inches)": 28
+        }
+      ]
+    }
+  },
+  {
+    "id": 17,
+    "name": "Kids Full Sleeve T-Shirt (Boys)",
+    "price": "499",
+    "category": "Kids Wear",
+    "img": "https://rukminim2.flixcart.com/image/480/640/xif0q/kids-t-shirt/h/x/v/13-14-years-ird-dgy-rnfuleye-boy-impst-original-imahaamvuwsh6hth.jpeg?q=90",
+    "images": [
+      "https://images.unsplash.com/photo-1520975916090-3105956dac38?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&h=700&fit=crop"
+    ],
+    "description": "Comfortable full sleeve kids t-shirt with soft fabric—perfect for daily school wear.",
+    "fabric": "Cotton",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Do not bleach",
+      "Iron low heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Navy",
+      "Red",
+      "Green"
+    ],
+    "sizes": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y",
+      "8-9Y",
+      "10-11Y"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Chest (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "2-3Y",
+          "Chest (inches)": 24,
+          "Length (inches)": 18
+        },
+        {
+          "Size": "4-5Y",
+          "Chest (inches)": 26,
+          "Length (inches)": 20
+        },
+        {
+          "Size": "6-7Y",
+          "Chest (inches)": 28,
+          "Length (inches)": 22
+        },
+        {
+          "Size": "8-9Y",
+          "Chest (inches)": 30,
+          "Length (inches)": 24
+        },
+        {
+          "Size": "10-11Y",
+          "Chest (inches)": 32,
+          "Length (inches)": 26
+        }
+      ]
+    }
+  },
+  {
+    "id": 18,
+    "name": "Kids Cotton Shorts (Boys)",
+    "price": "349",
+    "category": "Kids Wear",
+    "img": "https://annachy-prod-assets.annachy.com/pims/products-v1/CLOB015RED23YR_1.webp?v=1769246537408",
+    "images": [
+      "https://images.unsplash.com/photo-1520975693411-5b6b7bd3e7c8?w=900&h=700&fit=crop",
+      "https://images.unsplash.com/photo-1548690596-f450e10d00f0?w=900&h=700&fit=crop"
+    ],
+    "description": "Everyday cotton shorts for kids—lightweight, breathable, and easy to move.",
+    "fabric": "Cotton",
+    "washingInstructions": [
+      "Machine wash cold",
+      "Wash separately",
+      "Iron low heat"
+    ],
+    "availability": "Available",
+    "colors": [
+      "Grey",
+      "Black",
+      "Blue"
+    ],
+    "sizes": [
+      "2-3Y",
+      "4-5Y",
+      "6-7Y",
+      "8-9Y"
+    ],
+    "sizeChart": {
+      "columns": [
+        "Size",
+        "Waist (inches)",
+        "Length (inches)"
+      ],
+      "rows": [
+        {
+          "Size": "2-3Y",
+          "Waist (inches)": 20,
+          "Length (inches)": 10
+        },
+        {
+          "Size": "4-5Y",
+          "Waist (inches)": 21,
+          "Length (inches)": 11
+        },
+        {
+          "Size": "6-7Y",
+          "Waist (inches)": 22,
+          "Length (inches)": 12
+        },
+        {
+          "Size": "8-9Y",
+          "Waist (inches)": 23,
+          "Length (inches)": 13
+        }
       ]
     }
   }
 ]
-

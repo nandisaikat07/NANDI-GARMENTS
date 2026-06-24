@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Shop Department | Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<meta name="description" content="Browse Nandi Garments departments with sizes, offers, wishlist and cart ordering.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="department-page">
+  <div class="department-orbit" aria-hidden="true"></div>
+
+  <header class="site-header department-header">
+    <div class="container">
+      <a class="logo-container department-logo" href="index.html" aria-label="Nandi Garments home">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <div>
+          <div class="brand-kicker">Nandi Garments</div>
+          <h1>Department Store</h1>
+        </div>
+      </a>
+      <nav class="nav department-nav" aria-label="Departments">
+        <a href="category.html?section=women">Women</a>
+        <a href="category.html?section=men">Men</a>
+        <a href="category.html?section=kids">Kids</a>
+        <a href="category.html?section=home">Home Furnishing</a>
+        <a href="index.html#products">All Products</a>
+      </nav>
+      <div class="header-actions">
+        <button id="department-wishlist-toggle" class="btn small" type="button">Wishlist (<span id="department-wishlist-count">0</span>)</button>
+        <button id="department-cart-toggle" class="btn small" type="button">Cart (<span id="cart-count">0</span>)</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="department-hero">
+      <div class="container department-hero-grid">
+        <div class="department-hero-copy">
+          <p class="section-kicker" id="department-kicker">Shop section</p>
+          <h2 id="department-title">Women Collection</h2>
+          <p id="department-intro">Explore complete category-wise products with sizes, offers and quick ordering.</p>
+          <div class="department-actions">
+            <a class="btn" href="#department-products">Browse Products</a>
+            <a class="btn secondary" id="department-whatsapp" href="https://wa.me/918250530293" target="_blank" rel="noopener">Order Help</a>
+          </div>
+          <div class="department-stats" aria-label="Department highlights">
+            <div><strong id="department-count">0</strong><span>Products</span></div>
+            <div><strong>10-35%</strong><span>Offers</span></div>
+            <div><strong>Size</strong><span>Fit support</span></div>
+          </div>
+        </div>
+        <div class="department-visual-wrap" aria-hidden="true">
+          <div class="department-visual">
+            <span class="fold fold-one"></span>
+            <span class="fold fold-two"></span>
+            <span class="fold fold-three"></span>
+            <span class="fold fold-four"></span>
+            <div class="department-visual-label" id="department-visual-label">Women</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="department-switcher container" aria-label="Switch department">
+      <a href="category.html?section=women" data-section-link="women">Women</a>
+      <a href="category.html?section=men" data-section-link="men">Men</a>
+      <a href="category.html?section=kids" data-section-link="kids">Kids</a>
+      <a href="category.html?section=home" data-section-link="home">Home Furnishing</a>
+    </section>
+
+    <section class="container department-shop" id="department-products">
+      <aside class="department-filter-panel" aria-label="Product filters">
+        <div>
+          <p class="section-kicker">Categories</p>
+          <h3>Filter Products</h3>
+        </div>
+        <div id="department-filter-list" class="department-filter-list"></div>
+      </aside>
+
+      <div class="department-results">
+        <div class="department-toolbar">
+          <div>
+            <h3 id="department-results-title">All categories</h3>
+            <p class="muted" id="department-results-subtitle">Select size, add to cart, or save items.</p>
+          </div>
+          <label class="department-search">
+            <span>Search</span>
+            <input id="department-search" type="search" placeholder="Search saree, shirt, bedsheet...">
+          </label>
+        </div>
+        <div id="department-grid" class="department-product-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <aside id="department-cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-header">
+      <strong>Your Cart</strong>
+      <button id="department-cart-close" class="cart-close" aria-label="Close cart">x</button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <div>Total: <strong id="cart-total">Rs.0</strong></div>
+      <a class="btn" href="checkout.html">Checkout</a>
+    </div>
+  </aside>
+
+  <aside id="department-wishlist-drawer" class="wishlist-drawer" aria-hidden="true">
+    <div class="wishlist-header">
+      <strong>Saved Items</strong>
+      <button id="department-wishlist-close" class="wishlist-close" aria-label="Close wishlist">x</button>
+    </div>
+    <div id="department-wishlist-items" class="wishlist-items"></div>
+  </aside>
+
+  <script src="category.js"></script>
+</body>
+</html>

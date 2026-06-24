@@ -60,7 +60,15 @@ async function loadProducts(){
     console.log('Loaded from embedded fallback, products:', products);
   }
   renderCategories();
-  renderProducts();
+  const searchInput = document.getElementById('site-search');
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('search')?.trim() || '';
+  if(searchInput && searchQuery){
+    searchInput.value = searchQuery;
+    renderProducts('all', searchQuery);
+  } else {
+    renderProducts();
+  }
 }
 
 function availabilityBadgeHTML(p){
@@ -170,11 +178,11 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-document.getElementById('contact-form').addEventListener('submit', (e)=>{
+document.getElementById('contact-form')?.addEventListener('submit', (e)=>{
   e.preventDefault();
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const message = document.getElementById('message').value.trim();
+  const name = document.getElementById('name')?.value.trim() || '';
+  const email = document.getElementById('email')?.value.trim() || '';
+  const message = document.getElementById('message')?.value.trim() || '';
   const subject = encodeURIComponent('Website contact from ' + (name || email || 'website'));
   const body = encodeURIComponent(`${message}\n\nFrom: ${name} <${email}>`);
   // open mail client
@@ -182,17 +190,27 @@ document.getElementById('contact-form').addEventListener('submit', (e)=>{
   e.target.reset();
 });
 
-document.getElementById('whatsapp-send').addEventListener('click', ()=>{
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const message = document.getElementById('message').value.trim();
+document.getElementById('whatsapp-send')?.addEventListener('click', ()=>{
+  const name = document.getElementById('name')?.value.trim() || '';
+  const email = document.getElementById('email')?.value.trim() || '';
+  const message = document.getElementById('message')?.value.trim() || '';
   const text = encodeURIComponent(`${message}\n\nFrom: ${name} <${email}>`);
   // opens WhatsApp (web or app) with prefilled message; number must be in international format without +
   const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
   window.open(url, '_blank');
 });
 
-loadProducts();
+if (document.readyState !== 'loading') {
+  if(document.getElementById('product-grid')){
+    loadProducts();
+  }
+} else {
+  document.addEventListener('DOMContentLoaded', ()=>{
+    if(document.getElementById('product-grid')){
+      loadProducts();
+    }
+  });
+}
 
 /* WhatsApp floating chat button (separate from chatbot) */
 function initWhatsAppFloat(){
@@ -248,10 +266,25 @@ function isWishlisted(productId){
 
 function toggleWishlist(productId){
   const id = Number(productId);
-  if(isWishlisted(id)) wishlist = wishlist.filter(x=>x!==id); else wishlist.unshift(id);
+  const already = isWishlisted(id);
+  if(already) wishlist = wishlist.filter(x=>x!==id); else wishlist.unshift(id);
   saveWishlist();
   renderWishlistDrawer();
   syncWishlistButtons();
+  if(!already) showToast('Product added to wishlist'); else showToast('Product removed from wishlist');
+}
+
+
+function removeWishlistItem(productId){
+  wishlist = wishlist.filter(x=>x!==Number(productId));
+  saveWishlist();
+  renderWishlistDrawer();
+  syncWishlistButtons();
+}
+
+function moveWishlistToCart(productId){
+  addToCart(Number(productId), 1);
+  removeWishlistItem(productId);
 }
 
 function updateWishlistCount(){
@@ -269,10 +302,13 @@ function syncWishlistButtons(){
 
 function renderWishlistDrawer(){
   const container = document.getElementById('wishlist-items');
+  const emptyMessage = document.getElementById('empty-wishlist');
+  if(emptyMessage) emptyMessage.style.display = 'none';
   if(!container) return;
   container.innerHTML = '';
 
   if(wishlist.length===0){
+    if(emptyMessage) emptyMessage.style.display = '';
     container.innerHTML = `<div class="note">Your wishlist is empty.</div>`;
     return;
   }
@@ -291,14 +327,23 @@ function renderWishlistDrawer(){
         <div><strong>${p.name}</strong></div>
         <div class="meta">₹${p.price}</div>
       </div>
-      <button class="remove" data-remove-wishlist-id="${p.id}" aria-label="Remove from wishlist">✕</button>
+      <div class="actions">
+        <button class="btn small move-to-cart" data-move-wishlist-id="${p.id}" aria-label="Move to cart">Move to Cart</button>
+        <button class="remove" data-remove-wishlist-id="${p.id}" aria-label="Remove from wishlist">✕</button>
+      </div>
       `;
     container.appendChild(el);
   });
 
   container.querySelectorAll('[data-remove-wishlist-id]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      toggleWishlist(Number(btn.getAttribute('data-remove-wishlist-id')));
+      removeWishlistItem(Number(btn.getAttribute('data-remove-wishlist-id')));
+    });
+  });
+
+  container.querySelectorAll('[data-move-wishlist-id]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      moveWishlistToCart(Number(btn.getAttribute('data-move-wishlist-id')));
     });
   });
 }
@@ -420,7 +465,7 @@ function applyTheme(theme){
   document.body.classList.toggle('dark', isDark);
   localStorage.setItem('ng_theme', theme);
   const btn = document.getElementById('theme-toggle');
-  if(btn) btn.textContent = isDark ? '☀️' : '🌙';
+  if(btn) btn.innerHTML = `<span class="header-control-icon material-symbols-rounded" aria-hidden="true">${isDark ? 'light_mode' : 'dark_mode'}</span>`;
 }
 
 function initTheme(){
@@ -577,6 +622,13 @@ document.getElementById('map-zoom-out')?.addEventListener('click', ()=>{
 const CART_KEY = 'ng_cart_v1';
 let cart = loadCart();
 
+function parseMoneyValue(value){
+  if(typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  const cleaned = String(value || '').replace(/[^0-9.]/g, '');
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 function loadCart(){
   try{ return JSON.parse(localStorage.getItem(CART_KEY)) || {}; }catch(e){ return {}; }
 }
@@ -597,10 +649,12 @@ function addToCart(id, qty=1){
   if(!p) return alert('Product not found');
   // Recently viewed
   addRecentlyViewed(p.id);
-  if(cart[id]) cart[id].qty += qty; else cart[id] = {id:p.id,name:p.name,price:parseFloat(p.price),img:p.img,qty:qty};
+  if(cart[id]) cart[id].qty += qty; else cart[id] = {id:p.id,name:p.name,price:parseMoneyValue(p.price),img:p.img,qty:qty};
   saveCart();
   renderCart();
+  showToast('Product added to cart');
 }
+
 
 
 function removeFromCart(id){
@@ -688,35 +742,315 @@ function initCartUI(){
   // Search handler
   const searchInput = document.getElementById('site-search');
   if(searchInput){
-    searchInput.addEventListener('input', ()=>{
-      const q = searchInput.value.trim().toLowerCase();
+    const isProductPage = Boolean(document.getElementById('product-grid'));
+
+    const applySearch = (query)=>{
+      const q = query.trim().toLowerCase();
+      if(!isProductPage) return;
       if(!q) return renderProducts(document.getElementById('category-filter')?.value || 'all');
-      const filtered = products.filter(p=>p.name.toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
-      const grid = document.getElementById('product-grid'); grid.innerHTML='';
-      const dict = window.NG_I18N || TRANSLATIONS.en;
-      filtered.forEach(p=>{
-        const card = document.createElement('article'); card.className='product';
-        card.innerHTML = `
-          <img src="${p.img}" alt="${p.name}">
-          <div class="body">
-            <h3>${p.name}</h3>
-            <p>${dict['product.desc'] || 'High-quality fabric and finish.'}</p>
-            <div class="price">₹${p.price}</div>
-            <button class="btn" data-id="${p.id}">${dict['product.add_to_cart'] || 'Add to cart'}</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+      renderProducts('all', q);
+    };
+
+    searchInput.addEventListener('input', ()=>{
+      applySearch(searchInput.value);
+    });
+
+    searchInput.addEventListener('keydown', (e)=>{
+      if(e.key !== 'Enter') return;
+      const query = searchInput.value.trim();
+      if(!query) return;
+      if(isProductPage){
+        e.preventDefault();
+        applySearch(query);
+      } else {
+        window.location.href = `index.html?search=${encodeURIComponent(query)}`;
+      }
     });
   }
 }
 
-document.addEventListener('DOMContentLoaded', initCartUI);
+const ADDRESS_STORAGE_KEY = 'ng_saved_addresses_v1';
+const LAST_DELIVERY_ADDRESS_KEY = 'ng_last_address_v1';
+const ADDRESS_CUSTOMER_KEY = 'ng_customer_id_v1';
+const ADDRESS_API_BASE = 'http://localhost:5050/api';
+const DEFAULT_ADDRESSES = {
+  home: {
+    name: '',
+    phone: '',
+    line1: 'Flat 12B, Sunshine Apartments',
+    city: 'Kolkata',
+    pin: '700001',
+    landmark: 'MG Road, West Bengal',
+    country: 'India'
+  },
+  office: {
+    name: '',
+    phone: '',
+    line1: '20 Park Street Tower, 5th Floor',
+    city: 'Kolkata',
+    pin: '700016',
+    landmark: 'Park Street, West Bengal',
+    country: 'India'
+  }
+};
+
+function normalizeSavedAddress(address = {}){
+  const oldLine2 = String(address.line2 || '').trim();
+  const city = String(address.city || '').trim();
+  const pin = String(address.pin || '').trim();
+  const landmark = String(address.landmark || '').trim();
+
+  return {
+    name: String(address.name || '').trim(),
+    phone: String(address.phone || '').trim(),
+    line1: String(address.line1 || '').trim(),
+    city: city || oldLine2,
+    pin,
+    landmark,
+    country: String(address.country || 'India').trim()
+  };
+}
+
+function getAddressCustomerId(){
+  let customerId = localStorage.getItem(ADDRESS_CUSTOMER_KEY);
+  if(!customerId){
+    customerId = 'guest_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem(ADDRESS_CUSTOMER_KEY, customerId);
+  }
+  return customerId;
+}
+
+function addressSummaryLine(addr){
+  return [addr.city, addr.pin].filter(Boolean).join(' ');
+}
+
+function loadSavedAddresses(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(ADDRESS_STORAGE_KEY)) || {};
+    const lastDelivery = JSON.parse(localStorage.getItem(LAST_DELIVERY_ADDRESS_KEY)) || null;
+    const addresses = {
+      home: normalizeSavedAddress(DEFAULT_ADDRESSES.home),
+      office: normalizeSavedAddress(DEFAULT_ADDRESSES.office),
+      ...saved
+    };
+
+    Object.keys(addresses).forEach(key=>{
+      addresses[key] = normalizeSavedAddress(addresses[key]);
+    });
+
+    if(lastDelivery && !saved.home){
+      addresses.home = {
+        ...addresses.home,
+        ...normalizeSavedAddress(lastDelivery)
+      };
+    }
+
+    return addresses;
+  }catch(e){
+    return {
+      home: normalizeSavedAddress(DEFAULT_ADDRESSES.home),
+      office: normalizeSavedAddress(DEFAULT_ADDRESSES.office)
+    };
+  }
+}
+
+function saveSavedAddresses(addresses){
+  localStorage.setItem(ADDRESS_STORAGE_KEY, JSON.stringify(addresses));
+}
+
+function saveDeliveryAddress(address){
+  const deliveryAddress = normalizeSavedAddress(address);
+  localStorage.setItem(LAST_DELIVERY_ADDRESS_KEY, JSON.stringify(deliveryAddress));
+  return deliveryAddress;
+}
+
+function addressesArrayToMap(addresses){
+  return (Array.isArray(addresses) ? addresses : []).reduce((map, address)=>{
+    if(address && address.key){
+      map[address.key] = normalizeSavedAddress(address);
+    }
+    return map;
+  }, {});
+}
+
+async function loadAddressesFromBackend(){
+  const customerId = getAddressCustomerId();
+  const response = await fetch(`${ADDRESS_API_BASE}/addresses/${encodeURIComponent(customerId)}`);
+  if(!response.ok) throw new Error('Failed to load addresses');
+  const data = await response.json();
+  if(!data || !data.success) throw new Error('Bad address response');
+
+  const backendAddresses = addressesArrayToMap(data.addresses);
+  if(Object.keys(backendAddresses).length){
+    const current = loadSavedAddresses();
+    const merged = { ...current, ...backendAddresses };
+    saveSavedAddresses(merged);
+    return merged;
+  }
+
+  return loadSavedAddresses();
+}
+
+async function saveAddressToBackend(key, address){
+  const customerId = getAddressCustomerId();
+  const response = await fetch(`${ADDRESS_API_BASE}/addresses/${encodeURIComponent(customerId)}/${encodeURIComponent(key)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(address)
+  });
+
+  if(!response.ok) throw new Error('Failed to save address');
+  const data = await response.json();
+  if(!data || !data.success) throw new Error('Bad save address response');
+  return data.address;
+}
+
+function renderSavedAddresses(){
+  const addresses = loadSavedAddresses();
+  document.querySelectorAll('.address-card[data-address-key]').forEach(card=>{
+    const key = card.getAttribute('data-address-key');
+    const addr = addresses[key] || normalizeSavedAddress(DEFAULT_ADDRESSES[key]) || normalizeSavedAddress();
+    const view = card.querySelector('.address-view');
+    const form = card.querySelector('.address-form');
+    if(view){
+      const contact = [addr.name, addr.phone].filter(Boolean).join(' - ');
+      const contactEl = view.querySelector('.addr-contact');
+      if(contactEl){
+        contactEl.textContent = contact;
+        contactEl.hidden = !contact;
+      }
+      view.querySelector('.addr-line1').textContent = addr.line1 || 'No address saved yet';
+      view.querySelector('.addr-line2').textContent = [addr.landmark, addressSummaryLine(addr)].filter(Boolean).join(', ');
+      view.querySelector('.addr-country').textContent = addr.country || 'India';
+    }
+    if(form){
+      ['name','phone','line1','city','pin','landmark','country'].forEach(field=>{
+        const input = form.querySelector(`[name="${field}"]`);
+        if(input) input.value = addr[field] || '';
+      });
+    }
+  });
+}
+
+function toggleAddressEditor(key, show){
+  const card = document.querySelector(`.address-card[data-address-key="${key}"]`);
+  if(!card) return;
+  const view = card.querySelector('.address-view');
+  const form = card.querySelector('.address-form');
+  const editButton = card.querySelector('.address-edit');
+  if(show){
+    view?.classList.add('hidden');
+    form?.classList.remove('hidden');
+    editButton?.classList.add('hidden');
+  } else {
+    renderSavedAddresses();
+    view?.classList.remove('hidden');
+    form?.classList.add('hidden');
+    editButton?.classList.remove('hidden');
+  }
+}
+
+async function saveAddressForm(key){
+  const card = document.querySelector(`.address-card[data-address-key="${key}"]`);
+  if(!card) return;
+  const form = card.querySelector('.address-form');
+  const saveButton = card.querySelector('.address-save');
+  if(!form) return;
+  const address = normalizeSavedAddress({
+    name: form.querySelector('input[name="name"]')?.value,
+    phone: form.querySelector('input[name="phone"]')?.value,
+    line1: form.querySelector('input[name="line1"]')?.value,
+    city: form.querySelector('input[name="city"]')?.value,
+    pin: form.querySelector('input[name="pin"]')?.value,
+    landmark: form.querySelector('input[name="landmark"]')?.value,
+    country: form.querySelector('input[name="country"]')?.value
+  });
+
+  if(!address.name || !address.phone || !address.line1 || !address.city || !address.pin || !address.country){
+    alert('Please complete name, mobile number, address, city, PIN code, and country before saving.');
+    return;
+  }
+
+  const addresses = loadSavedAddresses();
+  addresses[key] = address;
+  saveSavedAddresses(addresses);
+  saveDeliveryAddress(address);
+
+  if(saveButton) saveButton.disabled = true;
+  try{
+    const backendAddress = await saveAddressToBackend(key, address);
+    addresses[key] = normalizeSavedAddress(backendAddress || address);
+    saveSavedAddresses(addresses);
+    saveDeliveryAddress(addresses[key]);
+    showToast('Address saved to your account.');
+  }catch(e){
+    showToast('Address saved in this browser. Start the backend to save it online.');
+  }finally{
+    if(saveButton) saveButton.disabled = false;
+  }
+
+  renderSavedAddresses();
+  toggleAddressEditor(key, false);
+}
+
+function showToast(message, duration = 2500){
+  let toast = document.getElementById('ng-toast');
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'ng-toast';
+    toast.className = 'ng-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.add('show');
+  if(window.__ngToastTimer){
+    clearTimeout(window.__ngToastTimer);
+  }
+  window.__ngToastTimer = setTimeout(()=>{
+    toast.classList.remove('show');
+  }, duration);
+}
+
+function initSavedAddressesUI(){
+  const cards = Array.from(document.querySelectorAll('.address-card[data-address-key]'));
+  if(!cards.length) return;
+  window.__ngAddressPageReady = true;
+  renderSavedAddresses();
+  loadAddressesFromBackend()
+    .then(()=> renderSavedAddresses())
+    .catch(()=> showToast('Backend not connected. Address edits will save in this browser.'));
+
+  document.body.addEventListener('click', (event)=>{
+    const button = event.target.closest('.address-edit, .address-save, .address-cancel');
+    if(!button) return;
+    const key = button.getAttribute('data-address-key') || button.closest('.address-card')?.getAttribute('data-address-key');
+    if(!key) return;
+
+    event.preventDefault();
+    if(button.matches('.address-edit')){
+      toggleAddressEditor(key, true);
+      return;
+    }
+    if(button.matches('.address-cancel')){
+      toggleAddressEditor(key, false);
+      return;
+    }
+    if(button.matches('.address-save')){
+      saveAddressForm(key);
+      return;
+    }
+  });
+}
+
 // Authentication (simple client-side mock)
 const AUTH_KEY = 'ng_user_v1';
 
 function getUser(){
-  try{ return JSON.parse(localStorage.getItem(AUTH_KEY)); }catch(e){return null}
+  try{
+    return JSON.parse(localStorage.getItem(AUTH_KEY)) || JSON.parse(localStorage.getItem('nandi_user'));
+  }catch(e){
+    return null;
+  }
 }
 
 function setUser(u){
@@ -729,19 +1063,33 @@ function clearUser(){
 
 function updateAuthUI(){
   const user = getUser();
-  const authBtn = document.getElementById('auth-button');
+  const authBtn = document.getElementById('account-button') || document.getElementById('auth-button');
   const accMenu = document.getElementById('account-menu');
-  const accLink = document.getElementById('account-link');
+  const logoutBtn = document.getElementById('logout-btn');
   if(!authBtn) return;
+
   if(user){
     const name = user.name || user.email || 'Account';
-    authBtn.innerHTML = `<span class="auth-icon" aria-hidden="true">👤</span><span class="auth-text">${escapeHtml(name)}</span>`;
+    authBtn.innerHTML = `<span class="auth-icon material-symbols-rounded" aria-hidden="true">account_circle</span><span class="auth-text">${escapeHtml(name)}</span>`;
     authBtn.setAttribute('aria-expanded','false');
     if(accMenu) accMenu.setAttribute('aria-hidden','true');
-    if(accLink) accLink.href = '#account';
+    if(logoutBtn) logoutBtn.style.display = '';
+    if(accMenu){
+      const loginItem = accMenu.querySelector('.account-login-item');
+      if(loginItem) loginItem.remove();
+    }
   } else {
-    authBtn.innerHTML = `<span class="auth-icon" aria-hidden="true">👤</span><span class="auth-text">Login</span>`;
+    authBtn.innerHTML = `<span class="auth-icon material-symbols-rounded" aria-hidden="true">account_circle</span><span class="auth-text">Login</span>`;
+    authBtn.setAttribute('aria-expanded','false');
     if(accMenu) accMenu.setAttribute('aria-hidden','true');
+    if(logoutBtn) logoutBtn.style.display = 'none';
+    if(accMenu && !accMenu.querySelector('.account-login-item')){
+      const loginItem = document.createElement('a');
+      loginItem.href = 'login.html';
+      loginItem.className = 'account-menu-item account-login-item';
+      loginItem.textContent = 'Login / Sign Up';
+      accMenu.insertBefore(loginItem, accMenu.firstChild);
+    }
   }
 }
 
@@ -757,7 +1105,7 @@ function escapeHtml(str){
 
 function initAuth(){
   // auth button opens modal when logged out, toggles menu when logged in
-  const authBtn = document.getElementById('auth-button');
+  const authBtn = document.getElementById('account-button') || document.getElementById('auth-button');
   const accMenu = document.getElementById('account-menu');
   const logoutBtn = document.getElementById('logout-btn');
   const loginModal = document.getElementById('login-modal');
@@ -769,16 +1117,23 @@ function initAuth(){
   if(!authBtn) return;
   authBtn.addEventListener('click', ()=>{
     const user = getUser();
-    if(user){
-      // toggle menu
-      const hidden = accMenu.getAttribute('aria-hidden') === 'true';
+    let hidden = true;
+    if(accMenu){
+      hidden = accMenu.getAttribute('aria-hidden') === 'true';
       accMenu.setAttribute('aria-hidden', String(!hidden));
-      authBtn.setAttribute('aria-expanded', String(hidden));
-    } else {
-      // open login modal
-      if(loginModal) loginModal.setAttribute('aria-hidden','false');
-      const nameInput = document.getElementById('login-name');
-      if(nameInput) nameInput.focus();
+      authBtn.setAttribute('aria-expanded', String(!hidden));
+    }
+    if(!user && hidden){
+      // just opened the menu for logged-out users; let them choose Login / Sign Up
+      return;
+    }
+  });
+
+  // close account menu when clicking outside
+  document.addEventListener('click', (e)=>{
+    if(authBtn && accMenu && !authBtn.contains(e.target) && !accMenu.contains(e.target)){
+      accMenu.setAttribute('aria-hidden','true');
+      authBtn.setAttribute('aria-expanded','false');
     }
   });
 
@@ -788,8 +1143,16 @@ function initAuth(){
   loginBackdrop?.addEventListener('click', ()=>{ loginModal.setAttribute('aria-hidden','true'); });
 
   // logout
-  logoutBtn?.addEventListener('click', ()=>{
-    if(confirm('Logout?')){ clearUser(); updateAuthUI(); document.getElementById('account-menu').setAttribute('aria-hidden','true'); }
+  logoutBtn?.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(confirm('Logout?')){
+      clearUser();
+      updateAuthUI();
+      if(accMenu) accMenu.setAttribute('aria-hidden','true');
+      if(authBtn) authBtn.setAttribute('aria-expanded','false');
+      // Redirect to home or login page
+      setTimeout(()=>{ window.location.href = 'index.html'; }, 500);
+    }
   });
 
   // login form submit
@@ -798,10 +1161,13 @@ function initAuth(){
     const name = document.getElementById('login-name').value.trim();
     const email = document.getElementById('login-email').value.trim();
     // password not used in this demo
-    if(!name || !email){ alert('Enter name and email'); return; }
+    if(!name || !email){ alert('Please enter name and email'); return; }
     setUser({name,email});
     updateAuthUI();
     if(loginModal) loginModal.setAttribute('aria-hidden','true');
+    // Show success message and redirect
+    alert(`Welcome, ${escapeHtml(name)}! Your account has been created.`);
+    setTimeout(()=>{ window.location.href = 'account.html'; }, 1000);
   });
 
   // initialize
@@ -810,60 +1176,63 @@ function initAuth(){
 
 document.addEventListener('DOMContentLoaded', initAuth);
 
+function getSectionProducts(section){
+  const key = String(section || 'all').toLowerCase();
+  if(key === 'all'){
+    return products;
+  }
+  if(key === 'men'){
+    return products.filter(p => /men|male|gent/i.test(p.category || '') || /men|male|gent/i.test(p.name || ''));
+  }
+  if(key === 'women'){
+    return products.filter(p => /women|female|lady|ladies/i.test(p.category || '') || /women|female|lady/i.test(p.name || ''));
+  }
+  if(key === 'kids'){
+    return products.filter(p => /kid|child|children/i.test(p.category || '') || /kid|child|children/i.test(p.name || ''));
+  }
+  if(key === 'ethnic'){
+    return products.filter(p => /kurta|saree|ethnic|suit|salwar|kurti/i.test(p.category || '') || /kurta|saree|ethnic|suit/i.test(p.name || ''));
+  }
+  if(key === 'western'){
+    return products.filter(p => /jeans|t-?shirt|tshirt|trouser|shirt|western|jacket/i.test(p.category || '') || /jeans|tshirt|trouser|shirt|jacket/i.test(p.name || ''));
+  }
+  if(key === 'bestsellers'){
+    return promoPick(products, 12, 'most-loved');
+  }
+  if(key === 'new'){
+    return [...products].sort((a,b)=>b.id - a.id).slice(0,12);
+  }
+  if(key === 'offers'){
+    return products.filter(p => parseFloat(p.price) && parseFloat(p.price) <= 800);
+  }
+  if(key === 'accessories'){
+    return products.filter(p => /bag|accessor|belt|scarf|cap|hat|jewel|watch/i.test(p.category || '') || /bag|belt|scarf|cap|hat|jewel|watch/i.test(p.name || ''));
+  }
+  return products.filter(p => String(p.category || '').toLowerCase().includes(key) || String(p.name || '').toLowerCase().includes(key));
+}
+
+function openSectionProducts(section){
+  const list = getSectionProducts(section);
+  const select = document.getElementById('category-filter');
+  if(select){
+    const firstCat = list.length === 1 ? list[0].category : null;
+    select.value = firstCat || 'all';
+  }
+  renderProducts(list.length ? list : products);
+  document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
+}
+
 // Top categories interactions: clicking an image button filters products
 function initTopCategories(){
-  const items = document.querySelectorAll('.cat-item');
+  const items = document.querySelectorAll('.cat-item, .section-card[data-cat]');
   items.forEach(it=>{
+    if(it.matches('[data-open-page="true"]')) return;
     it.addEventListener('click', ()=>{
       const cat = it.getAttribute('data-cat') || 'all';
-      const select = document.getElementById('category-filter');
-
-      // Map friendly top-strip categories to actual product filters (by keywords)
-      const key = String(cat).toLowerCase();
-      let list = [];
-      if(key === 'all'){
-        list = products;
-      } else if(key === 'men'){
-        list = products.filter(p => /men|male|gent/i.test(p.category || '') || /men|male|gent/i.test(p.name || ''));
-      } else if(key === 'women'){
-        list = products.filter(p => /women|female|lady|ladies/i.test(p.category || '') || /women|female|lady/i.test(p.name || ''));
-      } else if(key === 'kids'){
-        list = products.filter(p => /kid|child|children/i.test(p.category || '') || /kid|child|children/i.test(p.name || ''));
-      } else if(key === 'ethnic'){
-        list = products.filter(p => /kurta|saree|ethnic|suit|salwar|kurti/i.test(p.category || '') || /kurta|saree|ethnic|suit/i.test(p.name || ''));
-      } else if(key === 'western'){
-        list = products.filter(p => /jeans|t-?shirt|tshirt|trouser|shirt|western|jacket/i.test(p.category || '') || /jeans|tshirt|trouser|shirt|jacket/i.test(p.name || ''));
-      } else if(key === 'bestsellers'){
-        list = promoPick(products, 12, 'most-loved');
-      } else if(key === 'new'){
-        // newest by id (assumes higher id = newer)
-        list = [...products].sort((a,b)=>b.id - a.id).slice(0,12);
-      } else if(key === 'offers'){
-        // simple heuristic: lower priced items as 'offers'
-        list = products.filter(p => parseFloat(p.price) && parseFloat(p.price) <= 800);
-      } else if(key === 'accessories'){
-        list = products.filter(p => /bag|accessor|belt|scarf|cap|hat|jewel|watch/i.test(p.category || '') || /bag|belt|scarf|cap|hat|jewel|watch/i.test(p.name || ''));
-      } else {
-        // fallback: try to match by substring
-        list = products.filter(p => String(p.category || '').toLowerCase().includes(key) || String(p.name || '').toLowerCase().includes(key));
-      }
-
-      // If select exists, update it to either the first matching category or 'all'
-      if(select){
-        const firstCat = list.length === 1 ? list[0].category : null;
-        if(firstCat){
-          select.value = firstCat;
-        } else {
-          select.value = 'all';
-        }
-      }
-
-      // Render the computed list (array) and scroll to products
-      renderProducts(list.length ? list : products);
-      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
+      openSectionProducts(cat);
     });
   });
-  // nav 'All' link behavior
+
   const navAll = document.getElementById('nav-all');
   navAll?.addEventListener('click', (e)=>{
     e.preventDefault();
@@ -874,7 +1243,70 @@ function initTopCategories(){
   });
 }
 
+if (document.readyState !== 'loading') {
+  try{ initCartUI(); }catch(e){ console.error('Cart UI failed to initialize', e); }
+  try{ initSavedAddressesUI(); }catch(e){ console.error('Saved address UI failed to initialize', e); }
+} else {
+  document.addEventListener('DOMContentLoaded', ()=>{
+    try{ initCartUI(); }catch(e){ console.error('Cart UI failed to initialize', e); }
+    try{ initSavedAddressesUI(); }catch(e){ console.error('Saved address UI failed to initialize', e); }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', initTopCategories);
+
+function initInfoDrawer(){
+  const drawer = document.getElementById('info-drawer');
+  if(!drawer) return;
+
+  const title = drawer.querySelector('#info-drawer-title');
+  const tabs = Array.from(drawer.querySelectorAll('[data-info-panel]'));
+  const panels = Array.from(drawer.querySelectorAll('[data-info-content]'));
+  const panelTitles = {
+    about: 'About Us',
+    location: 'Location',
+    contact: 'Contact',
+    faq: 'Frequently Asked Questions',
+    size: 'Size Guide'
+  };
+
+  function setPanel(panelName, shouldOpen=true){
+    const key = panelTitles[panelName] ? panelName : 'about';
+    drawer.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+    drawer.dataset.activePanel = key;
+    if(title) title.textContent = panelTitles[key];
+    tabs.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-info-panel') === key));
+    panels.forEach(panel => panel.classList.toggle('active', panel.getAttribute('data-info-content') === key));
+  }
+
+  function closeDrawer(){
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+
+  document.addEventListener('click', (e)=>{
+    const openBtn = e.target.closest('[data-info-panel]');
+    if(openBtn){
+      const panel = openBtn.getAttribute('data-info-panel');
+      e.preventDefault();
+      setPanel(panel, true);
+      return;
+    }
+
+    if(e.target.closest('[data-info-close]')){
+      closeDrawer();
+    }
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && drawer.getAttribute('aria-hidden') === 'false'){
+      closeDrawer();
+    }
+  });
+
+  setPanel('about', false);
+}
+
+document.addEventListener('DOMContentLoaded', initInfoDrawer);
 
 /* === Sorting Options === */
 let currentSort = 'default';
@@ -960,9 +1392,60 @@ function renderProductRating(productId){
   return `<div class="product-rating">${renderStars(parseInt(avg))}<span class="count">${avg} (${reviews.length})</span></div>`;
 }
 
+/* Related products (You May Also Like) */
+function relatedProductsFor(currentProduct){
+  if(!currentProduct) return [];
+  const all = Array.isArray(products) ? products : [];
+  const sameCat = all.filter(p => p.id !== currentProduct.id && String(p.category||'') === String(currentProduct.category||''));
+  const pool = sameCat.length ? sameCat : all.filter(p => p.id !== currentProduct.id);
+
+  const scored = pool.map(p => {
+    const catMatch = String(p.category||'') === String(currentProduct.category||'');
+    const name = String(p.name||'');
+    const curName = String(currentProduct.name||'');
+    const tokenOverlap = String(name.toLowerCase()) === String(curName.toLowerCase()) ? 2 : 0;
+    const kw = (curName.split(/\s+/).filter(Boolean)[0] || '').toLowerCase();
+    const nameKw = kw && name.toLowerCase().includes(kw) ? 1 : 0;
+    return { p, score: (catMatch ? 5 : 0) + tokenOverlap + nameKw + (Number(p.id)||0)%3 };
+  }).sort((a,b)=>b.score-a.score);
+
+  return scored.map(x=>x.p).slice(0,6);
+}
+
+function renderRelatedProducts(){
+  const grid = document.getElementById('related-products-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  const current = window.__NG_CURRENT_PRODUCT;
+  const rel = relatedProductsFor(current);
+  if(!rel.length){
+    grid.innerHTML = '<div class="muted">No related products found.</div>';
+    return;
+  }
+  const dict = window.NG_I18N || TRANSLATIONS.en;
+  rel.forEach(p => {
+    const card = document.createElement('article');
+    card.className = 'related-card';
+    const ratingHtml = renderProductRating(p.id);
+    card.innerHTML = `
+      <a class="related-link" href="product.html?id=${p.id}" aria-label="View ${p.name}">
+        <div class="related-img"><img src="${p.img}" alt="${p.name}"></div>
+        <div class="related-body">
+          <div class="related-title">${p.name}</div>
+          ${ratingHtml}
+          <div class="related-price">₹${p.price}</div>
+        </div>
+      </a>
+    `;
+    grid.appendChild(card);
+  });
+}
+
 // Updated renderProducts with ratings, sorting, quick view + promo badges
-function renderProducts(filterCategory='all'){
+function renderProducts(filterCategory='all', searchQuery=''){
+
   const grid = document.getElementById('product-grid');
+  if(!grid) return;
   grid.innerHTML = '';
   const dict = window.NG_I18N || TRANSLATIONS.en;
 
@@ -974,6 +1457,15 @@ function renderProducts(filterCategory='all'){
     // compare case-insensitive and allow partial matches for robustness
     if(filterCategory === 'all') list = products;
     else list = products.filter(p => String(p.category || '').toLowerCase() === String(filterCategory).toLowerCase());
+  }
+
+  if(searchQuery){
+    const q = String(searchQuery).toLowerCase();
+    list = list.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      String(p.category || '').toLowerCase().includes(q) ||
+      String(p.description || '').toLowerCase().includes(q)
+    );
   }
 
   if(currentSort !== 'default'){
@@ -1045,9 +1537,13 @@ function openQuickView(productId){
   if(!product) return;
   
   // Recently viewed
-  addRecentlyViewed(product.id);
-  
-  let modal = document.getElementById('quick-view-modal');
+      addRecentlyViewed(product.id);
+
+      // If on product page, render related products after current product is set
+      renderRelatedProducts?.();
+
+      let modal = document.getElementById('quick-view-modal');
+
 
   if(!modal){
     modal = document.createElement('div');
@@ -1133,26 +1629,19 @@ window.submitReview = function(productId){
 
 /* === Back to Top Button === */
 function initBackToTop(){
-  const btn = document.createElement('button');
-  btn.className = 'back-to-top';
-  btn.setAttribute('aria-label', 'Back to top');
-  btn.setAttribute('title', 'Back to top');
-  btn.innerHTML = '&#8673;'; // Up arrow entity
-  document.body.appendChild(btn);
-  btn.style.cssText = 'position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:#c0392b;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 6px 20px rgba(12,18,24,0.18);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s,transform .2s;z-index:1100;';
+  const btn = document.getElementById('back-to-top');
+  if(!btn) return;
 
   // Show/hide based on scroll position
   const toggleVisibility = ()=>{
     if(window.scrollY > 300){
-      btn.style.opacity = '1';
-      btn.style.visibility = 'visible';
+      btn.classList.add('visible');
     } else {
-      btn.style.opacity = '0';
-      btn.style.visibility = 'hidden';
+      btn.classList.remove('visible');
     }
   };
 
-  // Scroll to top on click - always works
+  // Scroll to top on click
   btn.onclick = function(){
     window.scrollTo({top: 0, behavior: 'smooth'});
     return false;
@@ -1166,10 +1655,38 @@ function initBackToTop(){
 
 /* === Footer Back to Top === */
 function initFooterTop(){
-  document.querySelectorAll('.footer-top').forEach(btn=>{
+  document.querySelectorAll('.footer-back-to-top .back-to-top-bar').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       window.scrollTo({top: 0, behavior: 'smooth'});
     });
+  });
+}
+
+function initHeaderSupport(){
+  const toggle = document.getElementById('support-toggle');
+  const menu = document.getElementById('support-menu');
+  if(!toggle || !menu) return;
+
+  const setOpen = (open)=>{
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-hidden', String(!open));
+  };
+
+  toggle.addEventListener('click', (event)=>{
+    event.stopPropagation();
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  menu.addEventListener('click', (event)=>{
+    if(event.target.closest('a')) setOpen(false);
+  });
+
+  document.addEventListener('click', (event)=>{
+    if(!event.target.closest('.header-support')) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (event)=>{
+    if(event.key === 'Escape') setOpen(false);
   });
 }
 
@@ -1194,11 +1711,38 @@ document.addEventListener('DOMContentLoaded', ()=>{
   addSortControls();
   initBackToTop();
   initFooterTop();
+  initHeaderSupport();
   initFAQ();
   syncWishlistButtons();
   renderWishlistDrawer();
   renderRecentlyViewed();
   initDealStrip();
 });
+
+function initNandiReveal(){
+  const items = document.querySelectorAll(
+    '.section, .deal-item, .product-promo, .product-availability, .footer-support-rail, .footer-support-spotlight, .about-card, .about-trust-card, .location-info, .location-map, .contact-form-card, .contact-info-card, .testimonial-card, .newsletter-section'
+  );
+  if(!items.length) return;
+
+  if(!('IntersectionObserver' in window)){
+    items.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  items.forEach(el => el.classList.add('ng-reveal'));
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+
+  items.forEach(el => observer.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', initNandiReveal);
 
 

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Blog • Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Fashion tips, summer collections, styling guides, and fabric care from Nandi Garments.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html#products" id="nav-all">All</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        </div>
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding:2rem 0;">
+    <section>
+      <h1 style="margin-bottom:.25rem;">Blog</h1>
+      <p class="muted">Fashion Tips • Summer Collections • Styling Guides • Fabric Care</p>
+
+      <div class="blog-layout" style="display:grid;grid-template-columns:1fr 320px;gap:2rem;margin-top:2rem;">
+        <section>
+          <h2>Latest Articles</h2>
+          <div id="blog-posts" class="blog-post-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+            <!-- injected -->
+          </div>
+        </section>
+
+        <aside class="blog-sidebar">
+          <h2>Topics</h2>
+          <div class="topic-list" id="topic-list" style="display:flex;flex-direction:column;gap:.5rem;margin-top:1rem;">
+            <!-- injected -->
+          </div>
+          <div class="note" style="margin-top:1.25rem;">
+            New posts help you pick the right fabric and styling.
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom-inner">
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="delivery-policy.html">Delivery Policy</a>
+        <a href="return-policy.html">Return Policy</a>
+      </div>
+      <div class="copyright">© 2026 Nandi Garments</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (function(){
+      const posts = [
+        {id:1, topic:'Fashion Tips', title:'How to Choose the Perfect Cotton Shirt Fit', excerpt:'Simple tips for comfort, collar fit, and fabric feel.', cover:'https://images.unsplash.com/photo-1520975958225-8f4b46b6e4a0?w=800&h=500&fit=crop'},
+        {id:2, topic:'Summer Collections', title:'Summer Styling: Lightweight Layers That Look Premium', excerpt:'Stay cool with breathable fabrics and smart color pairing.', cover:'https://images.unsplash.com/photo-1520974735194-6e9d3e6d2e65?w=800&h=500&fit=crop'},
+        {id:3, topic:'Styling Guides', title:'Formal to Casual: Build Versatile Looks in Minutes', excerpt:'A step-by-step guide to mix-and-match outfits.', cover:'https://images.unsplash.com/photo-1520975682031-a7c7f0b5b4e1?w=800&h=500&fit=crop'},
+        {id:4, topic:'Fabric Care', title:'Fabric Care 101: Wash, Iron, and Store Like a Pro', excerpt:'Keep your clothes fresh and long-lasting.', cover:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=500&fit=crop'}
+      ];
+
+      const postsEl = document.getElementById('blog-posts');
+      const topicEl = document.getElementById('topic-list');
+
+      function card(p){
+        return `
+          <article class="blog-card" style="border:1px solid rgba(0,0,0,0.08);border-radius:12px;overflow:hidden;background:var(--surface);">
+            <a href="blog-post.html?id=${p.id}" style="text-decoration:none;color:inherit;display:block;">
+              <img src="${p.cover}" alt="${p.title}" style="width:100%;height:160px;object-fit:cover;display:block;">
+              <div style="padding:1rem;">
+                <div class="pill" style="margin-bottom:.5rem;">${p.topic}</div>
+                <h3 style="margin:.2rem 0 .5rem 0;font-size:1rem;line-height:1.3;">${p.title}</h3>
+                <p class="muted" style="margin:0;font-size:.95rem;">${p.excerpt}</p>
+              </div>
+            </a>
+          </article>
+        `;
+      }
+
+      postsEl.innerHTML = posts.map(card).join('');
+
+      const topics = Array.from(new Set(posts.map(p=>p.topic)));
+      topicEl.innerHTML = `
+        <a href="blog.html" class="btn secondary" style="text-align:center;width:100%;">All</a>
+        ` + topics.map(t=>`
+          <button class="btn" style="justify-content:flex-start;" onclick="filterTopic('${t}')">${t}</button>
+        `).join('');
+
+      window.filterTopic = function(topic){
+        // lightweight client-side filtering
+        const filtered = posts.filter(p=>p.topic===topic);
+        postsEl.innerHTML = filtered.map(card).join('');
+      }
+    })();
+  </script>
+</body>
+</html>
+

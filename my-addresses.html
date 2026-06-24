@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Saved Address - Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Saved Address - Nandi Garments">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html" id="nav-all">All</a>
+        <a href="index.html#products" data-i18n="nav.products">Products</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="careers.html">Careers</a>
+        <a href="press-releases.html">Press</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+        <a href="delivery-policy.html" data-i18n="nav.delivery">Delivery</a>
+      </nav>
+
+      <div class="header-actions">
+        <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+
+        <div class="account">
+          <button id="auth-button" class="btn small" aria-expanded="false">
+            <span class="auth-icon" aria-hidden="true">👤</span>
+            <span class="auth-text">Account</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <a href="account.html" class="account-menu-item">My Account</a>
+            <a href="profile.html" class="account-menu-item">Edit Profile</a>
+            <a href="orders.html" class="account-menu-item">Orders</a>
+            <a href="wishlist.html" class="account-menu-item">Wishlist</a>
+            <a href="coupons.html" class="account-menu-item">Coupons</a>
+            <a href="help.html" class="account-menu-item">Help Center</a>
+            <a href="my-devices.html" class="account-menu-item">Manage Devices</a>
+            <a href="my-cards.html" class="account-menu-item">Saved Cards & Gift Cards</a>
+            <a href="my-addresses.html" class="account-menu-item">Saved Address</a>
+            <a href="notification-settings.html" class="account-menu-item">Notification Settings</a>
+            <a href="privacy-center.html" class="account-menu-item">Privacy Center</a>
+            <a href="my-reviews.html" class="account-menu-item">Reviews</a>
+            <a href="questions-answers.html" class="account-menu-item">Questions & Answers</a>
+            <a href="seller.html" class="account-menu-item">Sell on Nandi Garments</a>
+            <a href="help.html#faq" class="account-menu-item">Browse FAQs</a>
+            <div class="account-menu-divider"></div>
+            <a href="terms.html" class="account-menu-item small">Terms, Policies & Licenses</a>
+            <a href="privacy.html" class="account-menu-item small">Privacy Policy</a>
+            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0;">
+    <section>
+      <h1>Saved Address</h1>
+      <p style="margin-top: 1rem; color: var(--text-secondary);">Manage your saved addresses for faster checkout and secure delivery.</p>
+      
+      <div style="margin-top: 2rem;"><div class="address-list">
+          <article class="address-card" data-address-key="home" style="padding: 1.5rem; background: var(--surface); border-radius: 8px; margin-bottom: 1rem;">
+            <h3>Home Address</h3>
+            <div class="address-view">
+              <p class="addr-contact"></p>
+              <p class="addr-line1">Flat 12B, Sunshine Apartments</p>
+              <p class="addr-line2">MG Road, Kolkata, West Bengal 700001</p>
+              <p class="addr-country">India</p>
+            </div>
+            <form class="address-form hidden" data-address-form="home">
+              <label>Full Name
+                <input name="name" required autocomplete="name">
+              </label>
+              <label>Mobile Number
+                <input name="phone" required inputmode="tel" autocomplete="tel">
+              </label>
+              <label>House / Street
+                <input name="line1" required autocomplete="street-address">
+              </label>
+              <label>City
+                <input name="city" required autocomplete="address-level2">
+              </label>
+              <label>PIN Code
+                <input name="pin" required inputmode="numeric" autocomplete="postal-code">
+              </label>
+              <label>Landmark
+                <input name="landmark" autocomplete="address-line2">
+              </label>
+              <label>Country
+                <input name="country" required autocomplete="country-name">
+              </label>
+              <div class="address-form-actions" style="margin-top:1rem; display:flex;gap:.75rem;flex-wrap:wrap;">
+                <button type="button" class="btn small address-save" data-address-key="home">Save</button>
+                <button type="button" class="btn small secondary address-cancel" data-address-key="home">Cancel</button>
+              </div>
+            </form>
+            <button class="btn small address-edit" data-address-key="home">Edit</button>
+          </article>
+          <article class="address-card" data-address-key="office" style="padding: 1.5rem; background: var(--surface); border-radius: 8px; margin-bottom: 1rem;">
+            <h3>Office Address</h3>
+            <div class="address-view">
+              <p class="addr-contact"></p>
+              <p class="addr-line1">20 Park Street Tower, 5th Floor</p>
+              <p class="addr-line2">Kolkata, West Bengal 700016</p>
+              <p class="addr-country">India</p>
+            </div>
+            <form class="address-form hidden" data-address-form="office">
+              <label>Full Name
+                <input name="name" required autocomplete="name">
+              </label>
+              <label>Mobile Number
+                <input name="phone" required inputmode="tel" autocomplete="tel">
+              </label>
+              <label>House / Street
+                <input name="line1" required autocomplete="street-address">
+              </label>
+              <label>City
+                <input name="city" required autocomplete="address-level2">
+              </label>
+              <label>PIN Code
+                <input name="pin" required inputmode="numeric" autocomplete="postal-code">
+              </label>
+              <label>Landmark
+                <input name="landmark" autocomplete="address-line2">
+              </label>
+              <label>Country
+                <input name="country" required autocomplete="country-name">
+              </label>
+              <div class="address-form-actions" style="margin-top:1rem; display:flex;gap:.75rem;flex-wrap:wrap;">
+                <button type="button" class="btn small address-save" data-address-key="office">Save</button>
+                <button type="button" class="btn small secondary address-cancel" data-address-key="office">Cancel</button>
+              </div>
+            </form>
+            <button class="btn small address-edit" data-address-key="office">Edit</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-section">
+          <h3>Learn More</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="faq.html">Browse FAQs</a></li>
+            <li><a href="careers.html">Join Our Team</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Policies</h3>
+          <ul>
+            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="delivery-policy.html">Delivery Policy</a></li>
+            <li><a href="return-policy.html">Return Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Connect</h3>
+          <div class="social-links">
+            <a href="https://facebook.com/nandigarments" aria-label="Facebook" title="Visit our Facebook page">f</a>
+            <a href="https://instagram.com/nandigarments" aria-label="Instagram" title="Follow us on Instagram">📷</a>
+            <a href="https://twitter.com/nandigarments" aria-label="Twitter" title="Follow us on Twitter">𝕏</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <label for="footer-lang">Language</label>
+          <select id="footer-lang" aria-label="Select language">
+            <option value="en">🇬🇧 English</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="bn">🇧🇩 বাংলা</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2026 Nandi Garments. All Rights Reserved. Fashion Crafted with Trust & Style.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (function(){
+      if(window.__ngAddressPageReady) return;
+
+      const addressStorageKey = 'ng_saved_addresses_v1';
+      const deliveryAddressKey = 'ng_last_address_v1';
+      const customerKey = 'ng_customer_id_v1';
+      const apiBase = 'http://localhost:5050/api';
+
+      function customerId(){
+        let id = localStorage.getItem(customerKey);
+        if(!id){
+          id = 'guest_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+          localStorage.setItem(customerKey, id);
+        }
+        return id;
+      }
+
+      function normalize(address){
+        return {
+          name: String(address.name || '').trim(),
+          phone: String(address.phone || '').trim(),
+          line1: String(address.line1 || '').trim(),
+          city: String(address.city || '').trim(),
+          pin: String(address.pin || '').trim(),
+          landmark: String(address.landmark || '').trim(),
+          country: String(address.country || 'India').trim()
+        };
+      }
+
+      function loadLocal(){
+        try{ return JSON.parse(localStorage.getItem(addressStorageKey)) || {}; }
+        catch(e){ return {}; }
+      }
+
+      function saveLocal(addresses){
+        localStorage.setItem(addressStorageKey, JSON.stringify(addresses));
+      }
+
+      function showToast(message){
+        let toast = document.getElementById('ng-toast');
+        if(!toast){
+          toast = document.createElement('div');
+          toast.id = 'ng-toast';
+          toast.className = 'ng-toast';
+          document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(()=> toast.classList.remove('show'), 2500);
+      }
+
+      function render(){
+        const addresses = loadLocal();
+        document.querySelectorAll('.address-card[data-address-key]').forEach(card=>{
+          const key = card.getAttribute('data-address-key');
+          const address = normalize(addresses[key] || {});
+          const view = card.querySelector('.address-view');
+          const form = card.querySelector('.address-form');
+
+          if(view){
+            const contact = [address.name, address.phone].filter(Boolean).join(' - ');
+            const contactEl = view.querySelector('.addr-contact');
+            if(contactEl){
+              contactEl.textContent = contact;
+              contactEl.hidden = !contact;
+            }
+            if(address.line1) view.querySelector('.addr-line1').textContent = address.line1;
+            if(address.city || address.pin || address.landmark){
+              view.querySelector('.addr-line2').textContent = [address.landmark, [address.city, address.pin].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+            }
+            if(address.country) view.querySelector('.addr-country').textContent = address.country;
+          }
+
+          if(form){
+            ['name','phone','line1','city','pin','landmark','country'].forEach(field=>{
+              const input = form.querySelector(`[name="${field}"]`);
+              if(input) input.value = address[field] || input.value || '';
+            });
+          }
+        });
+      }
+
+      function toggle(card, show){
+        card.querySelector('.address-view')?.classList.toggle('hidden', show);
+        card.querySelector('.address-form')?.classList.toggle('hidden', !show);
+        card.querySelector('.address-edit')?.classList.toggle('hidden', show);
+      }
+
+      async function save(card){
+        const key = card.getAttribute('data-address-key');
+        const form = card.querySelector('.address-form');
+        const address = normalize({
+          name: form.querySelector('[name="name"]')?.value,
+          phone: form.querySelector('[name="phone"]')?.value,
+          line1: form.querySelector('[name="line1"]')?.value,
+          city: form.querySelector('[name="city"]')?.value,
+          pin: form.querySelector('[name="pin"]')?.value,
+          landmark: form.querySelector('[name="landmark"]')?.value,
+          country: form.querySelector('[name="country"]')?.value
+        });
+
+        if(!address.name || !address.phone || !address.line1 || !address.city || !address.pin || !address.country){
+          alert('Please complete name, mobile number, address, city, PIN code, and country before saving.');
+          return;
+        }
+
+        const addresses = loadLocal();
+        addresses[key] = address;
+        saveLocal(addresses);
+        localStorage.setItem(deliveryAddressKey, JSON.stringify(address));
+
+        try{
+          await fetch(`${apiBase}/addresses/${encodeURIComponent(customerId())}/${encodeURIComponent(key)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(address)
+          });
+          showToast('Address saved to your account.');
+        }catch(e){
+          showToast('Address saved in this browser. Start backend to save online.');
+        }
+
+        render();
+        toggle(card, false);
+      }
+
+      document.addEventListener('click', (event)=>{
+        const button = event.target.closest('.address-edit, .address-save, .address-cancel');
+        if(!button) return;
+        const card = button.closest('.address-card[data-address-key]');
+        if(!card) return;
+        event.preventDefault();
+
+        if(button.classList.contains('address-edit')) toggle(card, true);
+        if(button.classList.contains('address-cancel')) {
+          render();
+          toggle(card, false);
+        }
+        if(button.classList.contains('address-save')) save(card);
+      });
+
+      fetch(`${apiBase}/addresses/${encodeURIComponent(customerId())}`)
+        .then(r=>r.json())
+        .then(data=>{
+          if(!data || !data.success || !Array.isArray(data.addresses)) return;
+          const addresses = loadLocal();
+          data.addresses.forEach(address=>{
+            if(address.key) addresses[address.key] = normalize(address);
+          });
+          saveLocal(addresses);
+          render();
+        })
+        .catch(()=> render());
+    })();
+  </script>
+</body>
+</html>

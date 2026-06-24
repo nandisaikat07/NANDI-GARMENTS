@@ -4,6 +4,141 @@
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
 }
+
+/* =========================================================
+   OEM-YADAK premium dark redesign overrides (CSS-only)
+   Scope: product page only, without changing HTML/JS.
+   Cascade priority: keep at end of file (append-only).
+   ========================================================= */
+
+:root{
+  --oem-accent:#a3e623;
+  --oem-accent-2:#c7f96e;
+  --oem-surface:#0f1820;
+  --oem-surface-2:#0b1220;
+  --oem-muted:rgba(234,242,248,0.72);
+  --oem-border:rgba(255,255,255,0.12);
+  --oem-radius:18px;
+}
+
+:root.dark, .dark{
+  --bg: var(--oem-surface-2);
+  --surface: var(--oem-surface);
+  --text: #eaf2f8;
+  --muted: var(--oem-muted);
+  --accent: var(--oem-accent);
+  --accent-2: var(--oem-accent-2);
+}
+
+/* Section cards + summary blocks */
+:root.dark .section-card,
+.dark .section-card,
+:root.dark .product-summary,
+.dark .product-summary,
+:root.dark .product-wash,
+.dark .product-wash,
+:root.dark .wash-box,
+.dark .wash-box{
+  background:rgba(255,255,255,0.04) !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+  border-radius:var(--oem-radius);
+}
+
+/* Gallery frames */
+:root.dark .gallery-main img,
+.dark .gallery-main img{
+  border-color:rgba(255,255,255,0.12) !important;
+}
+
+/* Gallery thumb buttons */
+:root.dark .thumb-btn,
+.dark .thumb-btn{
+  background:rgba(255,255,255,0.04) !important;
+  border-color:rgba(255,255,255,0.12) !important;
+}
+:root.dark .thumb-btn img,
+.dark .thumb-btn img{
+  border-radius:10px;
+}
+:root.dark .thumb-btn.active,
+.dark .thumb-btn.active{
+  border-color:rgba(163,230,53,0.7) !important;
+  box-shadow:0 0 0 3px rgba(163,230,53,0.18) !important;
+}
+
+/* Chips / pills / size selectors */
+:root.dark .pill,
+.dark .pill{
+  background:rgba(163,230,53,0.08) !important;
+  border-color:rgba(163,230,53,0.18) !important;
+  color:rgba(234,242,248,0.92) !important;
+}
+:root.dark .pill.subtle,
+.dark .pill.subtle{
+  background:rgba(255,255,255,0.04) !important;
+  border-color:rgba(255,255,255,0.08) !important;
+}
+:root.dark .size-chip,
+.dark .size-chip{
+  background:rgba(255,255,255,0.04) !important;
+  border-color:rgba(255,255,255,0.12) !important;
+  color:rgba(234,242,248,0.92) !important;
+}
+:root.dark .size-chip.active,
+.dark .size-chip.active{
+  border-color:rgba(163,230,53,0.7) !important;
+  box-shadow:0 0 0 3px rgba(163,230,53,0.18) !important;
+}
+
+/* Related + kids cards */
+:root.dark .related-card,
+.dark .related-card,
+:root.dark .kids-card,
+.dark .kids-card{
+  background:rgba(255,255,255,0.04) !important;
+  border:1px solid rgba(255,255,255,0.08) !important;
+  border-radius:var(--oem-radius);
+}
+:root.dark .related-img img,
+.dark .related-img img,
+:root.dark .kids-img img,
+.dark .kids-img img{
+  border-color:rgba(255,255,255,0.12) !important;
+  background:transparent !important;
+}
+
+/* Related / kids titles & prices */
+:root.dark .related-title,
+.dark .related-title,
+:root.dark .kids-title,
+.dark .kids-title{
+  color:rgba(234,242,248,0.92) !important;
+}
+:root.dark .related-price,
+.dark .related-price,
+:root.dark .kids-price,
+.dark .kids-price{
+  color:var(--oem-accent) !important;
+}
+
+/* FAQ/reviews spacing cards */
+:root.dark .product-reviews,
+.dark .product-reviews{
+  margin-top:1.25rem;
+}
+
+/* Ensure buttons (if any in product template) use OEM accent */
+:root.dark .btn,
+.dark .btn{
+  background:var(--oem-accent) !important;
+  color:#0b1220 !important;
+}
+:root.dark .btn.secondary,
+.dark .btn.secondary{
+  background:rgba(255,255,255,0.04) !important;
+  color:var(--oem-accent) !important;
+  border:1px solid rgba(163,230,53,0.25) !important;
+}
 .product-gallery{background:transparent}
 .gallery-main img{
   width:100%;
@@ -61,9 +196,38 @@
 
 .product-reviews{margin-top:1.25rem}
 
+/* Related products */
+.product-related{margin-top:1.25rem;}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.75rem;}
+.related-card{background:var(--surface);border:1px solid #eef2f6;border-radius:12px;overflow:hidden;transition:transform .12s ease, box-shadow .12s ease;}
+.related-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.06);}
+.related-link{color:inherit;text-decoration:none;display:block;}
+.related-img img{width:100%;height:140px;object-fit:cover;display:block;background:#fff;}
+.related-body{padding:.75rem;}
+.related-title{font-weight:800;font-size:.95rem;line-height:1.25;max-height:2.5em;overflow:hidden;}
+.related-price{margin-top:.35rem;font-weight:900;color:var(--accent);}
+
 @media (max-width:900px){
   .product-page .product-hero-inner{grid-template-columns:1fr;}
   .grid-2{grid-template-columns:1fr}
   .gallery-main img{height:320px}
+  .related-grid{grid-template-columns:repeat(2,1fr);}
 }
+
+/* Kids products section */
+.product-kids{margin-top:1.25rem;}
+.kids-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.75rem;}
+.kids-card{background:var(--surface);border:1px solid #eef2f6;border-radius:12px;overflow:hidden;transition:transform .12s ease, box-shadow .12s ease;}
+.kids-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,0.06);}
+.kids-link{color:inherit;text-decoration:none;display:block;}
+.kids-img img{width:100%;height:140px;object-fit:cover;display:block;background:#fff;}
+.kids-body{padding:.75rem;}
+.kids-title{font-weight:800;font-size:.95rem;line-height:1.25;max-height:2.5em;overflow:hidden;}
+.kids-price{margin-top:.35rem;font-weight:900;color:var(--accent);}
+
+@media (max-width:900px){
+  .kids-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+
 

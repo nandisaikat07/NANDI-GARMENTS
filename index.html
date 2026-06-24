@@ -4,18 +4,146 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Nandi Garments</title>
+  <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,0,0" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <meta name="description" content="Nandi Garments - quality clothing for every occasion">
+  <script id="aura-preview-performance-controller">
+    (function() {
+      if (window.__auraPreviewPerformanceController) return;
+
+      const nativeRequestAnimationFrame = window.requestAnimationFrame
+        ? window.requestAnimationFrame.bind(window)
+        : function(callback) { return window.setTimeout(function() { callback(Date.now()); }, 16); };
+
+      const nativeCancelAnimationFrame = window.cancelAnimationFrame
+        ? window.cancelAnimationFrame.bind(window)
+        : window.clearTimeout.bind(window);
+
+      const nativeSetInterval = window.setInterval.bind(window);
+
+      let paused = false;
+      let nextFrameId = 1;
+
+      const frameRecords = new Map();
+      const pausedFrameCallbacks = new Map();
+
+      const style = document.createElement('style');
+      style.id = 'aura-preview-performance-style';
+      style.textContent = [
+        'html[data-aura-preview-paused="true"] *,',
+        'html[data-aura-preview-paused="true"] *::before,',
+        'html[data-aura-preview-paused="true"] *::after {',
+        '  animation-play-state: paused !important;',
+        '  transition-duration: 0s !important;',
+        '  scroll-behavior: auto !important;',
+        '}'
+      ].join('\n');
+
+      document.head.appendChild(style);
+
+      window.requestAnimationFrame = function(callback) {
+        const frameId = nextFrameId++;
+        if (paused) {
+          pausedFrameCallbacks.set(frameId, callback);
+          frameRecords.set(frameId, { paused: true });
+          return frameId;
+        }
+
+        const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+          frameRecords.delete(frameId);
+          callback(timestamp);
+        });
+
+        frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+        return frameId;
+      };
+
+      window.cancelAnimationFrame = function(frameId) {
+        const record = frameRecords.get(frameId);
+        pausedFrameCallbacks.delete(frameId);
+
+        if (record && typeof record.nativeFrameId !== 'undefined') {
+          nativeCancelAnimationFrame(record.nativeFrameId);
+        }
+        frameRecords.delete(frameId);
+      };
+
+      window.setInterval = function(callback, delay) {
+        const args = Array.prototype.slice.call(arguments, 2);
+        return nativeSetInterval(function() {
+          if (paused) return;
+          callback.apply(this, args);
+        }, delay);
+      };
+
+      const flushPausedFrames = function() {
+        const callbacks = Array.from(pausedFrameCallbacks.entries());
+        pausedFrameCallbacks.clear();
+
+        callbacks.forEach(function(entry) {
+          const frameId = entry[0];
+          const callback = entry[1];
+
+          const nativeFrameId = nativeRequestAnimationFrame(function(timestamp) {
+            frameRecords.delete(frameId);
+            callback(timestamp);
+          });
+
+          frameRecords.set(frameId, { nativeFrameId: nativeFrameId });
+        });
+      };
+
+      const setPaused = function(nextPaused) {
+        const shouldPause = Boolean(nextPaused);
+        if (paused === shouldPause) return;
+
+        paused = shouldPause;
+        document.documentElement.toggleAttribute('data-aura-preview-paused', paused);
+
+        if (!paused) {
+          flushPausedFrames();
+        }
+      };
+
+      window.__auraPreviewPerformanceController = {
+        setPaused: setPaused,
+        get paused() {
+          return paused;
+        }
+      };
+
+      window.addEventListener('message', function(event) {
+        if (event.source !== window.parent) return;
+        if (!event.data || event.data.type !== 'aura-preview-performance-mode') return;
+        setPaused(event.data.paused);
+      });
+    })();
+  </script>
 </head>
 <body>
+  <div class="scene-bg" aria-hidden="true"></div>
+  <div class="scene-grid" aria-hidden="true"></div>
+  <div class="scene-noise" aria-hidden="true"></div>
+
+  <div class="offer-bar" aria-label="Current offer">
+    <img src="nandi-logo.png" alt="" class="offer-logo" aria-hidden="true">
+    Get Extra 5% Off On Prepaid Orders | Code: NANDI5 |
+    <a href="#products">Shop Now</a>
+  </div>
+
   <header class="site-header">
     <div class="container">
       <div class="logo-container">
-        <img src="Nandi Garments_transparent-.png" alt="Nandi Garments logo" class="header-logo">
-        <h1>Nandi Garments</h1>
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <div>
+          <div class="brand-kicker">Nandi Garments</div>
+          <h1>Premium Clothing</h1>
+        </div>
       </div>
       <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
         <span aria-hidden="true">☰</span>
@@ -23,9 +151,9 @@
       <nav class="nav" id="site-nav">
         <a href="#products" id="nav-all">All</a>
         <a href="#products" data-i18n="nav.products">Products</a>
-        <a href="#about" data-i18n="nav.about">About</a>
-        <a href="#location" data-i18n="nav.location">Location</a>
-        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <a href="#about" data-info-panel="about" data-i18n="nav.about">About</a>
+        <a href="#location" data-info-panel="location" data-i18n="nav.location">Location</a>
+        <a href="#contact" data-info-panel="contact" data-i18n="nav.contact">Contact</a>
         <a href="orders.html">Orders</a>
         <a href="returns.html">Returns</a>
         <a href="track.html">Track</a>
@@ -35,87 +163,172 @@
       <div class="header-actions">
 
         <div class="search-wrapper">
-          <span class="search-icon" aria-hidden="true">🔍</span>
+          <span class="search-icon material-symbols-rounded" aria-hidden="true">search</span>
           <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
         </div>
-        <select id="lang-select" aria-label="Select language" title="Select language"></select>
-        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
-        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <div class="language-wrapper">
+          <span class="header-control-icon material-symbols-rounded" aria-hidden="true">language</span>
+          <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        </div>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist"><span class="header-control-icon material-symbols-rounded" aria-hidden="true">favorite</span>Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart"><span class="header-control-icon material-symbols-rounded" aria-hidden="true">shopping_cart</span>Cart (<span id="cart-count">0</span>)</button>
 
-        <div class="account">
-          <button id="auth-button" class="btn small" aria-expanded="false">
-            <span class="auth-icon" aria-hidden="true">👤</span>
-            <span class="auth-text">Login</span>
+        <div class="header-support">
+          <button id="support-toggle" class="btn small support-toggle" type="button" aria-expanded="false" aria-controls="support-menu">
+            <span class="header-control-icon material-symbols-rounded" aria-hidden="true">support_agent</span>
+            <span>Customer Support</span>
           </button>
-          <div id="account-menu" class="account-menu" aria-hidden="true">
-            <a id="account-link" href="#account">Account</a>
-            <button id="logout-btn" class="btn small"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          <div id="support-menu" class="support-menu" aria-hidden="true">
+            <a class="support-menu-item" href="tel:8250530293">
+              <span class="header-control-icon material-symbols-rounded" aria-hidden="true">call</span>
+              <span><strong>Call Support</strong><small>8250530293</small></span>
+            </a>
+            <a class="support-menu-item" href="mailto:nandisaikat.2002@gmail.com">
+              <span class="header-control-icon material-symbols-rounded" aria-hidden="true">mail</span>
+              <span><strong>Mail Support</strong><small>nandisaikat.2002@gmail.com</small></span>
+            </a>
           </div>
         </div>
-        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+
+        <div class="account">
+          <button id="account-button" class="btn small" aria-expanded="false" title="Account menu">
+            <span class="auth-icon material-symbols-rounded" aria-hidden="true">account_circle</span>
+            <span class="auth-text">Account</span>
+          </button>
+          <div id="account-menu" class="account-menu" aria-hidden="true">
+            <!-- My Account Section -->
+            <div class="account-menu-section">
+              <a href="account.html" class="account-menu-item">My Account</a>
+              <a href="profile.html" class="account-menu-item">Edit Profile</a>
+              <a href="orders.html" class="account-menu-item">Orders</a>
+              <a href="wishlist.html" class="account-menu-item">Wishlist</a>
+            </div>
+
+            <!-- Shopping & Payments -->
+            <div class="account-menu-section">
+              <a href="coupons.html" class="account-menu-item">Coupons & Offers</a>
+              <a href="my-cards.html" class="account-menu-item">Saved Cards & Gift Cards</a>
+              <a href="my-addresses.html" class="account-menu-item">Saved Address</a>
+            </div>
+
+            <!-- Support & Settings -->
+            <div class="account-menu-section">
+              <a href="help.html" class="account-menu-item">Help Center</a>
+              <a href="my-devices.html" class="account-menu-item">Manage Devices</a>
+              <a href="notification-settings.html" class="account-menu-item">Notification Settings</a>
+              <a href="faq.html" class="account-menu-item">Browse FAQs</a>
+            </div>
+
+            <!-- Privacy & Safety -->
+            <div class="account-menu-section">
+              <a href="privacy-center.html" class="account-menu-item">Privacy Center</a>
+              <a href="my-reviews.html" class="account-menu-item">My Reviews</a>
+              <a href="questions-answers.html" class="account-menu-item">Questions & Answers</a>
+            </div>
+
+            <!-- Seller & Community -->
+            <div class="account-menu-section">
+              <a href="seller.html" class="account-menu-item">Sell on Nandi Garments</a>
+            </div>
+
+            <!-- Policies -->
+            <div class="account-menu-section">
+              <a href="terms.html" class="account-menu-item small">Terms & Conditions</a>
+              <a href="privacy.html" class="account-menu-item small">Privacy Policy</a>
+            </div>
+
+            <div class="account-menu-divider"></div>
+            <button id="logout-btn" class="btn small" style="width:100%;justify-content:center;"><span class="logout-icon" aria-hidden="true">🚪</span> Logout</button>
+          </div>
+        </div>
+
+        <button class="btn small info-menu-open" type="button" data-info-panel="about" aria-label="Open information menu"><span class="header-control-icon material-symbols-rounded" aria-hidden="true">info</span>Info</button>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme"><span class="header-control-icon material-symbols-rounded" aria-hidden="true">dark_mode</span></button>
       </div>
     </div>
   </header>
 
+
   <!-- Top categories strip (garment-focused) -->
   <div class="top-categories container" aria-hidden="false">
+    <a class="cat-item category-logo-chip" href="index.html" aria-label="Nandi Garments home">
+      <img src="nandi-logo.png" alt="" aria-hidden="true">
+      <span>Nandi</span>
+    </a>
+
     <button class="cat-item all-item" data-cat="all" aria-label="All categories">
-      <div class="cat-icon" aria-hidden="true">☰</div>
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">menu</span></div>
       <span>All</span>
     </button>
 
-    <button class="cat-item" data-cat="men" aria-label="Men">
-      <div class="cat-icon" aria-hidden="true">👔</div>
+    <a class="cat-item" href="category.html?section=men" data-open-page="true" aria-label="Men">
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">checkroom</span></div>
       <span>Men</span>
-    </button>
+    </a>
 
-    <button class="cat-item" data-cat="women" aria-label="Women">
-      <div class="cat-icon" aria-hidden="true">👗</div>
+    <a class="cat-item" href="category.html?section=women" data-open-page="true" aria-label="Women">
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">styler</span></div>
       <span>Women</span>
-    </button>
+    </a>
 
-    <button class="cat-item" data-cat="kids" aria-label="Kids">
-      <div class="cat-icon" aria-hidden="true">🧒</div>
+    <a class="cat-item" href="category.html?section=kids" data-open-page="true" aria-label="Kids">
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">child_care</span></div>
       <span>Kids</span>
-    </button>
+    </a>
 
-    <button class="cat-item" data-cat="ethnic" aria-label="Ethnic Wear">
-      <div class="cat-icon" aria-hidden="true">🧵</div>
-      <span>Ethnic</span>
-    </button>
+    <a class="cat-item" href="category.html?section=home" data-open-page="true" aria-label="Home Furnishing">
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">chair</span></div>
+      <span>Home</span>
+    </a>
 
-    <button class="cat-item" data-cat="western" aria-label="Western Wear">
-      <div class="cat-icon" aria-hidden="true">👖</div>
-      <span>Western</span>
-    </button>
 
     <button class="cat-item" data-cat="bestsellers" aria-label="Bestsellers">
-      <div class="cat-icon" aria-hidden="true">🔥</div>
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">local_fire_department</span></div>
       <span>Bestsellers</span>
     </button>
 
     <button class="cat-item" data-cat="new" aria-label="New Arrivals">
-      <div class="cat-icon" aria-hidden="true">🆕</div>
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">new_releases</span></div>
       <span>New</span>
     </button>
 
     <button class="cat-item" data-cat="offers" aria-label="Offers">
-      <div class="cat-icon" aria-hidden="true">💸</div>
+      <div class="cat-icon" aria-hidden="true"><span class="material-symbols-rounded">sell</span></div>
       <span>Offers</span>
     </button>
 
-    <button class="cat-item" data-cat="accessories" aria-label="Accessories">
-      <div class="cat-icon" aria-hidden="true">👜</div>
-      <span>Accessories</span>
-    </button>
+
   </div>
 
+  <aside class="customer-info-rail" aria-label="Customer help shortcuts">
+    <button type="button" data-info-panel="about">About Us</button>
+    <button type="button" data-info-panel="location">Location</button>
+    <button type="button" data-info-panel="contact">Contact</button>
+    <button type="button" data-info-panel="faq">FAQ</button>
+    <button type="button" data-info-panel="size">Size Guide</button>
+  </aside>
+
   <main>
-    <section class="hero">
-      <div class="container">
-        <h2 data-i18n="hero.title">Welcome to Nandi Garments</h2>
-        <p data-i18n="hero.text">Handpicked clothing and tailoring for style and comfort.</p>
-        <a class="btn" href="#products" data-i18n="hero.button">Shop Now</a>
+    <section class="hero hero-bg">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <div class="hero-brand-lockup">
+            <img src="nandi-logo.png" alt="Nandi Garments logo">
+            <span>Nandi Garments</span>
+          </div>
+          <div class="hero-eyebrow">Customer view collection</div>
+          <h2 data-i18n="hero.title">Welcome to Nandi Garments</h2>
+          <p data-i18n="hero.text">Handpicked clothing and tailoring for style and comfort.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#products" data-i18n="hero.button">Shop Now</a>
+            <a class="btn secondary" href="https://wa.me/918250530293" target="_blank" rel="noopener">Size Help</a>
+          </div>
+          <div class="hero-stats" aria-label="Nandi Garments highlights">
+            <div><strong>3-7</strong><span>Day delivery</span></div>
+            <div><strong>4.5</strong><span>Customer rating</span></div>
+            <div><strong>Easy</strong><span>Returns support</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -130,28 +343,32 @@
     <section class="deal-strip" aria-label="Shopping benefits">
       <div class="container deal-strip-inner">
         <button type="button" class="deal-item deal-link" data-deal-action="whatsapp" aria-label="Size & Fit Help on WhatsApp">
-          <div class="deal-icon" aria-hidden="true">📏</div>
+          <img src="nandi-logo.png" alt="" class="deal-logo" aria-hidden="true">
+          <div class="deal-icon" aria-hidden="true"><span class="material-symbols-rounded">straighten</span></div>
           <div>
             <div class="deal-title">Size & Fit Help</div>
             <div class="deal-sub">WhatsApp for custom measurements</div>
           </div>
         </button>
         <button type="button" class="deal-item deal-link" data-deal-action="returns" aria-label="Easy Returns info">
-          <div class="deal-icon" aria-hidden="true">↩️</div>
+          <img src="nandi-logo.png" alt="" class="deal-logo" aria-hidden="true">
+          <div class="deal-icon" aria-hidden="true"><span class="material-symbols-rounded">assignment_return</span></div>
           <div>
             <div class="deal-title">Easy Returns</div>
             <div class="deal-sub">3–5 days return window</div>
           </div>
         </button>
         <button type="button" class="deal-item deal-link" data-deal-action="payments" aria-label="Payment methods info">
-          <div class="deal-icon" aria-hidden="true">💳</div>
+          <img src="nandi-logo.png" alt="" class="deal-logo" aria-hidden="true">
+          <div class="deal-icon" aria-hidden="true"><span class="material-symbols-rounded">payments</span></div>
           <div>
             <div class="deal-title">Pay Flexibly</div>
             <div class="deal-sub">Online & Cash on Delivery</div>
           </div>
         </button>
         <button type="button" class="deal-item deal-link" data-deal-action="support" aria-label="Fast Support">
-          <div class="deal-icon" aria-hidden="true">⚡</div>
+          <img src="nandi-logo.png" alt="" class="deal-logo" aria-hidden="true">
+          <div class="deal-icon" aria-hidden="true"><span class="material-symbols-rounded">support_agent</span></div>
           <div>
             <div class="deal-title">Fast Support</div>
             <div class="deal-sub">Quick replies & order updates</div>
@@ -160,11 +377,65 @@
       </div>
     </section>
 
+    <section class="fabric-marquee" aria-label="Nandi Garments highlights">
+      <div class="marquee-row">
+        <div class="marquee-track">
+          <span>Premium Fabrics</span><span>Custom Fitting</span><span>Ethnic Wear</span><span>Daily Essentials</span><span>Easy Returns</span><span>Secure Payments</span>
+          <span>Premium Fabrics</span><span>Custom Fitting</span><span>Ethnic Wear</span><span>Daily Essentials</span><span>Easy Returns</span><span>Secure Payments</span>
+        </div>
+      </div>
+      <div class="marquee-row marquee-row-alt">
+        <div class="marquee-track reverse">
+          <span>Fresh Arrivals</span><span>Family Shopping</span><span>WhatsApp Support</span><span>Store Pickup</span><span>Fast Dispatch</span><span>Trusted Quality</span>
+          <span>Fresh Arrivals</span><span>Family Shopping</span><span>WhatsApp Support</span><span>Store Pickup</span><span>Fast Dispatch</span><span>Trusted Quality</span>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section category-showcase" aria-label="Shop by section">
+      <div class="container">
+        <div class="premium-section-head">
+          <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
+          <p class="section-kicker">Shop by section</p>
+          <h2>Find your fit faster</h2>
+          <p class="muted">Open Men, Women, Kids, or Home Furnishing collections directly from these customer view cards.</p>
+        </div>
+        <div class="section-card-grid">
+          <a class="section-card section-card-men" href="category.html?section=men" data-open-page="true">
+            <span class="section-card-label">Men</span>
+            <strong>Shirts, trousers, kurtas and everyday essentials.</strong>
+            <span class="section-card-action">Open section</span>
+          </a>
+          <a class="section-card section-card-women" href="category.html?section=women" data-open-page="true">
+            <span class="section-card-label">Women</span>
+            <strong>Sarees, kurtis, dupattas and soft occasion wear.</strong>
+            <span class="section-card-action">Open section</span>
+          </a>
+          <a class="section-card section-card-kids" href="category.html?section=kids" data-open-page="true">
+            <span class="section-card-label">Kids</span>
+            <strong>Comfort-first styles for school, play and family days.</strong>
+            <span class="section-card-action">Open section</span>
+          </a>
+          <a class="section-card section-card-home" href="category.html?section=home" data-open-page="true">
+            <span class="section-card-label">Home</span>
+            <strong>Bedsheets, curtains, towels and home linen essentials.</strong>
+            <span class="section-card-action">Open section</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
 
 
     <section id="products" class="section">
       <div class="container">
-        <h2 data-i18n="products.title">Products</h2>
+        <div class="premium-section-head product-section-head">
+          <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
+          <p class="section-kicker">Shop the edit</p>
+          <h2 data-i18n="products.title">Products</h2>
+          <p class="muted">Browse customer-ready pieces with quick view, wishlist, cart, and stock badges.</p>
+        </div>
 
         <!-- Best Seller / Trending / Top Picks (mock sections driven by product data) -->
         <section class="product-promo" aria-label="Most Loved">
@@ -205,6 +476,7 @@
               <option value="all">All</option>
             </select>
           </label>
+          <button type="button" class="btn secondary size-guide-trigger" data-info-panel="size">Size Guide</button>
         </div>
 
         <div id="product-grid" class="grid"></div>
@@ -214,60 +486,208 @@
 
     <section id="about" class="section">
       <div class="container">
-        <h2 data-i18n="about.title">About Us</h2>
-        <p data-i18n="about.text">Nandi Garments is focused on simplifying garment business operations through a smart digital platform. We help manage inventory, sales, and products efficiently, reducing manual work and improving accuracy. Our goal is to support business growth with a user-friendly and scalable solution.</p>
+        <div class="premium-section-head">
+          <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
+          <h2 data-i18n="about.title">About Us</h2>
+          <p class="muted">A premium garments experience—from quality fabrics to smooth returns.</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <div class="card-logo-mark"><img src="nandi-logo.png" alt="" aria-hidden="true"></div>
+            <h3>Built for quality & trust</h3>
+            <p data-i18n="about.text">Nandi Garments is focused on simplifying garment business operations through a smart digital platform. We help manage inventory, sales, and products efficiently, reducing manual work and improving accuracy. Our goal is to support business growth with a user-friendly and scalable solution.</p>
+            <div class="about-metrics">
+              <div class="metric"><div class="metric-value">4.5★</div><div class="metric-label">Customer satisfaction (demo)</div></div>
+              <div class="metric"><div class="metric-value">3–7</div><div class="metric-label">Delivery estimate (demo)</div></div>
+              <div class="metric"><div class="metric-value">Easy</div><div class="metric-label">Returns & exchange support</div></div>
+            </div>
+          </div>
+
+          <div class="about-trust-card">
+            <h3>What customers can expect</h3>
+            <ul class="checklist">
+              <li><strong>Premium Quality:</strong> quality fabrics and consistent finishing.</li>
+              <li><strong>Affordable Prices:</strong> value-for-money selections.</li>
+              <li><strong>Easy Returns:</strong> guided exchange process for size issues.</li>
+              <li><strong>Fast Delivery:</strong> dispatch tracking & support (demo).</li>
+              <li><strong>Secure Payments:</strong> safe checkout experience.</li>
+            </ul>
+            <div class="about-trust-cta">
+              <a class="btn" href="why-nandi.html">Why Nandi</a>
+              <a class="btn secondary" href="faq.html">Read FAQ</a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+
 
     <section id="location" class="section">
       <div class="container">
-        <h2 data-i18n="location.title">Location</h2>
-        <p data-i18n="location.text">Visit our store at : Madhubanpur, Muraddi, Santuri, Purulia,723156. We're open Mon–Sun, 6:30am–9pm.</p>
-        <div class="map-embed">
-          <iframe
-            id="map-iframe"
-            data-lat="23.60898"
-            data-lng="86.82593"
-            data-zoom="16"
-            src="https://www.google.com/maps?q=23.60898,86.82593&z=16&output=embed"
-            title="Nandi Garments location"
-            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="premium-section-head">
+          <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
+          <h2 data-i18n="location.title">Location</h2>
+          <p class="muted">Visit our store for fittings, size guidance, and fabric feel.</p>
         </div>
-        <div class="map-controls">
-          <div class="zoom-controls">
-            <button id="map-zoom-out" class="btn small" aria-label="Zoom out">−</button>
-            <button id="map-zoom-in" class="btn small" aria-label="Zoom in">+</button>
+
+        <div class="location-grid">
+          <div class="location-info">
+            <div class="location-text">
+              <p data-i18n="location.text">Visit our store at : Madhubanpur, Muraddi, Santuri, Purulia,723156. We're open Mon–Sun, 6:30am–9pm.</p>
+            </div>
+
+            <div class="location-cards">
+              <div class="mini-card">
+                <div class="mini-icon">📍</div>
+                <div>
+                  <div class="mini-title">Store address</div>
+                  <div class="mini-body">Madhubanpur • Muraddi • Santuri • Purulia 723156 (demo)</div>
+                </div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-icon">🕒</div>
+                <div>
+                  <div class="mini-title">Working hours</div>
+                  <div class="mini-body">Mon–Sun: 6:30am–9pm (as listed)</div>
+                </div>
+              </div>
+              <div class="mini-card">
+                <div class="mini-icon">🧵</div>
+                <div>
+                  <div class="mini-title">Get size help</div>
+                  <div class="mini-body">Talk to us on WhatsApp before you visit.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="location-ctas">
+              <a class="btn" href="faq.html">How returns work</a>
+              <a class="btn secondary" href="https://wa.me/918250530293" target="_blank" rel="noopener">WhatsApp for fitting</a>
+            </div>
           </div>
-          <a id="map-directions" class="btn small" href="https://www.google.com/maps/dir/?api=1&destination=23.60898,86.82593" target="_blank" rel="noopener">Get directions</a>
+
+          <div class="location-map">
+            <div class="map-embed">
+              <iframe
+                id="map-iframe"
+                data-lat="23.60898"
+                data-lng="86.82593"
+                data-zoom="16"
+                src="https://www.google.com/maps?q=23.60898,86.82593&z=16&output=embed"
+                title="Nandi Garments location"
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="map-controls">
+              <div class="zoom-controls">
+                <button id="map-zoom-out" class="btn small" aria-label="Zoom out">−</button>
+                <button id="map-zoom-in" class="btn small" aria-label="Zoom in">+</button>
+              </div>
+              <a id="map-directions" class="btn small" href="https://www.google.com/maps/dir/?api=1&destination=23.60898,86.82593" target="_blank" rel="noopener">Get directions</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-<section id="contact" class="section contact">
+
+    <section id="contact" class="section contact">
       <div class="container">
-        <h2 data-i18n="contact.title">Contact</h2>
-        <form id="contact-form">
-          <label><span data-i18n="contact.name">Name</span><input type="text" id="name" required></label>
-          <label><span data-i18n="contact.email">Email</span><input type="email" id="email" required></label>
-          <label><span data-i18n="contact.message">Message</span><textarea id="message" rows="4" required></textarea></label>
-          <div class="contact-actions">
-            <button type="submit" class="btn" data-i18n="contact.send_email">Send Email</button>
-            <button type="button" id="whatsapp-send" class="btn" data-i18n="contact.send_whatsapp">Send WhatsApp</button>
+        <div class="contact-hero">
+          <div class="contact-hero-text">
+            <img src="nandi-logo.png" alt="" class="section-logo contact-logo" aria-hidden="true">
+            <h2 data-i18n="contact.title">Contact</h2>
+            <p class="muted">Premium support for orders, size guidance, exchanges, and delivery updates.</p>
           </div>
-        </form>
-        <p class="note">Or visit us in-store — address and hours available on request.</p>
-        <div class="contact-info">
-          <p><strong>Phone:</strong> <a href="tel:8250530293">8250530293</a></p>
-          <p><strong>WhatsApp:</strong> <a href="https://wa.me/918250530293" target="_blank" rel="noopener">Message on WhatsApp</a></p>
-          <p><strong>Email:</strong> <a href="mailto:nandisaikat.2002@gmail.com">nandisaikat.2002@gmail.com</a></p>
-          <p><strong>GitHub:</strong> <a href="https://github.com/nandisaikat07" target="_blank" rel="noopener">nandisaikat07</a></p>
+          <div class="contact-hero-badges">
+            <div class="contact-badge">⚡ Fast replies</div>
+            <div class="contact-badge">✅ Easy returns support</div>
+            <div class="contact-badge">💳 Secure payments help</div>
+          </div>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-form-card">
+            <form id="contact-form">
+              <div class="form-row">
+                <label><span data-i18n="contact.name">Name</span><input type="text" id="name" required placeholder="Your name"></label>
+                <label><span data-i18n="contact.email">Email</span><input type="email" id="email" required placeholder="you@example.com"></label>
+              </div>
+              <label><span data-i18n="contact.message">Message</span><textarea id="message" rows="5" required placeholder="Tell us what you need..."></textarea></label>
+
+              <div class="contact-actions">
+                <button type="submit" class="btn" data-i18n="contact.send_email">Send Email</button>
+                <button type="button" id="whatsapp-send" class="btn" data-i18n="contact.send_whatsapp">Send WhatsApp</button>
+              </div>
+
+              <div class="contact-form-hint">
+                <span aria-hidden="true">🔒</span>
+                <span>We’ll only use your details to respond to your request (demo).</span>
+              </div>
+            </form>
+          </div>
+
+          <div class="contact-info-card">
+            <div class="card-logo-mark"><img src="nandi-logo.png" alt="" aria-hidden="true"></div>
+            <h3 style="margin-top:0">Reach us directly</h3>
+
+            <div class="contact-info-list">
+              <div class="contact-info-item">
+                <div class="contact-info-icon">📞</div>
+                <div>
+                  <div class="contact-info-label">Phone</div>
+                  <div><a href="tel:8250530293">8250530293</a></div>
+                </div>
+              </div>
+
+              <div class="contact-info-item">
+                <div class="contact-info-icon">💬</div>
+                <div>
+                  <div class="contact-info-label">WhatsApp</div>
+                  <div><a href="https://wa.me/918250530293" target="_blank" rel="noopener">Message on WhatsApp</a></div>
+                </div>
+              </div>
+
+              <div class="contact-info-item">
+                <div class="contact-info-icon">✉️</div>
+                <div>
+                  <div class="contact-info-label">Email</div>
+                  <div><a href="mailto:nandisaikat.2002@gmail.com">nandisaikat.2002@gmail.com</a></div>
+                </div>
+              </div>
+
+              <div class="contact-info-item">
+                <div class="contact-info-icon">🕒</div>
+                <div>
+                  <div class="contact-info-label">Working hours</div>
+                  <div>Mon–Sat: 10:00 AM – 7:00 PM</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-quick-links">
+              <a class="btn secondary" href="faq.html">Browse FAQ</a>
+              <a class="btn secondary" href="returns.html">Return Centre</a>
+              <a class="btn secondary" href="track.html">Track Order</a>
+            </div>
+
+            <div class="contact-verified">
+              <div class="verified-icon">✅</div>
+              <div>
+                <div class="verified-title">Verified Support</div>
+                <div class="muted" style="margin-top:.25rem;">Demo trust note to look premium.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
 
     <!-- FAQ Section -->
     <section id="faq" class="section">
       <div class="container">
+        <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
         <h2>Frequently Asked Questions</h2>
         <div class="faq-list">
 <div class="faq-item">
@@ -307,6 +727,7 @@
     <!-- Size Guide Section -->
     <section id="size-guide" class="section">
       <div class="container">
+        <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
         <h2>Size Guide</h2>
         <div class="size-guide-grid">
           <table class="size-table">
@@ -334,6 +755,7 @@
     <!-- Testimonials Section -->
     <section id="testimonials" class="section">
       <div class="container">
+        <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
         <h2>What Our Customers Say</h2>
         <div class="testimonials-grid">
           <div class="testimonial-card">
@@ -360,6 +782,7 @@
     <!-- Newsletter Section -->
     <section id="newsletter" class="section newsletter-section">
       <div class="container">
+        <img src="nandi-logo.png" alt="" class="section-logo" aria-hidden="true">
         <h2>Subscribe to Our Newsletter</h2>
         <p>Get exclusive offers and updates directly in your inbox!</p>
         <form id="newsletter-form" class="newsletter-form">
@@ -370,6 +793,104 @@
       </div>
     </section>
   </main>
+
+  <div id="info-drawer" class="info-drawer" aria-hidden="true">
+    <div class="info-drawer-backdrop" data-info-close></div>
+    <aside class="info-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="info-drawer-title">
+      <div class="info-drawer-header">
+        <img src="nandi-logo.png" alt="" class="drawer-logo" aria-hidden="true">
+        <div>
+          <span class="info-drawer-kicker">Nandi Guide</span>
+          <h3 id="info-drawer-title">About Us</h3>
+        </div>
+        <button type="button" class="info-drawer-close" data-info-close aria-label="Close information panel">Close</button>
+      </div>
+      <div class="info-drawer-tabs" role="tablist" aria-label="Information sections">
+        <button type="button" data-info-panel="about">About</button>
+        <button type="button" data-info-panel="location">Location</button>
+        <button type="button" data-info-panel="contact">Contact</button>
+        <button type="button" data-info-panel="faq">FAQ</button>
+        <button type="button" data-info-panel="size">Size</button>
+      </div>
+      <div class="info-drawer-body">
+        <section class="info-panel-content" data-info-content="about">
+          <h4>About Nandi Garments</h4>
+          <p>Nandi Garments brings quality fabrics, comfortable fits, and simple shopping support together for families and everyday wear.</p>
+          <ul>
+            <li>Premium fabric feel with practical pricing.</li>
+            <li>Support for size guidance before ordering.</li>
+            <li>Easy exchange and return help for fit issues.</li>
+          </ul>
+        </section>
+        <section class="info-panel-content" data-info-content="location">
+          <h4>Location</h4>
+          <p>Visit us for fittings, fabric checks, and size guidance.</p>
+          <div class="drawer-location-card">
+            <div class="drawer-location-copy">
+              <strong>Madhubanpur, Muraddi, Santuri, Purulia, 723156</strong>
+              <p>Open daily: 6:30 AM to 9:00 PM</p>
+            </div>
+            <div class="info-contact-list">
+              <a href="https://www.google.com/maps/dir/?api=1&destination=23.60898,86.82593" target="_blank" rel="noopener">Get directions</a>
+              <a href="https://wa.me/918250530293" target="_blank" rel="noopener">WhatsApp before you visit</a>
+            </div>
+          </div>
+          <div class="drawer-location-map">
+            <iframe
+              src="https://www.google.com/maps?q=23.60898,86.82593&z=16&output=embed"
+              title="Nandi Garments location"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen></iframe>
+          </div>
+        </section>
+        <section class="info-panel-content" data-info-content="contact">
+          <h4>Contact</h4>
+          <p>Need help choosing a size, checking availability, or tracking an order?</p>
+          <div class="info-contact-list">
+            <a href="tel:8250530293">Call: 8250530293</a>
+            <a href="https://wa.me/918250530293" target="_blank" rel="noopener">WhatsApp support</a>
+            <a href="mailto:nandisaikat.2002@gmail.com">nandisaikat.2002@gmail.com</a>
+          </div>
+        </section>
+        <section class="info-panel-content" data-info-content="faq">
+          <h4>Frequently Asked Questions</h4>
+          <details open>
+            <summary>What is your return policy?</summary>
+            <p>Return support is available within 3 to 5 days.</p>
+          </details>
+          <details>
+            <summary>Do you offer custom tailoring?</summary>
+            <p>Yes, contact us for measurements and availability.</p>
+          </details>
+          <details>
+            <summary>How do I track my order?</summary>
+            <p>Use the Track page or contact support with your tracking ID.</p>
+          </details>
+          <details>
+            <summary>What payment methods do you accept?</summary>
+            <p>Online payment and Cash on Delivery are supported.</p>
+          </details>
+        </section>
+        <section class="info-panel-content" data-info-content="size">
+          <h4>Size Guide</h4>
+          <p>Use this guide as a starting point. Message us for custom measurements.</p>
+          <div class="drawer-size-table">
+            <table>
+              <thead><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th></tr></thead>
+              <tbody>
+                <tr><td>S</td><td>38"</td><td>26"</td><td>16"</td></tr>
+                <tr><td>M</td><td>40"</td><td>27"</td><td>17"</td></tr>
+                <tr><td>L</td><td>42"</td><td>28"</td><td>18"</td></tr>
+                <tr><td>XL</td><td>44"</td><td>29"</td><td>19"</td></tr>
+                <tr><td>XXL</td><td>46"</td><td>30"</td><td>20"</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </aside>
+  </div>
 
   <script>
     // Mobile nav toggle
@@ -395,56 +916,112 @@
     })();
   </script>
 
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
   <footer class="site-footer">
+    <!-- Back to Top Section (Sticky bar) -->
+    <div class="footer-back-to-top">
+      <div class="container">
+        <button class="back-to-top-bar" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll back to top">
+          Back to top
+        </button>
+      </div>
+    </div>
 
-    <button class="footer-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>
-
-
-    <div class="footer-main">
-      <div class="container footer-columns">
-        <div class="footer-col">
-          <h4>Get to Know Us</h4>
-          <ul>
-            <li><a href="#">About Nandi</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Press Releases</a></li>
-            <li><a href="#">Our Story</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Connect with Us</h4>
-          <ul>
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">Twitter</a></li>
-            <li><a href="#">Instagram</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Make Money with Us</h4>
-          <ul>
-            <li><a href="#">Sell on Nandi</a></li>
-            <li><a href="#">Sell under Nandi Accelerator</a></li>
-            <li><a href="#">Advertise Your Products</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Let Us Help You</h4>
-          <ul>
-            <li><a href="#">Your Account</a></li>
-            <li><a href="#">Returns Centre</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
+    <div class="footer-top footer-support-band">
+      <div class="container footer-support-grid">
+        <aside class="footer-support-rail" aria-label="Customer guide shortcuts">
+          <img src="nandi-logo.png" alt="" class="footer-panel-logo" aria-hidden="true">
+          <span class="section-kicker">Customer view</span>
+          <h3>Helpful pages live here</h3>
+          <p class="muted">Open the store details, size help, and support notes from one calm place.</p>
+          <div class="footer-support-buttons">
+            <button type="button" class="btn secondary" data-info-panel="about">About Us</button>
+            <button type="button" class="btn secondary" data-info-panel="location">Location</button>
+            <button type="button" class="btn secondary" data-info-panel="contact">Contact</button>
+            <button type="button" class="btn secondary" data-info-panel="faq">FAQ</button>
+            <button type="button" class="btn secondary" data-info-panel="size">Size Guide</button>
+          </div>
+        </aside>
+        <div class="footer-support-spotlight">
+          <div class="footer-support-copy">
+            <img src="nandi-logo.png" alt="" class="footer-panel-logo" aria-hidden="true">
+            <span class="section-kicker">Nandi Garments</span>
+            <h3>Soft palette outside, dark brand art inside</h3>
+            <p>We moved the detailed support pages out of the main scroll so shopping stays clean and fast.</p>
+            <div class="footer-support-actions">
+              <button type="button" class="btn" data-info-panel="about">Open About</button>
+              <button type="button" class="btn secondary" data-info-panel="size">Open Size Guide</button>
+            </div>
+          </div>
+          <div class="footer-support-visual" aria-hidden="true"></div>
         </div>
       </div>
+    </div>
 
-      <div class="footer-center">
-        <div class="container footer-logo-row">
-          <img src="Nandi Garments-.png" alt="Nandi logo" class="footer-logo">
+    <div class="footer-main">
+      <div class="container">
+        <div class="footer-logo-row">
+          <img src="nandi-logo.png" alt="Nandi logo" class="footer-logo">
           <div class="footer-actions">
-            <div class="lang-select">
-              <button class="btn small">English ▾</button>
-              <button class="btn small">India</button>
+            <nav class="footer-social" aria-label="Social media links">
+              <a class="footer-social-link facebook" href="https://www.facebook.com/share/1D6TCJcu5j/" target="_blank" rel="noopener" aria-label="Visit Nandi Garments on Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M14.3 8.6V6.9c0-.8.5-1 1-1h1.3V3.5c-.6-.1-1.5-.2-2.4-.2-2.4 0-4 1.4-4 4v1.3H7.6v2.8h2.6v7.3h3.1v-7.3h2.6l.4-2.8h-3z"/>
+                </svg>
+              </a>
+              <a class="footer-social-link instagram" href="https://www.instagram.com/eternal_explorer__?igsh=cTloendxcDJyOWQw" target="_blank" rel="noopener" aria-label="Visit Nandi Garments on Instagram">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M7.4 2.9h9.2c2.5 0 4.5 2 4.5 4.5v9.2c0 2.5-2 4.5-4.5 4.5H7.4c-2.5 0-4.5-2-4.5-4.5V7.4c0-2.5 2-4.5 4.5-4.5zm0 2.2c-1.3 0-2.3 1-2.3 2.3v9.2c0 1.3 1 2.3 2.3 2.3h9.2c1.3 0 2.3-1 2.3-2.3V7.4c0-1.3-1-2.3-2.3-2.3H7.4zm4.6 3.1a3.8 3.8 0 1 1 0 7.6 3.8 3.8 0 0 1 0-7.6zm0 2.2a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zm4-2.7a.9.9 0 1 1 1.8 0 .9.9 0 0 1-1.8 0z"/>
+                </svg>
+              </a>
+              <a class="footer-social-link twitter" href="https://x.com/SaikatN12104728" target="_blank" rel="noopener" aria-label="Visit Nandi Garments on X">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M13.9 10.5 20.6 3h-3.1l-5 5.7L8.4 3H3l6.9 9.6L3 21h3.1l5.2-6.1 4.4 6.1H21l-7.1-10.5zm-1.8 2.1-1-1.4-4.5-6.1h1.1l3.7 5.1 1 1.4 4.8 6.5h-1.1l-4-5.5z"/>
+                </svg>
+              </a>
+            </nav>
+            <div class="newsletter">
+              <label for="footer-news">Join our newsletter</label>
+              <form id="footer-news" style="display:flex;gap:.5rem;align-items:center;margin-left:1rem">
+                <input type="email" placeholder="you@example.com" style="padding:.55rem .7rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06)">
+                <button class="btn" type="submit">Subscribe</button>
+              </form>
             </div>
+          </div>
+        </div>
+
+        <div class="footer-columns">
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="about.html">About Nandi</a></li>
+              <li><a href="press-releases.html">Press</a></li>
+              <li><a href="careers.html">Careers</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Customer</h4>
+            <ul>
+              <li><a href="help.html">Help Center</a></li>
+              <li><a href="returns.html">Returns</a></li>
+              <li><a href="track.html">Track Order</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Sell With Us</h4>
+            <ul>
+              <li><a href="seller.html">Sell on Nandi</a></li>
+              <li><a href="#">Advertise</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Policies</h4>
+            <ul>
+              <li><a href="privacy.html">Privacy</a></li>
+              <li><a href="terms.html">Terms</a></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -453,11 +1030,11 @@
     <div class="footer-bottom">
       <div class="container footer-bottom-inner">
         <div class="footer-links">
-          <a href="#">Conditions of Use & Sale</a>
-          <a href="#">Privacy Notice</a>
-          <a href="#">Interest-Based Ads</a>
+          <a href="javascript:void(0)">Conditions of Use & Sale</a>
+          <a href="javascript:void(0)">Privacy Notice</a>
+          <a href="javascript:void(0)">Interest-Based Ads</a>
         </div>
-        <div class="copyright">© 2026 Nandi Garments</div>
+        <div class="copyright">© 2026 Nandi Garments. All Rights Reserved.</div>
       </div>
     </div>
   </footer>
@@ -466,12 +1043,18 @@
   <!-- Embedded products JSON as a fallback when fetch() isn't available (file://) -->
   <script id="products-data" type="application/json">
     [
-      {"id":1,"name":"Classic Cotton Shirt","price":"799","category":"Shirts","img":"https://via.placeholder.com/400x300?text=Classic+Shirt"},
-      {"id":2,"name":"Formal Trousers","price":"1299","category":"Trousers","img":"https://via.placeholder.com/400x300?text=Formal+Trousers"},
-      {"id":3,"name":"Cotton Kurta","price":"699","category":"Kurtas","img":"https://via.placeholder.com/400x300?text=Cotton+Kurta"},
-      {"id":4,"name":"Tailored Suit","price":"4999","category":"Suits","img":"https://via.placeholder.com/400x300?text=Tailored+Suit"},
-      {"id":5,"name":"Casual T-Shirt","price":"499","category":"Shirts","img":"https://via.placeholder.com/400x300?text=Casual+T-Shirt"},
-      {"id":6,"name":"Denim Jeans","price":"1199","category":"Trousers","img":"https://via.placeholder.com/400x300?text=Denim+Jeans"}
+      {"id":1,"name":"Classic Cotton Shirt","price":"799","category":"Shirts","img":"https://images.unsplash.com/photo-1596783154498-8c43d9e70c3c?w=400&h=300&fit=crop"},
+      {"id":2,"name":"Formal Trousers","price":"1299","category":"Trousers","img":"https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=300&fit=crop"},
+      {"id":3,"name":"Cotton Kurta","price":"699","category":"Kurtas","img":"https://images.unsplash.com/photo-1606777895958-75169a1796b8?w=400&h=300&fit=crop"},
+      {"id":4,"name":"Tailored Suit","price":"4999","category":"Suits","img":"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=300&fit=crop"},
+      {"id":5,"name":"Casual T-Shirt","price":"499","category":"Shirts","img":"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop"},
+      {"id":6,"name":"Denim Jeans","price":"1199","category":"Trousers","img":"https://images.unsplash.com/photo-1542272604-787c62d465d1?w=400&h=300&fit=crop"},
+      {"id":7,"name":"Traditional Silk Saree","price":"2499","category":"Sarees","img":"https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&h=300&fit=crop"},
+      {"id":8,"name":"Cotton Saree","price":"1299","category":"Sarees","img":"https://images.unsplash.com/photo-1589553936836-ba6d3e8f3a00?w=400&h=300&fit=crop"},
+      {"id":9,"name":"Designer Printed Kurti","price":"899","category":"Kurtis","img":"https://images.unsplash.com/photo-1597589254194-d4c00f3e4b91?w=400&h=300&fit=crop"},
+      {"id":10,"name":"Embroidered Kurti","price":"1099","category":"Kurtis","img":"https://images.unsplash.com/photo-1617456202039-2a3f2be6c149?w=400&h=300&fit=crop"},
+      {"id":11,"name":"Party Wear Saree","price":"3499","category":"Sarees","img":"https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400&h=300&fit=crop"},
+      {"id":12,"name":"Casual Kurti with Dupatta","price":"749","category":"Kurtis","img":"https://images.unsplash.com/photo-1565577666747-69f6646db940?w=400&h=300&fit=crop"}
     ]
   </script>
   <!-- Chatbot widget -->

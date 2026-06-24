@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Blog Post • Nandi Garments</title>
+    <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+<link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Nandi Garments blog post.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav class="nav" id="site-nav">
+        <a href="index.html#products" id="nav-all">All</a>
+        <a href="index.html#about" data-i18n="nav.about">About</a>
+        <a href="index.html#location" data-i18n="nav.location">Location</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <a href="orders.html">Orders</a>
+        <a href="returns.html">Returns</a>
+        <a href="track.html">Track</a>
+      </nav>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">🔍</span>
+          <input id="site-search" class="site-search" placeholder="Search products..." aria-label="Search products" />
+        </div>
+        <select id="lang-select" aria-label="Select language" title="Select language"></select>
+        <button id="wishlist-toggle" class="btn small" aria-label="Open wishlist">Wishlist (<span id="wishlist-count">0</span>)</button>
+        <button id="cart-toggle" class="btn small" aria-label="Open cart">Cart (<span id="cart-count">0</span>)</button>
+        <button id="theme-toggle" class="btn small" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding:2rem 0;">
+    <a href="blog.html" class="btn secondary" style="margin-bottom:1rem;display:inline-block;">← Back to Blog</a>
+
+    <article class="blog-post">
+      <h1 id="post-title">Blog Post</h1>
+      <div class="muted" id="post-meta" style="margin-top:.25rem;">—</div>
+      <div id="post-cover" style="margin:1.25rem 0;">
+        <img id="post-cover-img" src="" alt="Blog cover" style="width:100%;height:320px;object-fit:cover;border-radius:14px;border:1px solid rgba(0,0,0,0.06)">
+      </div>
+
+      <div id="post-content" class="blog-content" style="max-width:860px;margin:0 auto;">
+        <!-- injected -->
+      </div>
+
+      <section style="margin-top:2rem;">
+        <h2 style="font-size:1.15rem;">Recommended next</h2>
+        <div id="post-recommend" class="blog-post-recommend" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1rem;">
+          <!-- injected -->
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom-inner">
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="delivery-policy.html">Delivery Policy</a>
+        <a href="return-policy.html">Return Policy</a>
+      </div>
+      <div class="copyright">© 2026 Nandi Garments</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    (function(){
+      const posts = [
+        {id:1, topic:'Fashion Tips', title:'How to Choose the Perfect Cotton Shirt Fit', cover:'https://images.unsplash.com/photo-1520975958225-8f4b46b6e4a0?w=1200&h=700&fit=crop',
+          paragraphs:[
+            'A great cotton shirt starts with the right fit. Check shoulder seams, sleeve length, and ensure there is enough room for comfortable movement.',
+            'For everyday comfort, look for breathable fabric and a collar that holds its shape. If you want a more tailored look, choose a slightly structured cotton weave.',
+            'Measure your chest and shoulder area. Compare with our size guide before checkout, or contact us for custom sizing assistance.'
+          ],
+          recommendations:[2,3]
+        },
+        {id:2, topic:'Summer Collections', title:'Summer Styling: Lightweight Layers That Look Premium', cover:'https://images.unsplash.com/photo-1520974735194-6e9d3e6d2e65?w=1200&h=700&fit=crop',
+          paragraphs:[
+            'Summer style is about smart layering. Choose lightweight fabrics, breathable linings, and colors that complement your skin tone.',
+            'Try pairing a crisp cotton shirt with relaxed trousers or a comfortable kurta for an effortless premium look.',
+            'Keep your palette simple and add one statement piece—like a subtle pattern or textured fabric.'
+          ],
+          recommendations:[1,4]
+        },
+        {id:3, topic:'Styling Guides', title:'Formal to Casual: Build Versatile Looks in Minutes', cover:'https://images.unsplash.com/photo-1520975682031-a7c7f0b5b4e1?w=1200&h=700&fit=crop',
+          paragraphs:[
+            'Versatility comes from choosing pieces that work across occasions. A well-fitted shirt and a versatile bottom give you more outfit combinations.',
+            'Switch your look by changing footwear and accessories. A simple watch or chain can elevate even a basic outfit.',
+            'For a casual vibe, unbutton one or two buttons and choose lighter colors.'
+          ],
+          recommendations:[2,1]
+        },
+        {id:4, topic:'Fabric Care', title:'Fabric Care 101: Wash, Iron, and Store Like a Pro', cover:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&h=700&fit=crop',
+          paragraphs:[
+            'Care is what makes your clothes last longer. Always check the fabric instructions and wash with gentle settings when needed.',
+            'Iron at the right temperature and let the fabric cool before folding to reduce wrinkles.',
+            'Store your garments in a dry place. Use breathable storage bags and avoid overcrowding.'
+          ],
+          recommendations:[1,3]
+        }
+      ];
+
+      const params = new URLSearchParams(window.location.search);
+      const id = Number(params.get('id')) || posts[0].id;
+      const post = posts.find(p=>p.id===id) || posts[0];
+
+      document.getElementById('post-title').textContent = post.title;
+      document.getElementById('post-meta').textContent = post.topic + ' • Updated ' + new Date().toLocaleDateString();
+      document.getElementById('post-cover-img').src = post.cover;
+      document.getElementById('post-cover-img').alt = post.title;
+
+      const contentEl = document.getElementById('post-content');
+      contentEl.innerHTML = `
+        <div class="blog-lead" style="font-size:1.05rem;font-weight:600;margin-bottom:1rem;">${post.topic} — practical tips you can use today.</div>
+        ${post.paragraphs.map(p=>`<p style="line-height:1.7;margin:.75rem 0;">${p}</p>`).join('')}
+        <ul style="margin:1rem 0;padding-left:1.1rem;line-height:1.7;">
+          <li>Choose the right size before checkout</li>
+          <li>Follow care instructions for better longevity</li>
+          <li>Contact support for tailored guidance</li>
+        </ul>
+      `;
+
+      const recEl = document.getElementById('post-recommend');
+      const recs = (post.recommendations || []).map(rid => posts.find(p=>p.id===rid)).filter(Boolean);
+      recEl.innerHTML = recs.length ? recs.map(p=>`
+        <a href="blog-post.html?id=${p.id}" style="text-decoration:none;color:inherit;">
+          <article style="border:1px solid rgba(0,0,0,0.08);border-radius:12px;overflow:hidden;background:var(--surface);">
+            <img src="${p.cover}" alt="${p.title}" style="width:100%;height:130px;object-fit:cover;display:block;">
+            <div style="padding:.75rem 1rem;">
+              <div class="pill" style="margin-bottom:.4rem;">${p.topic}</div>
+              <div style="font-weight:800;font-size:.95rem;line-height:1.25;">${p.title}</div>
+            </div>
+          </article>
+        </a>
+      `).join('') : '';
+    })();
+  </script>
+</body>
+</html>
+
