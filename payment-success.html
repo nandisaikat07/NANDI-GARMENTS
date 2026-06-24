@@ -215,8 +215,13 @@
         fetch(`http://localhost:5050/api/orders/${encodeURIComponent(orderId)}`)
           .then(r=>r.json())
           .then(data=>{
+            // Avoid overriding localStorage totals when backend totals are invalid/zero.
             if(data && data.success && data.order){
-              render(data.order, orderId);
+              const t = data.order?.totals;
+              const backendTotal = Number(t?.total);
+              if(Number.isFinite(backendTotal) && backendTotal > 0){
+                render(data.order, orderId);
+              }
             }
           })
           .catch(()=>{});

@@ -75,6 +75,9 @@ router.post('/create-order', async (req, res) => {
       ? totalComputed
       : Math.max(0, totalAmount);
 
+    console.log('[razorpay/create-order] incoming totals=', JSON.stringify(totals));
+    console.log('[razorpay/create-order] computed totals=', { subtotal, shipping, discount, totalComputed, totalToSave, totalAmount });
+
     const saved = await Order.create({
       orderId,
       items,
@@ -93,6 +96,8 @@ router.post('/create-order', async (req, res) => {
       },
       status: 'processing'
     });
+
+    console.log('[razorpay/create-order] saved totals=', saved?.totals);
 
 
     res.json({
