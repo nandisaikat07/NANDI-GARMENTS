@@ -1,36 +1,179 @@
-const express = require('express');
-const Order = require('../models/Order');
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Payment Failed · Nandi Garments</title>
+  <link rel="icon" type="image/png" href="nandi-logo.png">
+  <link rel="apple-touch-icon" href="nandi-logo.png">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Payment failed for Nandi Garments">
+  <style>
+    .fail-hero{padding:2rem 1rem;text-align:center}
+    .panel{background:var(--surface);border:1px solid #eef2f6;border-radius:10px;padding:1rem}
+    .summary-line{display:flex;justify-content:space-between;gap:.5rem;margin:.35rem 0}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    @media(max-width:680px){.grid-2{grid-template-columns:1fr}}
+    .muted-box{background:#f8fafc;border:1px solid #eef2f6;border-radius:10px;padding:.8rem}
+    .btn{display:inline-block;padding:.55rem .75rem;border-radius:8px;border:1px solid #e6eef6;background:#fff;text-decoration:none;color:inherit;cursor:pointer}
+    .btn.secondary{background:#f7f8fa}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-container">
+        <img src="nandi-logo.png" alt="Nandi Garments logo" class="header-logo">
+        <h1>Nandi Garments</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html#products">Products</a>
+        <a href="orders.html">Orders</a>
+        <a href="track.html">Track</a>
+      </nav>
+    </div>
+  </header>
 
-const router = express.Router();
+  <main>
+    <section class="fail-hero">
+      <div class="container">
+        <h2 style="color:#c0392b">Payment Failed</h2>
+        <p class="muted">No worries — please try again. Your cart items are kept (demo).</p>
+      </div>
+    </section>
 
-// Public (no auth yet) endpoints for the customer pages.
-// You can later restrict using auth.
+    <section class="container">
+      <div class="grid-2">
+        <div class="panel">
+          <h3 style="margin-top:0">Order Details</h3>
+          <div class="summary-line"><span class="muted">Order ID</span><span id="order-id" style="font-weight:900"></span></div>
+          <div class="summary-line"><span class="muted">Status</span><span id="order-status" style="font-weight:900"></span></div>
+          <div class="summary-line"><span class="muted">Delivery estimate</span><span>3–7 business days</span></div>
 
-router.get('/orders', async (req, res) => {
-  try {
-    const limit = Math.min(Number(req.query.limit || 50), 200);
-    const orders = await Order.find()
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .lean();
+          <div class="muted-box" style="margin-top:1rem">
+            <div style="font-weight:900">What to do</div>
+            <div class="muted" style="margin-top:.25rem">Return to checkout and complete payment again.</div>
+          </div>
+        </div>
 
-    res.json({ success: true, orders });
-  } catch (e) {
-    res.status(500).json({ success: false, message: 'Failed to fetch orders' });
-  }
-});
+        <div class="panel">
+          <h3 style="margin-top:0">Next Steps</h3>
+          <p class="muted">You can retry payment using the same cart.</p>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem">
+            <a class="btn" href="checkout.html">Go to Checkout</a>
+            <a class="btn secondary" href="index.html#products">Shop Again</a>
+          </div>
+        </div>
+      </div>
 
-router.get('/orders/:orderId', async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const order = await Order.findOne({ orderId }).lean();
+      <div class="panel" style="margin-top:1rem">
+        <h3 style="margin-top:0">Order Summary</h3>
+        <div id="fail-items"></div>
+        <hr style="border:none;border-top:1px solid #eef2f6;margin:1rem 0">
+        <div class="summary-line"><span class="muted">Subtotal</span><span id="f-sub">₹0</span></div>
+        <div class="summary-line"><span class="muted">Shipping</span><span id="f-ship">₹0</span></div>
+        <div class="summary-line"><span class="muted">Discount</span><span id="f-disc">₹0</span></div>
+        <div class="summary-line" style="font-weight:900"><span>Total</span><span id="f-total">₹0</span></div>
+      </div>
+    </section>
+  </main>
 
-    if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
-    res.json({ success: true, order });
-  } catch (e) {
-    res.status(500).json({ success: false, message: 'Failed to fetch order' });
-  }
-});
+  <footer class="site-footer">
+    <div class="container">© 2026 Nandi Garments</div>
+  </footer>
 
-module.exports = router;
+  <script>
+    const LAST_ORDER_KEY = 'ng_last_order_v1';
+
+    function safeParse(json, fallback){
+      try{ return JSON.parse(json); }catch(e){ return fallback; }
+    }
+
+    function money(n){
+      const x = Number(n || 0);
+      return '₹' + x.toLocaleString('en-IN');
+    }
+
+    function toInvoiceStatus(status){
+      if(status === 'success') return 'Paid';
+      if(status === 'failed') return 'Failed';
+      return status || '—';
+    }
+
+    function sanitizeTotals(totals){
+      const t = totals || {};
+      return {
+        subtotal: Number.isFinite(Number(t.subtotal)) ? Number(t.subtotal) : 0,
+        shipping: Number.isFinite(Number(t.shipping)) ? Number(t.shipping) : 0,
+        discount: Number.isFinite(Number(t.discount)) ? Number(t.discount) : 0,
+        total: Number.isFinite(Number(t.total)) ? Number(t.total) : 0
+      };
+    }
+
+    function render(orderData, orderIdOverride){
+      const params = new URLSearchParams(location.search);
+      const orderId = orderIdOverride || (orderData && orderData.orderId) || (params.get('orderId')) || '—';
+
+      const paymentStatus = (orderData && orderData.payment && orderData.payment.status) || (params.get('status') || 'failed');
+      const uiStatus = toInvoiceStatus(paymentStatus);
+
+      document.getElementById('order-id').textContent = orderId;
+      document.getElementById('order-status').textContent = uiStatus;
+
+      const itemsEl = document.getElementById('fail-items');
+      itemsEl.innerHTML = '';
+
+      const items = orderData && Array.isArray(orderData.items) ? orderData.items : [];
+      if(items.length===0){
+        itemsEl.innerHTML = '<div class="muted">Order data not found. Please place your order again from the cart.</div>';
+      } else {
+        items.forEach(it=>{
+          const row = document.createElement('div');
+          row.className = 'summary-line';
+          row.innerHTML = `<span style="flex:1">${it.name} <span class="muted">×${it.qty}</span></span><span>${money((Number(it.price)||0)*(Number(it.qty)||0))}</span>`;
+          itemsEl.appendChild(row);
+        });
+      }
+
+      const safeTotals = sanitizeTotals(orderData && orderData.totals);
+      document.getElementById('f-sub').textContent = money(safeTotals.subtotal);
+      document.getElementById('f-ship').textContent = money(safeTotals.shipping);
+      document.getElementById('f-disc').textContent = money(safeTotals.discount);
+      document.getElementById('f-total').textContent = money(safeTotals.total);
+    }
+
+    function init(){
+      const localOrder = safeParse(localStorage.getItem(LAST_ORDER_KEY), null);
+      const params = new URLSearchParams(location.search);
+      const orderIdFromQuery = params.get('orderId');
+      const orderId = (localOrder && localOrder.orderId) || orderIdFromQuery || null;
+
+      if(localOrder){
+        render(localOrder);
+      } else {
+        document.getElementById('order-id').textContent = orderId || '—';
+      }
+
+      // Try backend, but only override totals if backend total is valid (> 0)
+      if(orderId){
+        fetch(`http://localhost:5050/api/orders/${encodeURIComponent(orderId)}`)
+          .then(r=>r.json())
+          .then(data=>{
+            if(data && data.success && data.order){
+              const t = data.order?.totals;
+              const backendTotal = Number(t?.total);
+              const backendValid = Number.isFinite(backendTotal);
+              if(backendValid){
+                render(data.order, orderId);
+              }
+            }
+          })
+          .catch(()=>{});
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
 

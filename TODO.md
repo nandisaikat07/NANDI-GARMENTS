@@ -1,6 +1,7 @@
-# TODO - Login page redesign
-- [x] Inspect existing `login.html` and authentication flow (localStorage + redirect).
-- [ ] Replace `login.html` UI with the provided Tailwind/Lucide design.
-- [ ] Ensure Sign in / Sign up toggling works.
-- [ ] Ensure password visibility toggle works.
-- [ ] Ensure Sign in / Sign up demo auth behavior works (localStorage `ng_user_v1` + redirect to `account.html`).
+# TODO
+
+- [x] Fix Razorpay order creation so backend always stores a correct `totals.total` (prevents ₹0 on order summary / confirmation)
+- [ ] Retest checkout → payment success pages to confirm totals render correctly
+
+
+

@@ -219,7 +219,10 @@
             if(data && data.success && data.order){
               const t = data.order?.totals;
               const backendTotal = Number(t?.total);
-              if(Number.isFinite(backendTotal) && backendTotal > 0){
+              // Render backend totals when present (even if 0, so UI doesn't get stuck).
+              // If backend is invalid, keep the localStorage totals.
+              const backendValid = Number.isFinite(backendTotal);
+              if(backendValid){
                 render(data.order, orderId);
               }
             }

@@ -231,7 +231,8 @@
     const WHATSAPP_NUMBER = '918250530293';
 
     const CART_KEY = 'ng_cart_v1';
-    const CART_FALLBACK_KEYS = ['ng_cart_v1', 'cart', 'nandi_cart'];
+    const CHECKOUT_CART_KEY = 'ng_checkout_cart_v1';
+    const CART_FALLBACK_KEYS = ['ng_checkout_cart_v1', 'ng_cart_v1', 'cart', 'nandi_cart'];
     const LAST_ORDER_KEY = 'ng_last_order_v1';
     const LAST_COUPON_KEY = 'ng_last_coupon_v1';
     const LAST_ADDRESS_KEY = 'ng_last_address_v1';
@@ -239,8 +240,8 @@
     const ADDRESS_CUSTOMER_KEY = 'ng_customer_id_v1';
     const ADDRESS_API_BASE = 'http://localhost:5050/api';
 
-    // Demo flag: if true, non-COD payments will redirect to a local simulator page
-    const USE_PAYMENT_SIMULATOR = false;
+    // Demo/static checkout: use the local simulator unless a real Razorpay backend is wired up.
+    const USE_PAYMENT_SIMULATOR = true;
 
 
     const SHIPPING_FIXED = 49; // demo
@@ -256,7 +257,7 @@
     function parseMoneyValue(value){
       if(typeof value === 'number') return Number.isFinite(value) ? value : 0;
       if(value && typeof value === 'object'){
-        const nested = value.amount ?? value.price ?? value.totalPrice ?? value.salePrice;
+        const nested = value.value ?? value.amount ?? value.price ?? value.totalPrice ?? value.salePrice;
         if(nested !== undefined) return parseMoneyValue(nested);
       }
 
@@ -270,6 +271,20 @@
       return Number.isFinite(parsed) ? parsed : 0;
     }
 
+    function firstDefined(...values){
+      return values.find(value => value !== undefined && value !== null && value !== '');
+    }
+
+    function cartFromUrl(){
+      try{
+        const encoded = new URLSearchParams(window.location.search).get('cart');
+        if(!encoded) return null;
+        return JSON.parse(decodeURIComponent(encoded));
+      }catch(e){
+        return null;
+      }
+    }
+
     function normalizeCartItem(item, fallbackId){
       if(!item) return null;
 
@@ -279,17 +294,20 @@
       const qtyRaw = item.qty ?? item.quantity ?? item.count ?? 1;
       const qty = Math.max(0, Number(qtyRaw));
 
-      const priceRaw =
-        item.price ??
-        item.salePrice ??
-        item.amount ??
-        item.totalPrice ??
-        item.unitPrice ??
-        item.priceValue ??
-        (item.price && item.price.value) ??
-        (item.price && item.price.amount);
-
-      const price = parseMoneyValue(priceRaw);
+      const unitPriceRaw = firstDefined(
+        item.price,
+        item.salePrice,
+        item.unitPrice,
+        item.amount,
+        item.priceValue,
+        item.price && item.price.value,
+        item.price && item.price.amount,
+        (item.amount && item.amount.value)
+      );
+      const lineTotalRaw = firstDefined(item.lineTotal, item.totalPrice, item.total, item.totalAmount);
+      const unitPrice = parseMoneyValue(unitPriceRaw);
+      const lineTotal = parseMoneyValue(lineTotalRaw);
+      const price = unitPrice || (lineTotal && qty ? lineTotal / qty : 0);
 
       if(!qty || !price) return null;
 
@@ -303,20 +321,40 @@
     }
 
     function getCart(){
-      for(const key of CART_FALLBACK_KEYS){
-        const saved = safeParse(localStorage.getItem(key), null);
+      const cartSources = [cartFromUrl(), ...CART_FALLBACK_KEYS.map(key=>safeParse(localStorage.getItem(key), null))];
+      for(const saved of cartSources){
         if(!saved) continue;
 
         // saved can be:
         // 1) array: [{id,name,price,qty}, ...]
         // 2) object map: { "12": {id,name,price,qty}, ... }
-        // 3) legacy shapes
-        const rawItems = Array.isArray(saved)
-          ? saved
-          : (typeof saved === 'object' ? Object.values(saved || {}) : []);
+        // 3) legacy shapes with nested product objects
+        let rawItems = [];
+        if(Array.isArray(saved)){
+          rawItems = saved;
+        } else if(typeof saved === 'object'){
+          // common cases: {items:[...]}, {cart:[...]}, or map values
+          if(Array.isArray(saved.items)) rawItems = saved.items;
+          else if(Array.isArray(saved.cart)) rawItems = saved.cart;
+          else if(saved.item && typeof saved.item === 'object') rawItems = [saved.item];
+          else rawItems = Object.values(saved || {});
+        }
 
         const normalized = rawItems
-          .map((item, index)=>normalizeCartItem(item, index))
+          .map((item, index)=>{
+            // If item contains { product: {...}, qty: ... }
+            if(item && typeof item === 'object' && item.product && typeof item.product === 'object'){
+              return normalizeCartItem({
+                id: item.id ?? item.product.id,
+                name: item.name ?? item.product.name ?? item.product.title,
+                qty: item.qty ?? item.quantity ?? item.count ?? 1,
+                price: firstDefined(item.price, item.product.price, item.product.salePrice, item.product.amount),
+                lineTotal: firstDefined(item.lineTotal, item.totalPrice, item.total, item.totalAmount),
+                img: item.img ?? item.product.img ?? item.product.image
+              }, index);
+            }
+            return normalizeCartItem(item, index);
+          })
           .filter(Boolean);
 
         if(normalized.length){
@@ -400,15 +438,7 @@
       const total = Math.max(0, sub + shipping - discount);
       // Ensure we always send a valid numeric amount to the backend (Razorpay requires > 0).
       const safeTotal = Number.isFinite(total) ? Math.round(total * 100) / 100 : 0;
-      const totalToPay = safeTotal > 0 ? safeTotal : 0;
-
-      // Used for Razorpay amount.
-
-
-
-
-
-
+      const totalToRender = safeTotal > 0 ? safeTotal : 0;
 
       items.forEach(it=>{
         const row = document.createElement('div');
@@ -420,15 +450,15 @@
       subEl.textContent = money(sub);
       shipEl.textContent = money(shipping);
       discEl.textContent = money(discount);
-      totEl.textContent = money(total);
-      finalEl.textContent = money(total);
-      document.getElementById('pay-now').disabled = total <= 0;
+      totEl.textContent = money(totalToRender);
+      finalEl.textContent = money(totalToRender);
+      document.getElementById('pay-now').disabled = totalToRender <= 0;
 
       document.getElementById('discount-amount').textContent = money(discount);
 
       // update pay button label for COD
       const pm = getSelectedPayment();
-      document.getElementById('pay-now').textContent = pm==='cod' ? `Place COD Order (${money(total)})` : `Pay Now (${money(total)})`;
+      document.getElementById('pay-now').textContent = pm==='cod' ? `Place COD Order (${money(totalToRender)})` : `Pay Now (${money(totalToRender)})`;
     }
 
     function setCouponUI(){
@@ -707,8 +737,12 @@
       // For demo mode, redirect to a local payment simulator for non-COD methods.
       if(paymentMethod !== 'cod' && USE_PAYMENT_SIMULATOR){
         const receipt = 'receipt_' + orderId;
-        const params = new URLSearchParams({ orderId, method: paymentMethod, amount: String(total) });
-        // optional: add a `force` param for deterministic testing (force=success|failure)
+        const params = new URLSearchParams({
+          orderId,
+          method: paymentMethod,
+          amount: String(safeTotal),
+          force: 'success'
+        });
         window.location.href = `payment.html?${params.toString()}`;
         return;
       }

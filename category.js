@@ -1,5 +1,6 @@
 const WHATSAPP_NUMBER = '918250530293';
 const CART_KEY = 'ng_cart_v1';
+const CHECKOUT_CART_KEY = 'ng_checkout_cart_v1';
 const WISHLIST_KEY = 'ng_department_wishlist_v1';
 
 const departments = {
@@ -107,6 +108,39 @@ function loadJSON(key, fallback){
 
 function saveJSON(key, value){
   localStorage.setItem(key, JSON.stringify(value));
+}
+
+function checkoutCartPayload(){
+  const items = Object.values(cart).map(item=>({
+    id: item.id,
+    name: item.name,
+    price: Number(item.price) || 0,
+    img: item.img,
+    qty: Number(item.qty) || 0
+  })).filter(item=>item.qty > 0 && item.price > 0);
+
+  if(!items.length){
+    localStorage.removeItem(CHECKOUT_CART_KEY);
+    return null;
+  }
+
+  return {
+    items,
+    total: items.reduce((sum, item)=>sum + item.price * item.qty, 0),
+    savedAt: Date.now()
+  };
+}
+
+function saveCheckoutCartSnapshot(){
+  const payload = checkoutCartPayload();
+  if(payload) localStorage.setItem(CHECKOUT_CART_KEY, JSON.stringify(payload));
+  return payload;
+}
+
+function checkoutUrlWithCart(){
+  const payload = saveCheckoutCartSnapshot();
+  if(!payload) return 'checkout.html';
+  return 'checkout.html?cart=' + encodeURIComponent(JSON.stringify(payload));
 }
 
 function productsFor(sectionKey){
@@ -282,6 +316,7 @@ function addToCart(id, sizeOverride){
   if(cart[id]) cart[id].qty += 1;
   else cart[id] = { id: product.id, name: `${product.name} (${size})`, price: product.price, img: product.image || 'nandi-logo.png', qty: 1 };
   saveJSON(CART_KEY, cart);
+  saveCheckoutCartSnapshot();
   renderCart();
   document.getElementById('department-cart-drawer').setAttribute('aria-hidden', 'false');
 }
@@ -430,6 +465,7 @@ function changeQty(id, delta){
   cart[id].qty += delta;
   if(cart[id].qty <= 0) delete cart[id];
   saveJSON(CART_KEY, cart);
+  saveCheckoutCartSnapshot();
   renderCart();
 }
 
@@ -456,6 +492,15 @@ document.getElementById('department-search').addEventListener('input', (event)=>
 });
 document.getElementById('department-cart-toggle').addEventListener('click', ()=>document.getElementById('department-cart-drawer').setAttribute('aria-hidden', 'false'));
 document.getElementById('department-cart-close').addEventListener('click', ()=>document.getElementById('department-cart-drawer').setAttribute('aria-hidden', 'true'));
+document.getElementById('department-checkout-link')?.addEventListener('click', (event)=>{
+  const payload = saveCheckoutCartSnapshot();
+  if(!payload){
+    event.preventDefault();
+    alert('Cart is empty');
+    return;
+  }
+  event.currentTarget.href = checkoutUrlWithCart();
+});
 document.getElementById('department-wishlist-toggle').addEventListener('click', ()=>document.getElementById('department-wishlist-drawer').setAttribute('aria-hidden', 'false'));
 document.getElementById('department-wishlist-close').addEventListener('click', ()=>document.getElementById('department-wishlist-drawer').setAttribute('aria-hidden', 'true'));
 

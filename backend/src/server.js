@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 
+const { PORT, CORS_ORIGIN } = require('./config/env');
 
-const { PORT, NODE_ENV, CORS_ORIGIN } = require('./config/env');
 const { connectDb } = require('./config/db');
+
+
 
 const razorpayRoutes = require('./routes/razorpay');
 const adminRoutes = require('./routes/admin');
@@ -52,8 +54,8 @@ async function start(){
     res.status(500).json({ success: false, message: 'Internal server error' });
   });
 
-  const server = app.listen(PORT, () => {
-    console.log(`[backend] running on http://localhost:${PORT}`);
+ const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[backend] running on port ${PORT}`);
   });
 
   server.on('error', (err) => {
@@ -70,3 +72,5 @@ start().catch((e) => {
   console.error('Failed to start server:', e);
   process.exit(1);
 });
+
+

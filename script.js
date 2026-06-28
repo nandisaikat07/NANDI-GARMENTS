@@ -620,6 +620,7 @@ document.getElementById('map-zoom-out')?.addEventListener('click', ()=>{
 
 /* --- Cart logic (client-side, persisted in localStorage) --- */
 const CART_KEY = 'ng_cart_v1';
+const CHECKOUT_CART_KEY = 'ng_checkout_cart_v1';
 let cart = loadCart();
 
 function parseMoneyValue(value){
@@ -635,6 +636,7 @@ function loadCart(){
 
 function saveCart(){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  saveCheckoutCartSnapshot();
   updateCartCount();
 }
 
@@ -675,6 +677,35 @@ function clearCart(){ cart = {}; saveCart(); renderCart(); }
 
 function cartTotal(){
   return Object.values(cart).reduce((s,i)=>s + (i.price || 0) * i.qty, 0);
+}
+
+function saveCheckoutCartSnapshot(){
+  const items = Object.values(cart).map(item=>({
+    id: item.id,
+    name: item.name,
+    price: parseMoneyValue(item.price),
+    img: item.img,
+    qty: Number(item.qty) || 0
+  })).filter(item=>item.qty > 0 && item.price > 0);
+
+  if(!items.length){
+    localStorage.removeItem(CHECKOUT_CART_KEY);
+    return null;
+  }
+
+  const payload = {
+    items,
+    total: items.reduce((sum, item)=>sum + item.price * item.qty, 0),
+    savedAt: Date.now()
+  };
+  localStorage.setItem(CHECKOUT_CART_KEY, JSON.stringify(payload));
+  return payload;
+}
+
+function checkoutUrlWithCart(){
+  const payload = saveCheckoutCartSnapshot();
+  if(!payload) return 'checkout.html';
+  return 'checkout.html?cart=' + encodeURIComponent(JSON.stringify(payload));
 }
 
 function renderCart(){
@@ -730,7 +761,7 @@ function initCartUI(){
     const total = cartTotal();
     const subject = encodeURIComponent('New order from website');
     const body = encodeURIComponent(`Order:\n${summary}\n\nTotal: ₹${total}\n\nPlease contact: ${CONTACT_NUMBER}`);
-    window.location.href = 'checkout.html';
+    window.location.href = checkoutUrlWithCart();
   });
 
 

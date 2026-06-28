@@ -113,9 +113,7 @@
       setTimeout(()=>{
         if(force === 'success') return finalizeAndRedirect(order, true);
         if(force === 'failure') return finalizeAndRedirect(order, false);
-        // 80% success default
-        const ok = Math.random() > 0.2;
-        finalizeAndRedirect(order, ok);
+        finalizeAndRedirect(order, true);
       }, 2200);
     });
   </script>

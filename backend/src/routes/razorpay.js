@@ -69,14 +69,33 @@ router.post('/create-order', async (req, res) => {
     const subtotal = Math.max(0, toNumber(totals.subtotal));
     const shipping = Math.max(0, toNumber(totals.shipping));
     const discount = Math.max(0, toNumber(totals.discount));
-    const totalComputed = Math.max(0, toNumber(totals.total));
 
-    const totalToSave = Number.isFinite(totalComputed) && totalComputed > 0
+    // Prefer totals.total if valid; otherwise compute from other totals.
+    const totalComputedRaw = toNumber(totals.total);
+    const totalComputed = Math.max(0, totalComputedRaw);
+
+    const totalFromParts = Math.max(0, subtotal + shipping - discount);
+
+    // Fallback chain:
+    // 1) totals.total if > 0
+    // 2) subtotal + shipping - discount
+    // 3) incoming amount
+    const totalToSave = (Number.isFinite(totalComputed) && totalComputed > 0)
       ? totalComputed
-      : Math.max(0, totalAmount);
+      : (Number.isFinite(totalFromParts) && totalFromParts > 0)
+        ? totalFromParts
+        : Math.max(0, totalAmount);
 
     console.log('[razorpay/create-order] incoming totals=', JSON.stringify(totals));
-    console.log('[razorpay/create-order] computed totals=', { subtotal, shipping, discount, totalComputed, totalToSave, totalAmount });
+    console.log('[razorpay/create-order] computed totals=', {
+      subtotal,
+      shipping,
+      discount,
+      totalComputed: Number.isFinite(totalComputed) ? totalComputed : null,
+      totalFromParts,
+      totalToSave,
+      totalAmount
+    });
 
     const saved = await Order.create({
       orderId,

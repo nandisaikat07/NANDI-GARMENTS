@@ -19,7 +19,8 @@ router.get('/orders', async (req, res) => {
 router.get('/orders/:orderId', async (req, res) => {
   try {
     const { orderId } = req.params;
-    const order = await Order.findOne({ orderId }).lean();
+    const order = await Order.findOne({ orderId: String(orderId) }).lean();
+
 
     if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
     res.json({ success: true, order });
