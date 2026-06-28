@@ -176,7 +176,8 @@
 
       // load orders from backend (fallback to orders.json)
       function loadOrders(){
-        const backendUrl = 'http://localhost:5050/api/orders?limit=50';
+        const apiBase = window.NG_API_BASE || 'https://nandi-garments.onrender.com/api';
+        const backendUrl = `${apiBase}/orders?limit=50`;
         fetch(backendUrl)
           .then(r=>r.json())
           .then(data=>{

@@ -238,7 +238,8 @@
     const LAST_ADDRESS_KEY = 'ng_last_address_v1';
     const SAVED_ADDRESSES_KEY = 'ng_saved_addresses_v1';
     const ADDRESS_CUSTOMER_KEY = 'ng_customer_id_v1';
-    const ADDRESS_API_BASE = 'http://localhost:5050/api';
+    const API_BASE = window.NG_API_BASE || 'https://nandi-garments.onrender.com/api';
+    const ADDRESS_API_BASE = API_BASE;
 
     // Demo/static checkout: use the local simulator unless a real Razorpay backend is wired up.
     const USE_PAYMENT_SIMULATOR = true;
@@ -593,7 +594,7 @@
       // NOTE: backend creates Razorpay order.
       // This function expects backend returns {success:true, order:{id,...}, razorpayKeyId}.
 
-      return fetch('http://localhost:5050/api/razorpay/create-order', {
+      return fetch(`${API_BASE}/razorpay/create-order`, {
 
         method: 'POST',
         headers: {'Content-Type':'application/json'},

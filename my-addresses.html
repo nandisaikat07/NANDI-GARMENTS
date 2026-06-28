@@ -213,7 +213,7 @@
       const addressStorageKey = 'ng_saved_addresses_v1';
       const deliveryAddressKey = 'ng_last_address_v1';
       const customerKey = 'ng_customer_id_v1';
-      const apiBase = 'http://localhost:5050/api';
+      const apiBase = window.NG_API_BASE || 'https://nandi-garments.onrender.com/api';
 
       function customerId(){
         let id = localStorage.getItem(customerKey);

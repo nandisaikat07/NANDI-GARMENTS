@@ -217,7 +217,8 @@
       await new Promise(r => setTimeout(r, 350));
 
       try{
-        const res = await fetch(`http://localhost:5050/api/orders/${encodeURIComponent(orderId)}`);
+        const apiBase = window.NG_API_BASE || 'https://nandi-garments.onrender.com/api';
+        const res = await fetch(`${apiBase}/orders/${encodeURIComponent(orderId)}`);
         const data = await res.json();
         setLoading(false);
 

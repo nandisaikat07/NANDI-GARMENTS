@@ -212,7 +212,8 @@
 
       // Then fetch real order from backend
       if(orderId){
-        fetch(`http://localhost:5050/api/orders/${encodeURIComponent(orderId)}`)
+        const apiBase = window.NG_API_BASE || 'https://nandi-garments.onrender.com/api';
+        fetch(`${apiBase}/orders/${encodeURIComponent(orderId)}`)
           .then(r=>r.json())
           .then(data=>{
             // Avoid overriding localStorage totals when backend totals are invalid/zero.

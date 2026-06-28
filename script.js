@@ -803,7 +803,8 @@ function initCartUI(){
 const ADDRESS_STORAGE_KEY = 'ng_saved_addresses_v1';
 const LAST_DELIVERY_ADDRESS_KEY = 'ng_last_address_v1';
 const ADDRESS_CUSTOMER_KEY = 'ng_customer_id_v1';
-const ADDRESS_API_BASE = 'http://localhost:5050/api';
+const API_BASE = window.NG_API_BASE || 'https://nandi-garments.onrender.com/api';
+const ADDRESS_API_BASE = API_BASE;
 const DEFAULT_ADDRESSES = {
   home: {
     name: '',
